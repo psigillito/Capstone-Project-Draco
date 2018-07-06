@@ -1,7 +1,7 @@
 {
-  "name": "mern-stack-capstone-project",
+  "name": "capstone-project-draco",
   "version": "1.0.0",
-  "description": "MERN stack exercise planning web application for CS 467 capstone at oregon state university. Summer 2018.",
+  "description": "MERN stack web application for CS 467 at Oregon State University",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/psigillito/Capstone-Project-Draco.git"
   },
-  "author": "Nick DeJarnette, Philip Sigillito, Christopher Capps",
+  "author": "Nick DeJarnette",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/psigillito/Capstone-Project-Draco/issues"
