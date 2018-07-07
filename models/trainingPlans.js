@@ -1,4 +1,7 @@
-var trainingPlanSchema = new mongoose.Schema({
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+
+const trainingPlanSchema = new Schema({
   id: {
     type: Number,
     unique: true,
@@ -13,3 +16,6 @@ var trainingPlanSchema = new mongoose.Schema({
     type: Array
   }
 });
+
+// export our module to use in server.js
+export default mongoose.model('TrainingPlan', trainingPlanSchema);

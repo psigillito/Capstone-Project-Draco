@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
-const dotenv = require("dotenv").config();
 
 // Initialize app
 const app = express();
@@ -20,7 +19,11 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "client", "build")))
 
 // Connect to the db
-//mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/")  
+import { getSecret } from './secrets';
+
+mongoose.connect(getSecret('dbUri'));
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Port setting for later deployment to Heroku
 const port = process.env.PORT || 5000;

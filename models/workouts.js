@@ -1,4 +1,7 @@
-var workoutSchema = new mongoose.Schema({
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+
+const workoutSchema = new Schema({
   id: {
     type: Number,
     unique: true,
@@ -13,3 +16,6 @@ var workoutSchema = new mongoose.Schema({
     required: true
   },
 });
+
+// export our module to use in server.js
+export default mongoose.model('Workout', workoutSchema);

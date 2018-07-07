@@ -1,4 +1,7 @@
-var userSchema = new mongoose.Schema({
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
   email: {
     type: String,
     unique: true,
@@ -16,3 +19,6 @@ var userSchema = new mongoose.Schema({
   hash: String,
   salt: String
 });
+
+// export our module to use in server.js
+export default mongoose.model('User', userSchema);
