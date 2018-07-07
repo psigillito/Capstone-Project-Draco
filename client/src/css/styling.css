@@ -1,0 +1,36 @@
+
+.dayButton{
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 100px;
+    background:#4e72e9;
+    border-color: #4e72e9;
+    color: white;
+    margin:3px;
+    border: solid;
+    border-width:1px;
+    width:60px;
+    height:60px;
+}
+
+.calendar-component{
+    margin: auto;
+    width:50%;
+}
+
+input[type="button"]{
+    outline: 0;
+ }
+
+
+
+.dayButton:hover{
+    background:white;
+    color: #4e72e9;
+}
+
+.main-container{
+    width:100%;
+    margin:0px;
+}
+
