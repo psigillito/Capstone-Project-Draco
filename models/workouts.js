@@ -1,4 +1,6 @@
-var workoutSchema = new mongoose.Schema({
+const Schema = require('mongoose').Schema;
+
+const workoutSchema = new Schema({
   id: {
     type: Number,
     unique: true,
@@ -13,3 +15,6 @@ var workoutSchema = new mongoose.Schema({
     required: true
   },
 });
+
+// export our module to use in server.js
+exports.Workout = workoutSchema;

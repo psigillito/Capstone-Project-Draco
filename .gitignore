@@ -2,8 +2,4 @@
 package-lock.json
 /client/node_modules
 /client/build
-.DS_Store
-.env
-*.orig
-.idea/
-.vscode/
+/secrets.js
