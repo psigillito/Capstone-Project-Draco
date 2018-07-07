@@ -22,11 +22,6 @@ app.use(express.static(path.join(__dirname, "client", "build")))
 // Connect to the db
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/")  
 
-// Test route - DELETE ME LATER
-app.get('/', (req, res) => {
-	res.send('This is a test');
-});
-
 // Port setting for later deployment to Heroku
 const port = process.env.PORT || 5000;
 const secret = process.env.SECRET || "some secret passphrase here for local development"
