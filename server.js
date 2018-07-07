@@ -20,14 +20,14 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "client", "build")))
 
 // Connect to the db
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/")  
+//mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/")  
 
 // Port setting for later deployment to Heroku
 const port = process.env.PORT || 5000;
-const secret = process.env.SECRET || "some secret passphrase here for local development"
+//const secret = process.env.SECRET || "some secret passphrase here for local development"
 
 app.get("*", (req, res) => {  
-    res.sendFile(path.join(__dirname, "client", "src", "index.ejs"));
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
