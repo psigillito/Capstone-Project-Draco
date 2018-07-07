@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+  },
+  "engines": {
+    "node": "8.10.0"
   },
   "repository": {
     "type": "git",
@@ -18,10 +22,17 @@
   },
   "homepage": "https://github.com/psigillito/Capstone-Project-Draco#readme",
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "mongoose": "^5.2.1",
-    "passport": "^0.4.0"
+    "passport": "^0.4.0",
+    "react-bootstrap": "^0.32.1",
+    "react-modal": "^3.5.1",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"
