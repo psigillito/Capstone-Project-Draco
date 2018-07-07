@@ -27,7 +27,7 @@ app.use(passport.initialize());
 // React build middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
 
-mongoose.connect(process.env.MONGODB_URI.toString(), {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
