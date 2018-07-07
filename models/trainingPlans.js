@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+const Schema = require('mongoose').Schema;
 
 const trainingPlanSchema = new Schema({
   id: {
@@ -18,4 +17,4 @@ const trainingPlanSchema = new Schema({
 });
 
 // export our module to use in server.js
-export default mongoose.model('TrainingPlan', trainingPlanSchema);
+exports.TrainingPlan = trainingPlanSchema;

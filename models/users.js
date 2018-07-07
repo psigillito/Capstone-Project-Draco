@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+const Schema = require('mongoose').Schema;
 
 const userSchema = new Schema({
   email: {
@@ -21,4 +20,4 @@ const userSchema = new Schema({
 });
 
 // export our module to use in server.js
-export default mongoose.model('User', userSchema);
+exports.User = userSchema;
