@@ -27,7 +27,7 @@ const port = process.env.PORT || 5000;
 const secret = process.env.SECRET || "some secret passphrase here for local development"
 
 app.get("*", (req, res) => {  
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.join(__dirname, "client", "src", "index.ejs"));
 });
 
 app.listen(port, () => console.log(`Server listening on port ${port}`));
