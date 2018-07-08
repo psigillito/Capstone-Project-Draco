@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 // Connect to the db
-const getSecret = require('./secrets').getSecret;
 const userSchema = require('./models/users').User;
 const trainingPlanSchema = require('./models/trainingPlans').TrainingPlan;
 const workoutSchema = require('./models/workouts').Workout;
