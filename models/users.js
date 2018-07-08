@@ -12,9 +12,16 @@ const userSchema = new Schema({
   },
   username: {
     type: String,
+    unique: true,
     required: true
   },
   location: String,
+  goals: {},
+  trainingPlans: {
+    type: Array
+  },
+  numTrainingPlans: Number,
+  numWorkouts: Number,
   hash: String,
   salt: String
 });
