@@ -7,24 +7,29 @@ const userSchema = new Schema({
     unique: true,
     required: true
   },
+
   name: {
     type: String,
     required: true
   },
+
   password: {
     type: String,
     require: true
   },
+
   username: {
     type: String,
     unique: true,
     required: true
   },
+
   location: String,
   goals: {},
   trainingPlans: {
     type: Array
   },
+  
   numTrainingPlans: Number,
   numWorkouts: Number,
   hash: String,
