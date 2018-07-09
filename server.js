@@ -22,8 +22,6 @@ app.use(passport.initialize());
 // React build middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
 
-//const db1 = 'mongodb://heroku_qb31c6fv:a383e16v1dvi0gq8735a1mm3mg@ds229701.mlab.com:29701/heroku_qb31c6fv';
-
 // Connect to db
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var db = mongoose.connection;
