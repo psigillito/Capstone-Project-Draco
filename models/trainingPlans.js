@@ -1,4 +1,5 @@
-const Schema = require('mongoose').Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const trainingPlanSchema = new Schema({
   id: {
@@ -6,15 +7,17 @@ const trainingPlanSchema = new Schema({
     unique: true,
     required: true
   },
+
   name: {
     type: String,
     unique: true,
     required: true
   },
+  
   workouts: {
     type: Array
   }
 });
 
 // export our module to use in server.js
-exports.TrainingPlan = trainingPlanSchema;
+module.exports = TrainingPlan = mongoose.model('TrainingPlan', trainingPlanSchema);

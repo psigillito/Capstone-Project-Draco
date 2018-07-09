@@ -1,4 +1,5 @@
-const Schema = require('mongoose').Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const workoutSchema = new Schema({
   id: {
@@ -6,10 +7,12 @@ const workoutSchema = new Schema({
     unique: true,
     required: true
   },
+
   name: {
     type: String,
     required: true
   },
+  
   mode: {
     type: String,
     required: true
@@ -17,4 +20,4 @@ const workoutSchema = new Schema({
 });
 
 // export our module to use in server.js
-exports.Workout = workoutSchema;
+module.exports = Workout = mongoose.model('Workout', workoutSchema);
