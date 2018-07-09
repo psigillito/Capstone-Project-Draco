@@ -4,14 +4,18 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
+
 // Connect to the db
 const userSchema = require('./models/users').User;
 const trainingPlanSchema = require('./models/trainingPlans').TrainingPlan;
 const workoutSchema = require('./models/workouts').Workout;
 
-var User = mongoose.model('User', userSchema);
+//var User = mongoose.model('User', userSchema);
 var TrainingPlan = mongoose.model('TrainingPlan', trainingPlanSchema);
 var Workout = mongoose.model('Workout', workoutSchema);
+
+// Import routes
+const users = require('./routes/users');
 
 // Initialize app
 const app = express();
@@ -26,9 +30,15 @@ app.use(passport.initialize());
 // React build middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
 
+//const db1 = 'mongodb://heroku_qb31c6fv:a383e16v1dvi0gq8735a1mm3mg@ds229701.mlab.com:29701/heroku_qb31c6fv';
+
+// Connect to db
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// Use routes
+app.use('/users', users);
 
 // Port setting for later deployment to Heroku
 const port = process.env.PORT || 5000;
