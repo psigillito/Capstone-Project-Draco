@@ -2,20 +2,47 @@
     "goals": {
         "question": "What is your primary exercise goal?",
         "responses": [
-            "Improve my health",
-            "Lose weight",
-            "Improve my fitness",
-            "Sports performance",
-            "Other"
+            {
+                "text": "Improve my health",
+                "value": 1
+            },
+            {
+                "text": "Lose weight",
+                "value": 2
+            },
+            {
+                "text": "Improve my fitness",
+                "value": 3
+            },
+            {
+                "text": "Sports performance",
+                "value": 4
+            },
+            {
+                "text": "Other",
+                "value": 5
+            }
         ]
     },
     "improve-health": {
         "question": "Which aspects of your health are you most concerned with improving? (Select all that apply)",
         "responses": [
-            "Cardiovascular",
-            "Muscular strength",
-            "Muscular endurance",
-            "Flexibility"
+            {
+                "text":  "Cardiovascular",
+                "value": 1
+            },
+            {
+                "text": "Muscular strength",
+                "value": 2
+            },
+            {
+                "text": "Muscular endurance",
+                "value": 3
+            },
+            {
+                "text": "Flexibility",
+                "value": 4
+            }
         ]
     },
     "lose-weight": {
