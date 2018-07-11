@@ -1,0 +1,45 @@
+{
+    "goals": {
+        "question": "What is your primary exercise goal?",
+        "responses": [
+            "Improve my health",
+            "Lose weight",
+            "Improve my fitness",
+            "Sports performance",
+            "Other"
+        ]
+    },
+    "improve-health": {
+        "question": "Which aspects of your health are you most concerned with improving? (Select all that apply)",
+        "responses": [
+            "Cardiovascular",
+            "Muscular strength",
+            "Muscular endurance",
+            "Flexibility"
+        ]
+    },
+    "lose-weight": {
+        "question": "What is your current weight?"
+    },
+    "improve-fitness": {
+        "question": "Which aspects of fitness are you most concerned with improving? (Select all that apply)",
+        "responses": [
+            "Aerobic Endurance",
+            "Strength",
+            "Power",
+            "Flexibility"
+        ]
+    },
+    "sport-performance": {
+        "question": "What is your primary sport?",
+        "responses": [
+            "Running",
+            "Cycling",
+            "Swimming",
+            "Triathalon",
+            "Weightlifting",
+            "Powerlifting",
+            "Team Sport"
+        ]
+    }
+}
