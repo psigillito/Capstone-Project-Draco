@@ -46,7 +46,46 @@
         ]
     },
     "lose-weight": {
-        "question": "What is your current weight?"
+        "question": "What is your current weight?",
+        "follow-up": [
+            {
+                "question": "What is your goal weight?"
+            },
+            {
+                "question": "When would you like to be at this goal weight?",
+                "responses": [
+                    {
+                        "text": "Let the program suggest the timeframe for me"
+                    }
+                ]
+            },
+            {
+                "question": "Are there any forms of exercise you are <em>unable<\/em> to perform?",
+                "responses": [
+                    {
+                        "text": "Running, treadmill, etc...",
+                        "value": 1
+                    },
+                    {
+                        "text": "Other cardio machines e.g. Elliptical, Stepper, Rowing, etc",
+                        "value": 2
+                    },
+                    {
+                        "text": "Cycling",
+                        "value": 3
+                    },
+                    {
+                        "text": "Swimming",
+                        "value": 4
+                    },
+                    {
+                        "text": "Strength Training",
+                        "value": 5
+                    }
+                ]
+            }
+        ]
+        
     },
     "improve-fitness": {
         "question": "Which aspects of fitness are you most concerned with improving? (Select all that apply)",
