@@ -8,49 +8,47 @@ const Months = ['January', 'Februaru', 'March', 'April', 'May',
                 'October', 'November', 'December'
                 ];
 
+var year = "2018"
+var month = "11";
 
+function getMonthWeeks( year, month){
 
-/*******BREAK INTO FUNCTION*******/
-
-//Calculating current month number of days 
-//get number of days in month 
-var d = new Date();
-
-var year = "2018";
-var month = d.getMonth()+1;
-
-var startWeekDay = new Date(year + "-" + month + "-01").getDay();
-var numberOfDays = new Date(year, month, 0).getDate();
-var numberOfDaysThisMonth = new Date(year, month+1, 0).getDate();
-//stores 6 rows of dates
-var weekArray = []
-
-//date counter 
-var counter = 1;
-//for each week
-for(let i = 0; i < 6; i++){
-   
-    var aWeek = [];
-
-    //for eachday
-    for(let x = 0; x < 7; x++){
-      
-        //if day in previous month
-        if(i == 0 && x < startWeekDay){
-            aWeek[x] = 'X';
-        //if day later than current
-        }else if(counter > numberOfDaysThisMonth){
-            aWeek[x] = 'X';
-        }else{
-            aWeek[x] = counter;
-            counter++;
+    var d = new Date();
+    
+    var startWeekDay = new Date(year + "-" + month + "-01").getDay();
+    var numberOfDays = new Date(year, month, 0).getDate();
+    var numberOfDaysThisMonth = new Date(year, month+1, 0).getDate();
+    //stores 6 rows of dates
+    var weekArray = []
+    
+    //date counter 
+    var counter = 1;
+    //for each week
+    for(let i = 0; i < 6; i++){
+       
+        var aWeek = [];
+    
+        //for eachday
+        for(let x = 0; x < 7; x++){
+          
+            //if day in previous month
+            if(i == 0 && x < startWeekDay){
+                aWeek[x] = 'X';
+            //if day later than current
+            }else if(counter > numberOfDaysThisMonth){
+                aWeek[x] = 'X';
+            }else{
+                aWeek[x] = counter;
+                counter++;
+            }
         }
+        weekArray.push(aWeek)
     }
-    weekArray.push(aWeek)
-}
 
-/**************/
+    return weekArray;
+} 
 
+var weekArray = getMonthWeeks("2018", "11");
 
 
 class Calendar extends Component{
