@@ -1,0 +1,38 @@
+{
+    "days-per-week": {
+        "question": "How many days per week are you available to exercise?"
+    },
+    "hours-per-day": {
+        "question": "What is the maximum amount of time on each of the following days that you are willing to devote to exercise?",
+        "responses": [
+            {
+                "text": "Sunday",
+                "value": 1
+            },
+            {
+                "text": "Monday",
+                "value": 2
+            },
+            {
+                "text": "Tuesday",
+                "value": 3
+            },
+            {
+                "text": "Wednesday",
+                "value": 4
+            },
+            {
+                "text": "Thursday",
+                "value": 5
+            },
+            {
+                "text": "Friday",
+                "value": 6
+            },
+            {
+                "text": "Saturday",
+                "value": 7
+            }
+        ]
+    }
+}
