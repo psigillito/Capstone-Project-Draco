@@ -55,7 +55,8 @@
                 "question": "When would you like to be at this goal weight?",
                 "responses": [
                     {
-                        "text": "Let the program suggest the timeframe for me"
+                        "text": "Let the program suggest the timeframe for me",
+                        "value": 1
                     }
                 ]
             },
@@ -90,22 +91,55 @@
     "improve-fitness": {
         "question": "Which aspects of fitness are you most concerned with improving? (Select all that apply)",
         "responses": [
-            "Aerobic Endurance",
-            "Strength",
-            "Power",
-            "Flexibility"
+            {
+                "text": "Aerobic Endurance",
+                "value": 1
+            },
+            {
+                "text": "Strength",
+                "value": 2
+            },
+            {
+                "text": "Power",
+                "value": 3
+            },
+            {
+                "text": "Flexibility",
+                "value": 4
+            }
         ]
     },
     "sport-performance": {
         "question": "What is your primary sport?",
         "responses": [
-            "Running",
-            "Cycling",
-            "Swimming",
-            "Triathalon",
-            "Weightlifting",
-            "Powerlifting",
-            "Team Sport"
+            {
+                "text": "Running",
+                "value": 1
+            },
+            {
+                "text": "Cycling",
+                "value": 2
+            },
+            {
+                "text": "Swimming",
+                "value": 3
+            },
+            {
+                "text": "Triathalon",
+                "value": 4
+            },
+            {
+                "text": "Weightlifting",
+                "value": 5
+            },
+            {
+                "text": "Powerlifting",
+                "value": 6
+            },
+            {
+                "text": "Team Sport",
+                "value": 7
+            }
         ]
     }
 }
