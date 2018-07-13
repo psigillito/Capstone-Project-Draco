@@ -23,6 +23,7 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "client", "build")));
 
 // Connect to db
+console.log("Process variable is:"+process.env.MONGODB_URI);
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

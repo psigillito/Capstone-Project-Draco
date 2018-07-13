@@ -22,8 +22,6 @@ input[type="button"]{
     outline: 0;
  }
 
-
-
 .dayButton:hover{
     background:white;
     color: #4e72e9;

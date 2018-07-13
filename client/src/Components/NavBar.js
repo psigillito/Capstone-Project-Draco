@@ -22,7 +22,6 @@ class NavBar extends Component {
                         <Link className="dropdown-item" to="/About">About</Link>
                         <Link className="dropdown-item" to="/LogOff">Log Off</Link>
                     </div>
-
                 </div>
                 <Link className="btn btn-secondary home-btn" to="/">Home</Link>
                 

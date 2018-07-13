@@ -50,8 +50,12 @@ function getMonthWeeks( year, month){
 
 var weekArray = getMonthWeeks("2018", "11");
 
-
 class Calendar extends Component{
+    constructor(props) {
+        super(props);
+        
+        
+    }
 
     render(){
         console.log(weekArray)
