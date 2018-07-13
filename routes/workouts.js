@@ -6,9 +6,11 @@ const Workout = require('../models/workouts');
 // display workout
 router.get('/', (req, res) => {
     console.log(req.query);
-    const date = req.query.date;
+    if (req.query.date) {
+        const date = req.query.date;
+    }
 
-    if (req.query) {
+    if (Object.keys(req.query).length != 0) {
         var query = Workout.find({
             date: { $eq: new Date(date)}
         });

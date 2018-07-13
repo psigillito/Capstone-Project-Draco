@@ -8,6 +8,7 @@ import LogOff from './LogOff'
 import About from './About'
 import Settings from './Settings'
 import PairDevice from './PairDevice'
+import Goals from './Goals';
 
 
 class Main extends Component{
@@ -31,6 +32,7 @@ class Main extends Component{
                 <Route path="/LogOff" component={LogOff}/>
                 <Route path="/Settings" component={Settings}/>
                 <Route path="/PairDevice" component={PairDevice}/>
+                <Route path = "/goals" component={Goals}/>
             </div>
         )
     }
