@@ -3,17 +3,18 @@ const router = express.Router();
 
 const Workout = require('../models/workouts');
 
-// GET to workouts/
-// View all workouts
-// public access
-
+// display workout
 router.get('/', (req, res) => {
     console.log(req.query);
+    const date = req.query.date;
+
     if (req.query) {
-        var query = Workout.find(req.query);
+        var query = Workout.find({
+            date: { $eq: new Date(date)}
+        });
         query.exec((err, docs) => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true, data: docs });
+            if (err) return res.json({ success: false, error: err });
+            return res.json({ success: true, data: docs });
         });        
     }
     else {
@@ -25,11 +26,12 @@ router.get('/', (req, res) => {
     }
 });
 
-  
+// add workout
 router.post('/', (req, res) => {
     const newWorkout = new Workout({
         name: req.body.name,
-        mode: req.body.mode
+        mode: req.body.mode,
+        date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
     if (!newWorkout.name || !newWorkout.mode) {
