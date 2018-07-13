@@ -1,6 +1,7 @@
 // users.js will handle all user registration and login
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 // Import user model
 const User = require('../models/users');
@@ -27,12 +28,17 @@ router.post('/register', (req, res) => {
 					password: req.body.password
 				});
 
-				// Encrypt password here with bcrypt at later point
-
-				// Save user
-				newUser.save()
-					.then(user => res.json(user))
-					.catch(err => console.log(err));
+				// Encrypt password
+				bcrypt.genSalt(10, (err, salt) => {
+					bcrypt.hash(newUser.password, salt, (err, hash) => {
+						if(err) throw err;
+						newUser.password = hash;
+						// Save user
+						newUser.save()
+							.then(user => res.json(user))
+							.catch(err => console.log(err));
+					});
+				});	
 			}
 		});
 });
@@ -53,16 +59,18 @@ router.post('/login', (req, res) => {
 			if(!user) {
 				errors.email = 'No user exists with that email';
 				return res.status(404).json({errors});
-			} else {
-				// check for correct password
-				// need to refactor to use bcrypt once password encryption completed
-				if(password === user.password) {
-					res.json({ msg: 'login successful' });
-				} else {
-					errors.password = 'Password incorrect';
-					return res.status(400).json({ errors });
-				}
-			}
+			} 
+
+			// check for correct password
+			bcrypt.compare(password, user.password)
+				.then(match => {
+					if(match) {
+						res.json({msg: 'success'});
+					} else {
+						errors.password = 'Password incorrect';
+						return res.status(400).json({errors});
+					}
+				})
 		});
 });
 
