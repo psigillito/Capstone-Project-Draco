@@ -6,3 +6,5 @@ const router = express.Router();
 router.post('/', (req, res) => {
 	// handle input from front end for goals, etc..
 });
+
+module.exports = router;
