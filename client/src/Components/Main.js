@@ -11,12 +11,14 @@ import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
 import weekData from '../data/weekData'
-
+import Goals from './Goals';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
                 ' October', ' November', ' December'
                 ];
+
+
 
 
 class Main extends Component{
@@ -46,7 +48,9 @@ class Main extends Component{
                     <Route path="/LogOff" exact component={LogOff}/>
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
+                    <Route path = "/goals" component={Goals}/>
                 </Switch>
+                
             </div>
         )
     }

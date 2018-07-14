@@ -8,6 +8,7 @@ const path = require('path');
 // Import routes
 const users = require('./routes/users');
 const workouts = require('./routes/workouts');
+const profile = require('./routes/profile');
 
 // Initialize app
 const app = express();
@@ -31,6 +32,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Use routes
 app.use('/users', users);
 app.use('/workouts', workouts);
+app.use('/profile', profile);
 
 // Port setting for later deployment to Heroku
 const port = process.env.PORT || 5000;
