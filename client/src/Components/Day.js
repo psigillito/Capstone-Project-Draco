@@ -3,9 +3,16 @@ import React, {Component} from 'react'
 class Day extends Component {
 
     render(){
-        return(
-            <button className="dayButton">{this.props.date}</button>
-        )
+
+        if(this.props.date != 'X'){            
+            return(
+                    <button className="dayButton">{this.props.date}</button>
+            )
+        }else {
+            return(
+                <span></span>
+            )
+        }
     }
 }
 
