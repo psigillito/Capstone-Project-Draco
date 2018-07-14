@@ -1,0 +1,145 @@
+{
+    "goals": {
+        "question": "What is your primary exercise goal?",
+        "responses": [
+            {
+                "text": "Improve my health",
+                "value": 1
+            },
+            {
+                "text": "Lose weight",
+                "value": 2
+            },
+            {
+                "text": "Improve my fitness",
+                "value": 3
+            },
+            {
+                "text": "Sports performance",
+                "value": 4
+            },
+            {
+                "text": "Other",
+                "value": 5
+            }
+        ]
+    },
+    "improve-health": {
+        "question": "Which aspects of your health are you most concerned with improving? (Select all that apply)",
+        "responses": [
+            {
+                "text":  "Cardiovascular",
+                "value": 1
+            },
+            {
+                "text": "Muscular strength",
+                "value": 2
+            },
+            {
+                "text": "Muscular endurance",
+                "value": 3
+            },
+            {
+                "text": "Flexibility",
+                "value": 4
+            }
+        ]
+    },
+    "lose-weight": {
+        "question": "What is your current weight?",
+        "follow-up": [
+            {
+                "question": "What is your goal weight?"
+            },
+            {
+                "question": "When would you like to be at this goal weight?",
+                "responses": [
+                    {
+                        "text": "Let the program suggest the timeframe for me",
+                        "value": 1
+                    }
+                ]
+            },
+            {
+                "question": "Are there any forms of exercise you are <em>unable<\/em> to perform?",
+                "responses": [
+                    {
+                        "text": "Running, treadmill, etc...",
+                        "value": 1
+                    },
+                    {
+                        "text": "Other cardio machines e.g. Elliptical, Stepper, Rowing, etc",
+                        "value": 2
+                    },
+                    {
+                        "text": "Cycling",
+                        "value": 3
+                    },
+                    {
+                        "text": "Swimming",
+                        "value": 4
+                    },
+                    {
+                        "text": "Strength Training",
+                        "value": 5
+                    }
+                ]
+            }
+        ]
+        
+    },
+    "improve-fitness": {
+        "question": "Which aspects of fitness are you most concerned with improving? (Select all that apply)",
+        "responses": [
+            {
+                "text": "Aerobic Endurance",
+                "value": 1
+            },
+            {
+                "text": "Strength",
+                "value": 2
+            },
+            {
+                "text": "Power",
+                "value": 3
+            },
+            {
+                "text": "Flexibility",
+                "value": 4
+            }
+        ]
+    },
+    "sport-performance": {
+        "question": "What is your primary sport?",
+        "responses": [
+            {
+                "text": "Running",
+                "value": 1
+            },
+            {
+                "text": "Cycling",
+                "value": 2
+            },
+            {
+                "text": "Swimming",
+                "value": 3
+            },
+            {
+                "text": "Triathalon",
+                "value": 4
+            },
+            {
+                "text": "Weightlifting",
+                "value": 5
+            },
+            {
+                "text": "Powerlifting",
+                "value": 6
+            },
+            {
+                "text": "Team Sport",
+                "value": 7
+            }
+        ]
+    }
+}

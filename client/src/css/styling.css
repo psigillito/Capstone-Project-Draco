@@ -13,16 +13,9 @@
     height:60px;
 }
 
-.calendar-component{
-    margin: auto;
-    width:50%;
-}
-
 input[type="button"]{
     outline: 0;
  }
-
-
 
 .dayButton:hover{
     background:white;
@@ -30,7 +23,34 @@ input[type="button"]{
 }
 
 .main-container{
-    width:100%;
-    margin:0px;
+    width:50%;
+    margin:auto;
 }
+
+
+.home-btn{
+    margin-left:10px;
+    height:2.5em;
+}
+
+.calendar-header{
+    text-align: center;
+}
+
+.calendar-controller{
+    float: left;
+}
+
+.calendar-component{
+    margin: auto;
+    width:auto;
+    float: left;
+}
+
+.calendar-caption{
+    display: inline;
+}
+
+
+
 

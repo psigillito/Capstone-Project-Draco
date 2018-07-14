@@ -2,21 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const workoutSchema = new Schema({
-  id: {
-    type: Number,
-    unique: true,
-    required: true
-  },
-
   name: {
     type: String,
     required: true
   },
-  
   mode: {
     type: String,
     required: true
   },
+  date: [{
+  	type: Date
+  }]
 });
 
 // export our module to use in server.js
