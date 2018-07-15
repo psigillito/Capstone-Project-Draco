@@ -1,29 +1,29 @@
 
 import React, {Component} from 'react'
-
+import DropDown from './DropDown'
 
 class CalendarController extends Component {
     constructor(props) {
         super(props);
-        this.handleDateChange = this.handleDateChange.bind(this);
+        //this.handleDateChange = this.handleDateChange.bind(this);
+        //this.toggleMenu = this.toggleMenu.bind(this);
+
     }
+
+ 
     
-    handleDateChange = (param)=> (e) =>{
-        this.props.updateCurrentYear(param);
-        this.props.updateDays( this.props.month, param)
-    }
 
     render(){
         return(
         <ul className="calendar-controller">
             <li>
-                <button onClick={this.handleDateChange(2016)} > 2016 </button>
+                <DropDown year='2016' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/> 
             </li>
             <li>
-                <button onClick={this.handleDateChange(2017)}> 2017 </button>
+                <DropDown year='2017' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/> 
             </li>
             <li>
-                <button onClick={this.handleDateChange(2018)} > 2018 </button>
+                <DropDown year='2018' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/> 
             </li>
         </ul>
         )

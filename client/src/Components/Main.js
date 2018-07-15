@@ -10,6 +10,7 @@ import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
+import {updateMonth} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals';
 
@@ -35,12 +36,9 @@ class Main extends Component{
                 <NavBar onNavigate = {this.navigate}/>
                 <Route exact path = "/" render={()=>(
                     <section className="main-container">
-
                         <h2>{Months[this.props.month] + ","+this.props.year}</h2>
-
                         <Calendar  weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month}  /> 
-
-                        <CalendarController updateDays={this.props.updateDays}  updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                        <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays}  updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
                     </section>
                 )}/>
                 <Switch>
@@ -50,7 +48,6 @@ class Main extends Component{
                     <Route path="/PairDevice" exact component={PairDevice}/>
                     <Route path = "/goals" component={Goals}/>
                 </Switch>
-                
             </div>
         )
     }
