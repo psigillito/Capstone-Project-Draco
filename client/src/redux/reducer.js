@@ -4,11 +4,6 @@ import {selectedMonth} from '../data/weekData'
 import { combineReducers } from 'redux'
 
 
-
-/*function year(state = selectedYear, action){
-    return state;
-}*/
-
 function days(state = weekData, action) {
 
     switch(action.type){
@@ -33,7 +28,12 @@ function year(state = selectedYear, action, month, year){
 }
 
 function month(state = selectedMonth, action){
-    return state;
+    switch(action.type){
+        case 'UPDATE_MONTH':
+            return action.selectedMonth;
+        default:
+            return state;
+    }
 }
 
 const rootReducer = combineReducers({days, year, month})

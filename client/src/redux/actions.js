@@ -8,9 +8,17 @@ export function updateCurrentYear(newYear){
     }
 }
 
+export function updateMonth(newMonth){
+
+    return {
+        type: 'UPDATE_MONTH',
+        selectedMonth: newMonth
+    }
+}
+
+
 export function updateDays(month, year){
 
-    console.log("MONTH:"+month+","+"Year:"+year);
     var newDays = getMonthWeeks(year, month);
 
     return {
