@@ -71,7 +71,7 @@ class Goals extends React.Component {
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Save changes</button>
+              <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
             </div>
           </div>
         </div>
