@@ -6,14 +6,17 @@ import Alert from './Alert';
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: 1 };
+    this.state = { value: 1, showWarning: false };
+    this.alertMsg = 
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showAlert = this.showAlert.bind(this);
   }
 
-  showAlert(el) {
-    document.getElementById(el).className = "show";
+  showAlert() {
+    this.setState({showWarning: true});
+    //this.render();
   }
 
   handleChange(event) {
@@ -75,7 +78,7 @@ class Goals extends React.Component {
                     </label>
                   </div>
                 </form>
-                <Alert text="This will turn off all recommendations" />
+                <Alert warn={this.state.showWarning} text="This will turn off all recommendations" />
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
