@@ -9,10 +9,8 @@ function getMonthWeeks( year, month){
     var d = new Date();
     
     var newDate = new Date(year, month, 1);
-    console.log("newdate is:"+newDate);
     var startWeekDay = newDate.getDay(); 
 
-    console.log('start week day is'+startWeekDay)
     var numberOfDays = new Date(year, (month+2)%13, 0).getDate();
     var numberOfDaysThisMonth = new Date(year, month, 0).getDate();
 
@@ -47,8 +45,8 @@ function getMonthWeeks( year, month){
 
 const selectedYear = 2018;
 const selectedMonth = 0;
-const weekData = getMonthWeeks(selectedYear, selectedMonth)
-
+const weekData = getMonthWeeks(selectedYear, selectedMonth);
+const selectedDayVisible = true;
 
 const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)}
@@ -58,6 +56,7 @@ module.exports =    {
     weekData,
     selectedYear,
     selectedMonth,
-    getMonthWeeks
+    getMonthWeeks,
+    selectedDayVisible
 }
 

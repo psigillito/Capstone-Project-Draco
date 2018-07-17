@@ -1,6 +1,7 @@
 import {weekData} from '../data/weekData'
 import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
+import {selectedDayVisible} from '../data/weekData'
 import { combineReducers } from 'redux'
 
 
@@ -36,7 +37,16 @@ function month(state = selectedMonth, action){
     }
 }
 
-const rootReducer = combineReducers({days, year, month})
+function dayVisible(state = selectedDayVisible, action){
+    switch(action.type){
+        case 'UPDATE_DAY_VISIBLE':
+            return action.dayVisible;
+        default:
+            return state; 
+    }
+}
+
+const rootReducer = combineReducers({days, year, month, dayVisible})
 
 
 export default rootReducer

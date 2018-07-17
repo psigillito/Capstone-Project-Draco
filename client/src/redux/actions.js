@@ -16,7 +16,6 @@ export function updateMonth(newMonth){
     }
 }
 
-
 export function updateDays(month, year){
 
     var newDays = getMonthWeeks(year, month);
@@ -25,6 +24,12 @@ export function updateDays(month, year){
         type: 'UPDATE_DAYS',
         newDays: newDays
     }
-
 }
 
+export function updateDayVisible(newVisible){
+
+    return{
+        type: 'UPDATE_DAY_VISIBLE',
+        dayVisible: newVisible
+    }
+}

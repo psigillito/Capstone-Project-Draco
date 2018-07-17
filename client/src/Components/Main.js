@@ -11,16 +11,15 @@ import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
 import {updateMonth} from '../redux/actions'
+import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
-import Goals from './Goals';
+import Goals from './Goals'
+import DayDetail from './DayDetail'
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
                 ' October', ' November', ' December'
                 ];
-
-
-
 
 class Main extends Component{
     constructor(props) {
@@ -37,8 +36,10 @@ class Main extends Component{
                 <Route exact path = "/" render={()=>(
                     <section className="main-container">
                         <h2>{Months[this.props.month] + ","+this.props.year}</h2>
-                        <Calendar  weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month}  /> 
-                        <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays}  updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                        <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
+                        <Calendar weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
+                        <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
+                        updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
                     </section>
                 )}/>
                 <Switch>

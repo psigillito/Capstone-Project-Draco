@@ -1,19 +1,33 @@
 import React, {Component} from 'react'
+import DayDetail from './DayDetail'
 
 class Day extends Component {
 
-    render(){
+    constructor(props){
+        super(props);
+        this.handleVisibleChange = this.handleVisibleChange.bind(this);
+    }
 
+    handleVisibleChange = (newValue) => (e) =>{
+        this.props.updateDayVisible(newValue);
+    }
+
+
+    render(){
         if(this.props.date != 'X'){            
             return(
-                    <button className="dayButton">{this.props.date}</button>
+                
+                <div>
+                    <button onClick={this.handleVisibleChange(true)} className="dayButton">{this.props.date}</button>
+                </div>
+                
             )
         }else {
             return(
                 <span></span>
             )
         }
-    }
+    }   
 }
 
 export default Day
