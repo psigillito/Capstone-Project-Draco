@@ -9,6 +9,7 @@ class Day extends Component {
     }
 
     handleVisibleChange = (newValue) => (e) =>{
+        console.log("RENDER FIRED!")
         this.props.updateDayVisible(newValue);
     }
 
@@ -18,7 +19,7 @@ class Day extends Component {
             return(
                 
                 <div>
-                    <button onClick={this.handleVisibleChange(true)} className="dayButton">{this.props.date}</button>
+                    <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton">{this.props.date}</button>
                 </div>
                 
             )

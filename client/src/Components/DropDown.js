@@ -25,7 +25,6 @@ class DropDown extends Component{
         this.props.updateCurrentYear(year);
         this.props.updateDays( month, year);
         this.props.updateMonth(month);
-
     }
 
     render(){
