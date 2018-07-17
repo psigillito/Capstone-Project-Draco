@@ -76,3 +76,12 @@ input[type="button"]{
 
 }
 
+.landing {
+  position: relative;
+  height: 100px;
+  margin-top: 0px;
+}
+
+.landing-inner {
+  padding-top: 80px;
+}
