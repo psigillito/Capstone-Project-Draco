@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+import classnames from 'classnames';
 
 class Register extends Component {
   constructor() {
@@ -29,11 +31,15 @@ class Register extends Component {
       username: this.state.username
     }
 
-    console.log(newUser);
+    axios.post('/users/register', newUser)
+      .then(result => console.log(result.data))
+      .catch(err => this.setState({ errors: err.response.data }));
   }
 
-
   render() {
+    // errors object
+    const { errors } = this.state;
+
     return (
     <div className="register">
       <div className="container">
@@ -50,17 +56,22 @@ class Register extends Component {
                  name="name" 
                  value={this.state.name}
                  onChange={this.onChange}
+                 required
                 />
               </div>
               <div className="form-group">
                 <input 
                   type="email" 
-                  className="form-control form-control-lg" 
+                  className={classnames("form-control form-control-lg", {
+                    "is-invalid": errors.email
+                  })} 
                   placeholder="Email Address" 
                   name="email" 
                   value={this.state.email}
                   onChange={this.onChange}
+                  required
                 />
+                { errors.email && (<div className="invalid-feedback">{errors.email}</div>) }
               </div>
               <div className="form-group">
                 <input 
@@ -70,17 +81,22 @@ class Register extends Component {
                   name="password" 
                   value={this.state.password}
                   onChange={this.onChange}
+                  required
                 />
               </div>
               <div className="form-group">
                 <input 
                   type="text" 
-                  className="form-control form-control-lg" 
+                  className={classnames("form-control form-control-lg", {
+                    "is-invalid": errors.username
+                  })}  
                   placeholder="Username" 
                   name="username" 
                   value={this.state.username}
                   onChange={this.onChange}
+                  required
                 />
+                { errors.username && (<div className="invalid-feedback">{errors.username}</div>) }
               </div>
               <input type="submit" className="btn btn-info btn-block mt-4"/>
             </form>
