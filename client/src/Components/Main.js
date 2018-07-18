@@ -15,6 +15,7 @@ import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
 import DayDetail from './DayDetail'
+import * as goalsJCR from '../copy/goals.json'
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -27,10 +28,9 @@ class Main extends Component{
     }
 
     render(){
-
         console.log(this.props)
+        
         return (
-
             <div>
                 <NavBar onNavigate = {this.navigate}/>
                 <Route exact path = "/" render={()=>(
@@ -47,7 +47,7 @@ class Main extends Component{
                     <Route path="/LogOff" exact component={LogOff}/>
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
-                    <Route path = "/goals" component={Goals}/>
+                    <Route path = "/goals" render={(props) => <Goals {...props} responses={goalsJCR.goals.responses}/>}/>
                 </Switch>
             </div>
         )

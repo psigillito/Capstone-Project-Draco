@@ -7,7 +7,7 @@ class Goals extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: 1, showWarning: false };
-    this.alertMsg = 
+    this.responses = props.responses; 
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,7 +16,6 @@ class Goals extends React.Component {
 
   showAlert() {
     this.setState({showWarning: true});
-    //this.render();
   }
 
   handleChange(event) {
@@ -52,6 +51,8 @@ class Goals extends React.Component {
   }
 
   render() {
+    console.log(JSON.stringify(this.responses));
+    const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
     return (
       <div>
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
@@ -69,11 +70,7 @@ class Goals extends React.Component {
                     <label>
                       {goals.goals.question}
                       <select class="form-control" value={this.state.value} onChange={this.handleChange}>
-                        <option value={goals.goals.responses[0].value}>{goals.goals.responses[0].text}</option>
-                        <option value={goals.goals.responses[1].value}>{goals.goals.responses[1].text}</option>
-                        <option value={goals.goals.responses[2].value}>{goals.goals.responses[2].text}</option>
-                        <option value={goals.goals.responses[3].value}>{goals.goals.responses[3].text}</option>
-                        <option value={goals.goals.responses[4].value}>{goals.goals.responses[4].text}</option>
+                        {jsxResponses}
                       </select>
                     </label>
                   </div>
