@@ -9,6 +9,7 @@ const path = require('path');
 const users = require('./routes/users');
 const workouts = require('./routes/workouts');
 const profile = require('./routes/profile');
+const trainingPlans = require('./routes/trainingPlans');
 
 // Initialize app
 const app = express();
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 app.use('/workouts', workouts);
 app.use('/users', users);
 app.use('/profile', profile);
+app.use('/trainingPlans', trainingPlans);
 
 // Connect to db
 // console.log("Process variable is:"+process.env.MONGODB_URI);

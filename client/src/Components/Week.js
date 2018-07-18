@@ -5,7 +5,7 @@ class Week extends Component{
     render(){
         return(
             <tr>
-                {this.props.days.map( (day, index) => <td><Day date={day} /></td>)}
+                {this.props.days.map( (day, index) => <td><Day updateDayVisible ={this.props.updateDayVisible} date={day} /></td>)}
             </tr>
         )
     }

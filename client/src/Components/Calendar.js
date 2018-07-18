@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Day from './Day'
 import Week from './Week'
+import DayDetail from './DayDetail'
 
 const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
 
@@ -16,11 +17,9 @@ class Calendar extends Component{
                         <tr>{Days.map( (day, index) => <th className ="calendar-header">{day}</th> )}</tr>
                     </thead>
                     <tbody>
-                        {this.props.weekArray.map( (daysOfWeek, index) => <Week days={daysOfWeek}/>)}
+                        {this.props.weekArray.map( (daysOfWeek, index) => <Week updateDayVisible ={this.props.updateDayVisible} days={daysOfWeek}/>)}
                     </tbody>
                 </table>
-
-
             </div>
         )
     }

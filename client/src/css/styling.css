@@ -51,6 +51,41 @@ input[type="button"]{
     display: inline;
 }
 
+.year-enter {
+    transform: translate(100%);
+    transition: transform 1000ms ease-in-out;
+  }
 
+.month-list{
+    transform: translate(100%);
+    transition: transform 1000ms ease-in-out;
+}
 
+.dayDetail{
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 600px;
+    height: 600px;
+    margin: auto;
+    background-color:#8f96ca;
+    opacity:0.97;
 
+}
+
+.landing {
+  position: relative;
+  height: 100px;
+  margin-top: 0px;
+}
+
+.landing-inner {
+  padding-top: 80px;
+}
+
+.register {
+    padding-top: 30px;
+}
