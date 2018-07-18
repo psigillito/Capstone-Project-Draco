@@ -1,15 +1,14 @@
 import React from 'react'
 import { Button, FormControl } from 'react-bootstrap'
-import * as goals from '../copy/goals.json'
+import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
 
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { show: false, value: 1, showWarning: false };
-    this.responses = props.responses;
-    this.handleChange = this.handleChange.bind(this);
+    this.state = { user: { goals: { primaryGoal: 1 } }, value: 1, showWarning: false };
+    this.handlePrimaryGoalChange = this.handlePrimaryGoalChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
@@ -18,8 +17,8 @@ class Goals extends React.Component {
     this.setState({ showWarning: true });
   }
 
-  handleChange(event) {
-    this.setState({ value: parseInt(event.target.value, 10) });
+  handlePrimaryGoalChange(event) {
+    this.setState({ user: { goals: { primaryGoal: parseInt(event.target.value, 10) }}});
   }
 
   handleSubmit(event) {
@@ -49,7 +48,8 @@ class Goals extends React.Component {
   }
 
   render() {
-    const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
+    const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
+    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const title = "Exercise Goals";
     const btnText = "Submit";
     const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
@@ -59,9 +59,9 @@ class Goals extends React.Component {
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">{title}</h1>
-              <p className="lead text-center">{goals.goals.question}</p>
+              <p className="lead text-center">{goalsJCR.goals.question}</p>
               <form onSubmit={this.handleSubmit}>
-                <FormControl componentClass="select" onChange={this.handleChange}>
+                <FormControl componentClass="select" onChange={this.handlePrimaryGoalChange}>
                     {jsxResponses}
                 </FormControl>
               </form>
@@ -69,6 +69,19 @@ class Goals extends React.Component {
               <Alert warn={this.state.showWarning} text={warnText} />
             </div>
           </div>
+          {this.state.user.goals.primaryGoal === 1 &&
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
+              <form>
+                <FormControl componentClass="select" multiple onChange={this.handleImproveHealthChange}>
+                  {improveHealthResponses}
+                </FormControl>
+              </form>
+            </div>
+          </div>
+          }
+          <br />
           <div className="row">
             <div className="col-md-8 m-auto text-center">
               <Button bsStyle="info" bsSize="large" onClick={this.handleSubmit}>{btnText}</Button>

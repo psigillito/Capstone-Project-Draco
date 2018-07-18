@@ -24,7 +24,7 @@
             }
         ]
     },
-    "improve-health": {
+    "improveHealth": {
         "question": "Which aspects of your health are you most concerned with improving? (Select all that apply)",
         "responses": [
             {
