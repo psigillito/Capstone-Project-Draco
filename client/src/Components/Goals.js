@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import * as goals from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
-import Alert from './Alert';
 import Modal from './Modal';
 
 class Goals extends React.Component {
@@ -26,18 +25,17 @@ class Goals extends React.Component {
   generateForm() {
     const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
     return (
-      <div>
+      <div class="modal-body" id="myModal">
         <form onSubmit={this.handleSubmit}>
           <div class="form-group">
             <label>
               {goals.goals.question}
-              <select class="form-control" value={this.state.value} onChange={this.handleChange}>
+              <select class="form-control" onChange={this.handleChange}>
                 {jsxResponses}
               </select>
             </label>
           </div>
         </form>
-        <Alert warn={this.state.showWarning} text="This will turn off all recommendations" />
       </div>
     );
   }
@@ -61,8 +59,6 @@ class Goals extends React.Component {
         break;
       case 5:
         this.showAlert();
-        //alert("This will turn off all recommendations");
-        console.log("Made it past the Alert creation");
         break;
       default:
         console.log("This shouldn't get executed!");
@@ -71,11 +67,11 @@ class Goals extends React.Component {
   }
 
   render() {
-    //console.log(JSON.stringify(this.responses));
+    //< SelectForm responses={this.responses} value={this.state.value} labelText={goals.goals.question} handleSubmit={this.handleSubmit} />} handleSubmit={this.handleSubmit} />
     return (
       <div>
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
-        <Modal title="Exercise Goals" payload={this.generateForm()} handleSubmit={this.handleSubmit} />
+        <Modal title="Exercise Goals" payload={this.generateForm()} warn={this.state.showWarning} warnText="This will turn off all recommendations" handleSubmit={this.handleSubmit} />
       </div>
     );
   }

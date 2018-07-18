@@ -3,6 +3,11 @@ import React, { Component } from 'react'
 class Alert extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onWarnChange(e.target.value);
   }
 
   render() {

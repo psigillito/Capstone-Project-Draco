@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Alert from './Alert'
 
 class Modal extends React.Component {
   constructor(props) {
@@ -9,6 +10,8 @@ class Modal extends React.Component {
   }
 
   render() {
+    const displayWarning = this.props.warn;
+    const warningText = this.props.warnText;
     return (
         <div class="modal fade" id="myModal" tabIndex="-1" role="dialog">
           <div class="modal-dialog" role="document">
@@ -17,9 +20,8 @@ class Modal extends React.Component {
                 <h4 class="modal-title">{this.title}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
-              <div class="modal-body" id="myModal">
                 {this.payload}
-              </div>
+                <Alert warn={displayWarning} text={warningText} />
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
