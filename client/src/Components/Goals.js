@@ -1,22 +1,23 @@
 import React, { Component } from 'react'
-import {Modal} from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import * as goals from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Overlay from './Modal';
 import Alert from './Alert';
+import FormModal from './Modal';
 
 class Goals extends React.Component {
   constructor(props) {
     super(props);
     this.state = { show: false, value: 1, showWarning: false };
-    this.responses = props.responses; 
+    this.responses = props.responses;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
 
   showAlert() {
-    this.setState({showWarning: true});
+    this.setState({ showWarning: true });
   }
 
   handleChange(event) {
@@ -50,12 +51,15 @@ class Goals extends React.Component {
   }
 
   render() {
+    if (!this.state.show) {
+      return null;
+    }
     const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const modalTitle = "Exercise Goals";
     const modalId = "exerciseGoalModal";
+    const btnText = "Submit";
     return (
-        <Overlay title={modalTitle} handleSubmit={this.handleSubmit}>
-        <div className="modal-body" id={modalId}>
+      <FormModal title={modalTitle} id={modalId} text={btnText}>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>
@@ -67,8 +71,7 @@ class Goals extends React.Component {
           </div>
         </form>
         <Alert warn={this.state.showWarning} text="This will turn off all recommendations" />
-      </div>
-        </ Overlay>
+      </FormModal>
     );
   }
 }

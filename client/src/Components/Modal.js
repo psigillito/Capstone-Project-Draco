@@ -1,32 +1,33 @@
-import React, { Component } from 'react'
-import Alert from './Alert'
+import React from 'react'
+import { Modal, Button } from 'react-bootstrap'
 
-class Overlay extends React.Component {
+class ModalWrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = props.handleSubmit;
   }
 
   render() {
     const title = this.props.title;
+    const submitBtnText = this.props.text;
     return (
-        <div className="modal" id="myModal" role="dialog"> {/* tabIndex="-1" */}
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title">{title}</h4>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              </div>
-                {this.props.children}
-              <div className="modal-footer">
-                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="static-modal">
+        <Modal.Dialog>
+          <Modal.Header>
+            <Modal.Title>{title}</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            {this.props.children}
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button>Close</Button>
+            <Button bsStyle="primary" onClick={this.handleSubmit}>{submitBtnText}</Button>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </div>
     );
   }
 }
 
-export default Overlay
+export default ModalWrapper
