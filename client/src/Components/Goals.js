@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import React from 'react'
+import { Button, FormControl } from 'react-bootstrap'
 import * as goals from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
-import Overlay from './Modal';
 import Alert from './Alert';
-import FormModal from './Modal';
 
 class Goals extends React.Component {
   constructor(props) {
@@ -51,27 +49,33 @@ class Goals extends React.Component {
   }
 
   render() {
-    if (!this.state.show) {
-      return null;
-    }
     const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
-    const modalTitle = "Exercise Goals";
-    const modalId = "exerciseGoalModal";
+    const title = "Exercise Goals";
     const btnText = "Submit";
+    const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
     return (
-      <FormModal title={modalTitle} id={modalId} text={btnText}>
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>
-              {goals.goals.question}
-              <select className="form-control" onChange={this.handleChange}>
-                {jsxResponses}
-              </select>
-            </label>
+      <div className="register">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <h1 className="display-4 text-center">{title}</h1>
+              <p className="lead text-center">{goals.goals.question}</p>
+              <form onSubmit={this.handleSubmit}>
+                <FormControl componentClass="select" onChange={this.handleChange}>
+                    {jsxResponses}
+                </FormControl>
+              </form>
+              <br/>
+              <Alert warn={this.state.showWarning} text={warnText} />
+            </div>
           </div>
-        </form>
-        <Alert warn={this.state.showWarning} text="This will turn off all recommendations" />
-      </FormModal>
+          <div className="row">
+            <div className="col-md-8 m-auto text-center">
+              <Button bsStyle="info" bsSize="large" onClick={this.handleSubmit}>{btnText}</Button>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
