@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 class Alert extends React.Component {
   constructor(props) {
@@ -15,8 +15,8 @@ class Alert extends React.Component {
       return null;
     } else {
       return (
-        <div class="alert alert-warning alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div className="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Warning!</strong> {this.props.text}
         </div>
       );

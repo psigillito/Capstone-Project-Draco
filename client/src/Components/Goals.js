@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
+import {Modal} from 'react-bootstrap'
 import * as goals from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
-import Modal from './Modal';
+import Overlay from './Modal';
+import Alert from './Alert';
 
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: 1, showWarning: false };
+    this.state = { show: false, value: 1, showWarning: false };
     this.responses = props.responses; 
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
@@ -20,24 +21,6 @@ class Goals extends React.Component {
 
   handleChange(event) {
     this.setState({ value: parseInt(event.target.value, 10) });
-  }
-
-  generateForm() {
-    const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
-    return (
-      <div class="modal-body" id="myModal">
-        <form onSubmit={this.handleSubmit}>
-          <div class="form-group">
-            <label>
-              {goals.goals.question}
-              <select class="form-control" onChange={this.handleChange}>
-                {jsxResponses}
-              </select>
-            </label>
-          </div>
-        </form>
-      </div>
-    );
   }
 
   handleSubmit(event) {
@@ -67,12 +50,25 @@ class Goals extends React.Component {
   }
 
   render() {
-    //< SelectForm responses={this.responses} value={this.state.value} labelText={goals.goals.question} handleSubmit={this.handleSubmit} />} handleSubmit={this.handleSubmit} />
+    const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
+    const modalTitle = "Exercise Goals";
+    const modalId = "exerciseGoalModal";
     return (
-      <div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
-        <Modal title="Exercise Goals" payload={this.generateForm()} warn={this.state.showWarning} warnText="This will turn off all recommendations" handleSubmit={this.handleSubmit} />
+        <Overlay title={modalTitle} handleSubmit={this.handleSubmit}>
+        <div className="modal-body" id={modalId}>
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group">
+            <label>
+              {goals.goals.question}
+              <select className="form-control" onChange={this.handleChange}>
+                {jsxResponses}
+              </select>
+            </label>
+          </div>
+        </form>
+        <Alert warn={this.state.showWarning} text="This will turn off all recommendations" />
       </div>
+        </ Overlay>
     );
   }
 }
