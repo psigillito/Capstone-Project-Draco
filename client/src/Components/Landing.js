@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import NavBar from './NavBar';
+import { Link } from 'react-router-dom';
 
 class Landing extends Component {
 	render() {
@@ -13,8 +13,8 @@ class Landing extends Component {
                   </h1>
                   <p className="lead">Plan Your Workouts</p>
                   <hr />
-                  <a href="register.html" className="btn btn-lg btn-info mr-2">Register</a>
-                  <a href="login.html" className="btn btn-lg btn-light">Login</a>
+                  <Link to="/register" className="btn btn-lg btn-info mr-2">Register</Link>
+                  <Link to="/login" className="btn btn-lg btn-light">Login</Link>
                 </div>
               </div>
             </div>

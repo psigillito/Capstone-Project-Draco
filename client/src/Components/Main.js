@@ -15,6 +15,10 @@ import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
 import DayDetail from './DayDetail'
+import Landing from './Landing'
+import Register from './auth/Register'
+import Login from './auth/Login'
+
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -31,9 +35,13 @@ class Main extends Component{
         console.log(this.props)
         return (
 
-            <div>
+            <div className="App">
+            
                 <NavBar onNavigate = {this.navigate}/>
-                <Route exact path = "/" render={()=>(
+                <Route exact path= "/" component={Landing} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path = "/calendar" render={()=>(
                     <section className="main-container">
                         <h2>{Months[this.props.month] + ","+this.props.year}</h2>
                         <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
