@@ -1,47 +1,42 @@
-import React, { Component } from 'react'
-import * as goals from '../copy/goals.json'
+import React from 'react'
+import { Button, FormControl, FormGroup, Checkbox } from 'react-bootstrap'
+import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
-import Modal from './Modal';
+import Alert from './Alert';
+
+var healthAreas = [];
 
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: 1, showWarning: false };
-    this.responses = props.responses; 
-
-    this.handleChange = this.handleChange.bind(this);
+    this.state = { user: { goals: { primaryGoal: 1 } }, value: 1, showWarning: false };
+    this.handlePrimaryGoalChange = this.handlePrimaryGoalChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
 
   showAlert() {
-    this.setState({showWarning: true});
+    this.setState({ showWarning: true });
   }
 
-  handleChange(event) {
-    this.setState({ value: parseInt(event.target.value, 10) });
+  handlePrimaryGoalChange(event) {
+    this.setState({ user: { goals: { primaryGoal: parseInt(event.target.value, 10) }}});
   }
 
-  generateForm() {
-    const jsxResponses = this.responses.map((response) => <option value={response.value}>{response.text}</option>);
-    return (
-      <div class="modal-body" id="myModal">
-        <form onSubmit={this.handleSubmit}>
-          <div class="form-group">
-            <label>
-              {goals.goals.question}
-              <select class="form-control" onChange={this.handleChange}>
-                {jsxResponses}
-              </select>
-            </label>
-          </div>
-        </form>
-      </div>
-    );
+  handleImproveHealthChange(event) {
+    console.log(event.target.value);
+    var index = healthAreas.indexOf(event.target.value);
+    if (index > -1) {
+      // element is already in the array
+      healthAreas.splice(index, 1);
+    } else {
+      healthAreas.push(event.target.value);
+    }
+    console.log("The array contains: " + healthAreas);
   }
 
   handleSubmit(event) {
-    switch (this.state.value) {
+    switch (this.state.user.goals.primaryGoal) {
       case 1:
         console.log("Improving Health");
         break;
@@ -67,11 +62,46 @@ class Goals extends React.Component {
   }
 
   render() {
-    //< SelectForm responses={this.responses} value={this.state.value} labelText={goals.goals.question} handleSubmit={this.handleSubmit} />} handleSubmit={this.handleSubmit} />
+    const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
+    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
+    const title = "Exercise Goals";
+    const btnText = "Submit";
+    const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
     return (
-      <div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Launch demo modal</button>
-        <Modal title="Exercise Goals" payload={this.generateForm()} warn={this.state.showWarning} warnText="This will turn off all recommendations" handleSubmit={this.handleSubmit} />
+      <div className="register">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <h1 className="display-4 text-center">{title}</h1>
+              <p className="lead text-center">{goalsJCR.goals.question}</p>
+              <form onSubmit={this.handleSubmit}>
+                <FormControl componentClass="select" onChange={this.handlePrimaryGoalChange}>
+                    {jsxResponses}
+                </FormControl>
+              </form>
+              <br/>
+              <Alert warn={this.state.showWarning} text={warnText} />
+            </div>
+          </div>
+          {this.state.user.goals.primaryGoal === 1 &&
+          <div className="row">
+            <div className="col-md-8 m-auto">
+              <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
+              <form>
+                <FormGroup onChange={this.handleImproveHealthChange}>
+                  {improveHealthResponses}
+                </FormGroup>
+              </form>
+            </div>
+          </div>
+          }
+          <br />
+          <div className="row">
+            <div className="col-md-8 m-auto text-center">
+              <Button bsStyle="info" bsSize="large" onClick={this.handleSubmit}>{btnText}</Button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

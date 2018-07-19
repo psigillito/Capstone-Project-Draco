@@ -1,4 +1,6 @@
 import {getMonthWeeks} from '../data/weekData'
+import axios from 'axios';
+import { GET_ERRORS } from './types';
 
 export function updateCurrentYear(newYear){
 
@@ -39,5 +41,14 @@ export function updateUser(newUser){
         type: 'UPDATE_USER',
         newUser: newUser
     }
+}
+
+// Registration
+export const registerUser = (userData, history) => dispatch => {
+    axios.post('/users/register', userData)
+        // redirect on success
+      .then(result => history.push('/login'))
+      // use dispatch for async calls
+      .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 
 }
