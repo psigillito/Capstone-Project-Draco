@@ -1,8 +1,10 @@
 import React from 'react'
-import { Button, FormControl } from 'react-bootstrap'
+import { Button, FormControl, FormGroup, Checkbox } from 'react-bootstrap'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
+
+var healthAreas = [];
 
 class Goals extends React.Component {
   constructor(props) {
@@ -21,8 +23,20 @@ class Goals extends React.Component {
     this.setState({ user: { goals: { primaryGoal: parseInt(event.target.value, 10) }}});
   }
 
+  handleImproveHealthChange(event) {
+    console.log(event.target.value);
+    var index = healthAreas.indexOf(event.target.value);
+    if (index > -1) {
+      // element is already in the array
+      healthAreas.splice(index, 1);
+    } else {
+      healthAreas.push(event.target.value);
+    }
+    console.log("The array contains: " + healthAreas);
+  }
+
   handleSubmit(event) {
-    switch (this.state.value) {
+    switch (this.state.user.goals.primaryGoal) {
       case 1:
         console.log("Improving Health");
         break;
@@ -49,7 +63,7 @@ class Goals extends React.Component {
 
   render() {
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
-    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <option value={response.value}>{response.text}</option>);
+    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
     const title = "Exercise Goals";
     const btnText = "Submit";
     const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
@@ -74,9 +88,9 @@ class Goals extends React.Component {
             <div className="col-md-8 m-auto">
               <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
               <form>
-                <FormControl componentClass="select" multiple onChange={this.handleImproveHealthChange}>
+                <FormGroup onChange={this.handleImproveHealthChange}>
                   {improveHealthResponses}
-                </FormControl>
+                </FormGroup>
               </form>
             </div>
           </div>
