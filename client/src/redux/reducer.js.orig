@@ -48,7 +48,9 @@ function dayVisible(state = selectedDayVisible, action){
     }
 }
 
+<<<<<<< HEAD
 // initial state for registration
+=======
 function user(state = userName, action){
     switch(action.type){
         case 'UPDATE_USER':
@@ -59,6 +61,7 @@ function user(state = userName, action){
 }
 
 // authorization reducer
+>>>>>>> ec490590cb0bc82ee752b6eae6661ab9a7a199f5
 const initialState = {
     isAuthenticated: false,
     user: {}

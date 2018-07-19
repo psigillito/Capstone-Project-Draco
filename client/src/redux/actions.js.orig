@@ -52,6 +52,7 @@ export const registerUser = (userData, history) => dispatch => {
       .then(result => history.push('/login'))
       // use dispatch for async calls
       .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+<<<<<<< HEAD
 }
 
 // Login and get token for user
@@ -77,4 +78,7 @@ export const setCurrentUser = (data) => {
     type: SET_CURRENT_USER,
     payload: data
   }
+=======
+
+>>>>>>> ec490590cb0bc82ee752b6eae6661ab9a7a199f5
 }
