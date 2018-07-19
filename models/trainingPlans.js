@@ -7,9 +7,18 @@ const trainingPlanSchema = new Schema({
     unique: true,
     required: true
   },
-  
+  user: {
+    type: String,
+    required: true
+  },
   workouts: {
     type: Array
+  },
+  startDate: {
+    type: Date
+  },
+  endDate: {
+    type: Date
   }
 });
 
