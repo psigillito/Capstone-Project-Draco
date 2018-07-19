@@ -3,6 +3,7 @@ import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
 import {selectedDayVisible} from '../data/weekData'
 import { combineReducers } from 'redux'
+import { GET_ERRORS } from './types';
 
 
 function days(state = weekData, action) {
@@ -46,7 +47,28 @@ function dayVisible(state = selectedDayVisible, action){
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible})
+// authorization reducer
+const initialState = {
+    isAuthenticated: false,
+    user: {}
+}
+
+function auth(state = initialState, action) {
+    switch(action.type) {
+      default: return state;
+    }
+}
+
+// errors reducer
+function errors(state = initialState, action) {
+    switch(action.type) {
+      case GET_ERRORS: return action.payload;
+      default: return state;
+    }
+}
+
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors})
 
 
 export default rootReducer
