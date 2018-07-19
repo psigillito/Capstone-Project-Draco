@@ -47,7 +47,7 @@ const selectedYear = 2018;
 const selectedMonth = 0;
 const weekData = getMonthWeeks(selectedYear, selectedMonth);
 const selectedDayVisible = true;
-
+const userName = 'jman';
 const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)}
 
@@ -57,6 +57,7 @@ module.exports =    {
     selectedYear,
     selectedMonth,
     getMonthWeeks,
-    selectedDayVisible
+    selectedDayVisible,
+    userName
 }
 

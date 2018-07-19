@@ -30,7 +30,6 @@ class DropDown extends Component{
     render(){
         const listOpen = this.state.listOpen;
         const months = this.state.months;
-        console.log(months);
         return(
             <div className="dd-wrapper">
                 <div className="dd-header" onClick={() => this.toggleList()}>

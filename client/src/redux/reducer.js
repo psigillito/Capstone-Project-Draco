@@ -2,6 +2,7 @@ import {weekData} from '../data/weekData'
 import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
 import {selectedDayVisible} from '../data/weekData'
+import {userName} from '../data/weekData'
 import { combineReducers } from 'redux'
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import isEmpty from '../utility/isEmpty';
@@ -11,7 +12,6 @@ function days(state = weekData, action) {
 
     switch(action.type){
         case 'UPDATE_DAYS':
-            console.log(action.newDays)
             return action.newDays; 
         default:
             return state;
@@ -48,7 +48,20 @@ function dayVisible(state = selectedDayVisible, action){
     }
 }
 
+<<<<<<< HEAD
 // initial state for registration
+=======
+function user(state = userName, action){
+    switch(action.type){
+        case 'UPDATE_USER':
+            return action.newUser;
+        default:
+            return state;
+    }
+}
+
+// authorization reducer
+>>>>>>> ec490590cb0bc82ee752b6eae6661ab9a7a199f5
 const initialState = {
     isAuthenticated: false,
     user: {}
@@ -76,7 +89,7 @@ function errors(state = {}, action) {
 }
 
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors})
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user})
 
 
 export default rootReducer
