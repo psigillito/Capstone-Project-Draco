@@ -33,3 +33,11 @@ export function updateDayVisible(newVisible){
         dayVisible: newVisible
     }
 }
+
+export function updateUser(newUser){
+    return {
+        type: 'UPDATE_USER',
+        newUser: newUser
+    }
+
+}
