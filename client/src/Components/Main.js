@@ -19,11 +19,25 @@ import Landing from './Landing'
 import Register from './auth/Register'
 import Login from './auth/Login'
 import * as goalsJCR from '../copy/goals.json'
+import jwt_decode from 'jwt-decode';
+import setAuthToken from '../utility/authToken';
+import { setCurrentUser } from '../redux/actions';
+import store from '../store';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
                 ' October', ' November', ' December'
                 ];
+
+// check for the user's authorization token
+if(localStorage.jwtToken) {
+    // set the token header
+    setAuthToken(localStorage.jwtToken);
+    // decode the token and get user info
+    const userData = jwt_decode(localStorage.jwtToken);
+    // set the current user
+    store.dispatch(setCurrentUser(userData));
+}
 
 class Main extends Component{
     constructor(props) {
