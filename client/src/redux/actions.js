@@ -49,7 +49,7 @@ export function updateUser(newUser){
 export const registerUser = (userData, history) => dispatch => {
     axios.post('/users/register', userData)
       // redirect on success
-      .then(result => history.push('/login'))
+      .then(result => history.push('/goals'))
       // use dispatch for async calls
       .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 }
