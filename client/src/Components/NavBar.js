@@ -5,8 +5,16 @@ import Settings from './Settings'
 import About from './About'
 import LogOff from './LogOff'
 import PairDevice from './PairDevice'
+import { logout } from '../redux/actions';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class NavBar extends Component {
+    logoutClick(e) {
+        e.preventDefault();
+        this.props.logout();
+    }
+
     render(){
         return(
             <nav className="nav navbar navbar-dark navbar-expand-md bg-dark">
@@ -20,7 +28,7 @@ class NavBar extends Component {
                         <Link className="dropdown-item" to="/PairDevice">Pair Device</Link>
                         <Link className="dropdown-item" to="/Settings">Settings</Link>
                         <Link className="dropdown-item" to="/About">About</Link>
-                        <Link className="dropdown-item" to="/LogOff">Log Off</Link>
+                        <a href="#" onClick={this.logoutClick.bind(this)} className="dropdown-item">Log Off</a>
                     </div>
                 </div>
                 <Link className="btn btn-secondary home-btn" to="/">Home</Link>
@@ -30,4 +38,8 @@ class NavBar extends Component {
     }
 }
 
-export default NavBar
+NavBar.propTypes = {
+    logout: PropTypes.func.isRequired
+}
+
+export default connect(null, { logout })(NavBar);
