@@ -1,10 +1,13 @@
 import React from 'react'
-import { Button, FormControl, FormGroup, Checkbox } from 'react-bootstrap'
+import { Button, FormControl, FormGroup, Checkbox, ControlLabel, HelpBlock } from 'react-bootstrap'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
+import FieldGroup from './FieldGroup';
+import { parse } from 'path';
 
 var healthAreas = [];
+var loseWeight = {};
 
 class Goals extends React.Component {
   constructor(props) {
@@ -20,7 +23,7 @@ class Goals extends React.Component {
   }
 
   handlePrimaryGoalChange(event) {
-    this.setState({ user: { goals: { primaryGoal: parseInt(event.target.value, 10) }}});
+    this.setState({ user: { goals: { primaryGoal: parseInt(event.target.value, 10) } } });
   }
 
   handleImproveHealthChange(event) {
@@ -35,6 +38,26 @@ class Goals extends React.Component {
     console.log("The array contains: " + healthAreas);
   }
 
+  handleWeightLossChange(event) {
+    console.log(event.target.value);
+    console.log(event.target.id);
+    switch (event.target.id) {
+      case "formControlsCurrentWeight":
+        loseWeight['currentWeight'] = parseInt(event.target.value);
+        break;
+      case "formControlsGoalWeight":
+        loseWeight['goalWeight'] = parseInt(event.target.value);
+        break;
+      case "formControlsTimeframe":
+        loseWeight['timeframe'] = parseInt(event.target.value);
+        break;
+      case "autoSelectCheckbox": 
+        loseWeight['autoSelect'] = event.target.checked;
+    }
+    
+    console.log("The object contains: " + JSON.stringify(loseWeight));
+  }
+
   handleSubmit(event) {
     switch (this.state.user.goals.primaryGoal) {
       case 1:
@@ -42,7 +65,7 @@ class Goals extends React.Component {
         break;
       case 2:
         console.log("Lose Weight");
-        // launch follow up
+        this.setState({ user: { goals: { primaryGoal: 2, loseWeight: { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect } } } });
         break;
       case 3:
         console.log("Improve fitness");
@@ -76,22 +99,70 @@ class Goals extends React.Component {
               <p className="lead text-center">{goalsJCR.goals.question}</p>
               <form onSubmit={this.handleSubmit}>
                 <FormControl componentClass="select" onChange={this.handlePrimaryGoalChange}>
-                    {jsxResponses}
+                  {jsxResponses}
                 </FormControl>
               </form>
-              <br/>
+              <br />
               <Alert warn={this.state.showWarning} text={warnText} />
             </div>
           </div>
           {this.state.user.goals.primaryGoal === 1 &&
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
-              <form>
-                <FormGroup onChange={this.handleImproveHealthChange}>
-                  {improveHealthResponses}
-                </FormGroup>
-              </form>
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
+                <form>
+                  <FormGroup onChange={this.handleImproveHealthChange}>
+                    {improveHealthResponses}
+                  </FormGroup>
+                </form>
+              </div>
+            </div>
+          }
+          {this.state.user.goals.primaryGoal === 2 &&
+          <div>
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.loseWeight.question}</p>
+                <form>
+                  <FormGroup onChange={this.handleWeightLossChange}>
+                    <FieldGroup
+                      id="formControlsCurrentWeight"
+                      type="number"
+                      placeholder="lbs"
+                    />
+                  </FormGroup>
+                </form>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.loseWeight.followUp[0].question}</p>
+                <form>
+                  <FormGroup onChange={this.handleWeightLossChange}>
+                    <FieldGroup
+                      id="formControlsGoalWeight"
+                      type="number"
+                      placeholder="lbs"
+                    />
+                  </FormGroup>
+                </form>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.loseWeight.followUp[1].question}</p>
+                <form>
+                  <FormGroup onChange={this.handleWeightLossChange}>
+                    <FieldGroup
+                      id="formControlsTimeframe"
+                      type="number"
+                      label="Enter the number of weeks:"
+                      placeholder="1"
+                    />
+                  </FormGroup>
+                  <Checkbox id="autoSelectCheckbox" onChange={this.handleWeightLossChange} value={goalsJCR.loseWeight.followUp[1].responses[0].value}>{goalsJCR.loseWeight.followUp[1].responses[0].text}</Checkbox>
+                </form>
+              </div>
             </div>
           </div>
           }

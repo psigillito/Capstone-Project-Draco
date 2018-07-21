@@ -45,9 +45,9 @@
             }
         ]
     },
-    "lose-weight": {
+    "loseWeight": {
         "question": "What is your current weight?",
-        "follow-up": [
+        "followUp": [
             {
                 "question": "What is your goal weight?"
             },
@@ -56,7 +56,7 @@
                 "responses": [
                     {
                         "text": "Let the program suggest the timeframe for me",
-                        "value": 1
+                        "value": 0
                     }
                 ]
             },
