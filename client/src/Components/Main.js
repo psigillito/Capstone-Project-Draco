@@ -45,7 +45,6 @@ class Main extends Component{
     }
 
     render(){
-        console.log(this.props.user);
         return (
             <div>
                 <NavBar onNavigate = {this.navigate}/>
@@ -54,10 +53,10 @@ class Main extends Component{
                 <Route exact path="/login" component={Login} />
                 <Route exact path = "/calendar" render={()=>(
                     <section className="main-container">
-                    <h1>Welcome Back {this.props.user}</h1>
+                    <h1>Welcome Back {this.props.auth.user.name}</h1>
                         <h2>{Months[this.props.month] + ","+this.props.year}</h2>
                         <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
-                        <Calendar weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
+                        <Calendar user = {this.props.auth.user.name} weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
                         <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
                         updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
                     </section>

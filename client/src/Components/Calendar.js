@@ -17,7 +17,6 @@ class Calendar extends Component{
     }
 
     render(){
-
         return (
             <div className="calendar-component">
                 <table>

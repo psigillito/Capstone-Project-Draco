@@ -8,6 +8,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import isEmpty from '../utility/isEmpty';
 
 
+
 function days(state = weekData, action) {
 
     switch(action.type){
@@ -58,7 +59,6 @@ function user(state = userName, action){
     }
 }
 
-// authorization reducer
 const initialState = {
     isAuthenticated: false,
     user: {}
@@ -67,9 +67,8 @@ const initialState = {
 // authorization reducer
 function auth(state = initialState, action) {
     switch(action.type) {
-      case SET_CURRENT_USER:
+      case 'SET_CURRENT_USER':
         return {
-          ...state,
           isAuthenticated: !isEmpty(action.payload),
           user: action.payload
         }
@@ -85,8 +84,6 @@ function errors(state = {}, action) {
     }
 }
 
-
 const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user})
-
 
 export default rootReducer

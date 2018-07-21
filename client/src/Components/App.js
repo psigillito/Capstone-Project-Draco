@@ -10,7 +10,7 @@ function mapStateToProps(state){
         month: state.month,
         year: state.year,
         dayVisible: state.dayVisible,
-        user: state.user,
+        auth: state.auth
     }
 }
 
