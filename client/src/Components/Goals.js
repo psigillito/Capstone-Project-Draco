@@ -8,12 +8,15 @@ import { parse } from 'path';
 
 var healthAreas = [];
 var loseWeight = {};
+var fitnessAreas = [];
+var warningShown = false;
 
 class Goals extends React.Component {
   constructor(props) {
     super(props);
     this.state = { user: { goals: { primaryGoal: 1 } }, value: 1, showWarning: false };
     this.handlePrimaryGoalChange = this.handlePrimaryGoalChange.bind(this);
+    this.handleSportsChange = this.handleSportsChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
   }
@@ -58,9 +61,26 @@ class Goals extends React.Component {
     console.log("The object contains: " + JSON.stringify(loseWeight));
   }
 
+  handleFitnessChange(event) {
+    console.log(event.target.value);
+    var index = fitnessAreas.indexOf(event.target.value);
+    if (index > -1) {
+      // element is already in the array
+      fitnessAreas.splice(index, 1);
+    } else {
+      fitnessAreas.push(event.target.value);
+    }
+    console.log("The array contains: " + fitnessAreas);
+  }
+
+  handleSportsChange(event) {
+    this.setState({ user: { goals: { primaryGoal: 4, sport: parseInt(event.target.value, 10) } } });
+  }
+
   handleSubmit(event) {
     switch (this.state.user.goals.primaryGoal) {
       case 1:
+        this.setState({ user: { goals: { primaryGoal: 1, health: healthAreas }}});
         console.log("Improving Health");
         break;
       case 2:
@@ -69,24 +89,32 @@ class Goals extends React.Component {
         break;
       case 3:
         console.log("Improve fitness");
-        // launch follow up
+        this.setState({ user: { goals: { primaryGoal: 3, fitness: fitnessAreas }}});
         break;
       case 4:
         console.log("Sports performance");
-        // launch follow up
+        if (!this.state.user.goals.sport) {
+          this.setState({ user: { goals: { primaryGoal: 4, sport: 1 }}});
+        }
         break;
       case 5:
-        this.showAlert();
+        if (!warningShown) {
+          this.showAlert();
+        }
         break;
       default:
         console.log("This shouldn't get executed!");
     }
+    //POST to the DB
     event.preventDefault();
+    //Navigate Home
   }
 
   render() {
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
+    const improveFitnessResponses = goalsJCR.improveFitness.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
+    const improveSportsResponses = goalsJCR.sportPerformance.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const title = "Exercise Goals";
     const btnText = "Submit";
     const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
@@ -165,6 +193,30 @@ class Goals extends React.Component {
               </div>
             </div>
           </div>
+          }
+          {this.state.user.goals.primaryGoal === 3 &&
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.improveFitness.question}</p>
+                <form>
+                  <FormGroup onChange={this.handleFitnessChange}>
+                    {improveFitnessResponses}
+                  </FormGroup>
+                </form>
+              </div>
+            </div>
+          }
+          {this.state.user.goals.primaryGoal === 4 &&
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{goalsJCR.sportPerformance.question}</p>
+                <form>
+                  <FormControl componentClass="select" onChange={this.handleSportsChange}>
+                    {improveSportsResponses}
+                  </FormControl>
+                </form>
+              </div>
+            </div>
           }
           <br />
           <div className="row">
