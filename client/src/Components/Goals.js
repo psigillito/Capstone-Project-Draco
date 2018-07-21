@@ -1,10 +1,10 @@
 import React from 'react'
-import { Button, FormControl, FormGroup, Checkbox, ControlLabel, HelpBlock } from 'react-bootstrap'
+import { Button, FormControl, FormGroup, Checkbox } from 'react-bootstrap'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
 import FieldGroup from './FieldGroup';
-import { parse } from 'path';
+import NumericValidation from './NumericValidation';
 
 var healthAreas = [];
 var loseWeight = {};
@@ -14,11 +14,12 @@ var warningShown = false;
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: { goals: { primaryGoal: 1 } }, value: 1, showWarning: false };
+    this.state = { user: { goals: { primaryGoal: 1 } }, validationState: {sunday: null, monday: null, tuesday: null, wednesday: null, thursday: null, friday: null, saturday: null}, showWarning: false };
     this.handlePrimaryGoalChange = this.handlePrimaryGoalChange.bind(this);
     this.handleSportsChange = this.handleSportsChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
+    this.handleHoursPerDayChange = this.handleHoursPerDayChange.bind(this);
   }
 
   showAlert() {
@@ -77,6 +78,43 @@ class Goals extends React.Component {
     this.setState({ user: { goals: { primaryGoal: 4, sport: parseInt(event.target.value, 10) } } });
   }
 
+  handleHoursPerDayChange(event) {
+    //console.log(event.target.value);
+    var numHours = parseInt(event.target.value, 10);
+    var dayOfWeek = "";
+    var returnObj = {validationState:{}};
+    if (event.target.id.indexOf("Sunday") > -1) {
+      dayOfWeek = "sunday";
+    }
+    else if (event.target.id.indexOf("Monday") > -1) {
+      dayOfWeek = "monday";
+    }
+    else if (event.target.id.indexOf("Tuesday") > -1) {
+      dayOfWeek = "tuesday";
+    }
+    else if (event.target.id.indexOf("Wednesday") > -1) {
+      dayOfWeek = "wednesday";
+    }
+    else if (event.target.id.indexOf("Thursday") > -1) {
+      dayOfWeek = "thursday";
+    }
+    else if (event.target.id.indexOf("Friday") > -1) {
+      dayOfWeek = "friday";
+    }
+    else if (event.target.id.indexOf("Saturday") > -1) {
+      dayOfWeek = "saturday";
+    }
+    //console.log(dayOfWeek);
+    returnObj['validationState'][dayOfWeek]
+    if (numHours < 0 || numHours > 24) {
+      returnObj['validationState'][dayOfWeek] = "error";
+    } else {
+      returnObj['validationState'][dayOfWeek] = "success";
+    }
+
+    this.setState(returnObj);
+  }
+
   handleSubmit(event) {
     switch (this.state.user.goals.primaryGoal) {
       case 1:
@@ -111,6 +149,7 @@ class Goals extends React.Component {
   }
 
   render() {
+    const daysPerWeek = [1, 2, 3, 4, 5, 6, 7].map((day) => <option value={day}>{day}</option>);
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
     const improveFitnessResponses = goalsJCR.improveFitness.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
@@ -118,6 +157,7 @@ class Goals extends React.Component {
     const title = "Exercise Goals";
     const btnText = "Submit";
     const warnText = "This will turn off all recommendations. Click " + btnText + " to continue";
+    const helpText = "Please enter a number between 0 and 24";
     return (
       <div className="register">
         <div className="container">
@@ -218,6 +258,31 @@ class Goals extends React.Component {
               </div>
             </div>
           }
+          <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{logistics.daysPerWeek.question}</p>
+                <form>
+                  <FormControl componentClass="select" onChange={this.handleDaysPerWeekChange}>
+                    {daysPerWeek}
+                  </FormControl>
+                </form>
+              </div>
+            </div>
+            <br/>
+            <div className="row">
+              <div className="col-md-8 m-auto">
+                <p className="lead text-center">{logistics.hoursPerDay.question}</p>
+                <form>
+                  <NumericValidation id="frmCntrlSunday" validationState={this.state.validationState.sunday} label="Sunday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlMonday" validationState={this.state.validationState.monday} label="Monday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlTuesday" validationState={this.state.validationState.tuesday} label="Tuesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlWednesday" validationState={this.state.validationState.wednesday} label="Wednesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlThursday" validationState={this.state.validationState.thursday} label="Thursday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlFriday" validationState={this.state.validationState.friday} label="Friday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlSaturday" validationState={this.state.validationState.saturday} label="Saturday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                </form>
+              </div>
+            </div>
           <br />
           <div className="row">
             <div className="col-md-8 m-auto text-center">
