@@ -76,8 +76,6 @@ function errors(state = initialState, action) {
     }
 }
 
-
 const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user})
-
 
 export default rootReducer
