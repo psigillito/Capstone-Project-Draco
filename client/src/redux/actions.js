@@ -74,7 +74,7 @@ export const loginUser = (userData) => dispatch => {
 // set the currently logged in user
 export const setCurrentUser = (data) => {
   return {
-    type: SET_CURRENT_USER,
+    type: 'SET_CURRENT_USER',
     payload: data
   }
 }
