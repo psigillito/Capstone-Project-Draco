@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, FormControl, FormGroup, Checkbox } from 'react-bootstrap'
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
@@ -47,16 +47,19 @@ class Goals extends React.Component {
     console.log(event.target.id);
     switch (event.target.id) {
       case "formControlsCurrentWeight":
-        loseWeight['currentWeight'] = parseInt(event.target.value);
+        loseWeight['currentWeight'] = parseInt(event.target.value, 10);
         break;
       case "formControlsGoalWeight":
-        loseWeight['goalWeight'] = parseInt(event.target.value);
+        loseWeight['goalWeight'] = parseInt(event.target.value, 10);
         break;
       case "formControlsTimeframe":
-        loseWeight['timeframe'] = parseInt(event.target.value);
+        loseWeight['timeframe'] = parseInt(event.target.value, 10);
         break;
       case "autoSelectCheckbox": 
         loseWeight['autoSelect'] = event.target.checked;
+        break;
+      default:
+        // to get rid of the console warning :)
     }
     
     console.log("The object contains: " + JSON.stringify(loseWeight));
@@ -81,8 +84,9 @@ class Goals extends React.Component {
   handleHoursPerDayChange(event) {
     //console.log(event.target.value);
     var numHours = parseInt(event.target.value, 10);
+    //console.log(numHours);
     var dayOfWeek = "";
-    var returnObj = {validationState:{}};
+    var returnObj = JSON.parse(JSON.stringify(this.state));
     if (event.target.id.indexOf("Sunday") > -1) {
       dayOfWeek = "sunday";
     }
@@ -105,11 +109,10 @@ class Goals extends React.Component {
       dayOfWeek = "saturday";
     }
     //console.log(dayOfWeek);
-    returnObj['validationState'][dayOfWeek]
-    if (numHours < 0 || numHours > 24) {
-      returnObj['validationState'][dayOfWeek] = "error";
+    if (numHours > 0 && numHours <= 24) {
+      returnObj['validationState'][dayOfWeek] = true;
     } else {
-      returnObj['validationState'][dayOfWeek] = "success";
+      returnObj['validationState'][dayOfWeek] = false;
     }
 
     this.setState(returnObj);
@@ -151,8 +154,8 @@ class Goals extends React.Component {
   render() {
     const daysPerWeek = [1, 2, 3, 4, 5, 6, 7].map((day) => <option value={day}>{day}</option>);
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
-    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
-    const improveFitnessResponses = goalsJCR.improveFitness.responses.map((response) => <Checkbox value={response.value}>{response.text}</Checkbox>);
+  const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <FormGroup check><Input type="checkbox" value={response.value} />{' '}{response.text}</FormGroup>);
+    const improveFitnessResponses = goalsJCR.improveFitness.responses.map((response) => <FormGroup check><Input type="checkbox" value={response.value} />{' '}{response.text}</FormGroup>);
     const improveSportsResponses = goalsJCR.sportPerformance.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const title = "Exercise Goals";
     const btnText = "Submit";
@@ -166,9 +169,9 @@ class Goals extends React.Component {
               <h1 className="display-4 text-center">{title}</h1>
               <p className="lead text-center">{goalsJCR.goals.question}</p>
               <form onSubmit={this.handleSubmit}>
-                <FormControl componentClass="select" onChange={this.handlePrimaryGoalChange}>
+                <Input type="select" onChange={this.handlePrimaryGoalChange}>
                   {jsxResponses}
-                </FormControl>
+                </Input>
               </form>
               <br />
               <Alert warn={this.state.showWarning} text={warnText} />
@@ -187,52 +190,54 @@ class Goals extends React.Component {
             </div>
           }
           {this.state.user.goals.primaryGoal === 2 &&
-          <div>
-            <div className="row">
-              <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.loseWeight.question}</p>
-                <form>
-                  <FormGroup onChange={this.handleWeightLossChange}>
-                    <FieldGroup
-                      id="formControlsCurrentWeight"
-                      type="number"
-                      placeholder="lbs"
-                    />
-                  </FormGroup>
-                </form>
+            <div>
+              <div className="row">
+                <div className="col-md-8 m-auto">
+                  <p className="lead text-center">{goalsJCR.loseWeight.question}</p>
+                  <form>
+                    <FormGroup onChange={this.handleWeightLossChange}>
+                      <FieldGroup
+                        id="formControlsCurrentWeight"
+                        type="number"
+                        placeholder="lbs"
+                      />
+                    </FormGroup>
+                  </form>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-8 m-auto">
+                  <p className="lead text-center">{goalsJCR.loseWeight.followUp[0].question}</p>
+                  <form>
+                    <FormGroup onChange={this.handleWeightLossChange}>
+                      <FieldGroup
+                        id="formControlsGoalWeight"
+                        type="number"
+                        placeholder="lbs"
+                      />
+                    </FormGroup>
+                  </form>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-8 m-auto">
+                  <p className="lead text-center">{goalsJCR.loseWeight.followUp[1].question}</p>
+                  <form>
+                    <FormGroup onChange={this.handleWeightLossChange}>
+                      <FieldGroup
+                        id="formControlsTimeframe"
+                        type="number"
+                        label="Enter the number of weeks:"
+                        placeholder="1"
+                      />
+                    </FormGroup>
+                    <FormGroup>
+                      <Input type="checkbox" id="autoSelectCheckbox" onChange={this.handleWeightLossChange} value={goalsJCR.loseWeight.followUp[1].responses[0].value} />{' '}{goalsJCR.loseWeight.followUp[1].responses[0].text}
+                    </FormGroup>
+                  </form>
+                </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.loseWeight.followUp[0].question}</p>
-                <form>
-                  <FormGroup onChange={this.handleWeightLossChange}>
-                    <FieldGroup
-                      id="formControlsGoalWeight"
-                      type="number"
-                      placeholder="lbs"
-                    />
-                  </FormGroup>
-                </form>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.loseWeight.followUp[1].question}</p>
-                <form>
-                  <FormGroup onChange={this.handleWeightLossChange}>
-                    <FieldGroup
-                      id="formControlsTimeframe"
-                      type="number"
-                      label="Enter the number of weeks:"
-                      placeholder="1"
-                    />
-                  </FormGroup>
-                  <Checkbox id="autoSelectCheckbox" onChange={this.handleWeightLossChange} value={goalsJCR.loseWeight.followUp[1].responses[0].value}>{goalsJCR.loseWeight.followUp[1].responses[0].text}</Checkbox>
-                </form>
-              </div>
-            </div>
-          </div>
           }
           {this.state.user.goals.primaryGoal === 3 &&
             <div className="row">
@@ -251,9 +256,9 @@ class Goals extends React.Component {
               <div className="col-md-8 m-auto">
                 <p className="lead text-center">{goalsJCR.sportPerformance.question}</p>
                 <form>
-                  <FormControl componentClass="select" onChange={this.handleSportsChange}>
+                  <Input type="select" onChange={this.handleSportsChange}>
                     {improveSportsResponses}
-                  </FormControl>
+                  </Input>
                 </form>
               </div>
             </div>
@@ -262,9 +267,9 @@ class Goals extends React.Component {
               <div className="col-md-8 m-auto">
                 <p className="lead text-center">{logistics.daysPerWeek.question}</p>
                 <form>
-                  <FormControl componentClass="select" onChange={this.handleDaysPerWeekChange}>
+                  <Input type="select" onChange={this.handleDaysPerWeekChange}>
                     {daysPerWeek}
-                  </FormControl>
+                  </Input>
                 </form>
               </div>
             </div>
@@ -272,7 +277,7 @@ class Goals extends React.Component {
             <div className="row">
               <div className="col-md-8 m-auto">
                 <p className="lead text-center">{logistics.hoursPerDay.question}</p>
-                <form>
+                <Form>
                   <NumericValidation id="frmCntrlSunday" validationState={this.state.validationState.sunday} label="Sunday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                   <NumericValidation id="frmCntrlMonday" validationState={this.state.validationState.monday} label="Monday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                   <NumericValidation id="frmCntrlTuesday" validationState={this.state.validationState.tuesday} label="Tuesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
@@ -280,7 +285,7 @@ class Goals extends React.Component {
                   <NumericValidation id="frmCntrlThursday" validationState={this.state.validationState.thursday} label="Thursday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                   <NumericValidation id="frmCntrlFriday" validationState={this.state.validationState.friday} label="Friday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                   <NumericValidation id="frmCntrlSaturday" validationState={this.state.validationState.saturday} label="Saturday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                </form>
+                </Form>
               </div>
             </div>
           <br />

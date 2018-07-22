@@ -1,14 +1,14 @@
 import React from 'react'
-import { FormControl, FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap'
+import { FormGroup, Label, Input, FormFeedback } from 'reactstrap'
 
 class NumericValidation extends React.Component {
 
     render() {
         return (
-            <FormGroup controlId={this.props.id} validationState={this.props.validationState}>
-                <ControlLabel>{this.props.label}</ControlLabel>
-                <FormControl type="number" onChange={this.props.onChange} />
-                {this.props.help && this.props.validationState === "error" && <HelpBlock>{this.props.help}</HelpBlock>}
+            <FormGroup>
+                <Label>{this.props.label}</Label>
+                <Input invalid={!this.props.validationState} valid={this.props.validationState} type="number" id={this.props.id} onChange={this.props.onChange} />
+                {this.props.help && this.props.validationState === false && <FormFeedback>{this.props.help}</FormFeedback>}
             </FormGroup>
         );
     }
