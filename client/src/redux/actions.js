@@ -1,6 +1,6 @@
 import {getMonthWeeks} from '../data/weekData'
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import setAuthToken from '../utility/authToken';
 import jwt_decode from 'jwt-decode';
 
@@ -89,4 +89,23 @@ export const logout = () => dispatch => {
   dispatch(setCurrentUser({}));
   // redirect to login page
   window.location.href = '/login';
+}
+
+// get the current user profile
+export const getProfile = () => dispatch => {
+  axios.get('/profile')
+    .then(res => dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    }))
+    .catch(err => dispatch({
+      type: GET_PROFILE,
+      payload: {}
+    }));
+}
+
+export const clearProfile = () => {
+  return {
+    type: CLEAR_PROFILE
+  }  
 }

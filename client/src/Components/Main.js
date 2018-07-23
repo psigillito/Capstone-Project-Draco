@@ -18,6 +18,7 @@ import DayDetail from './DayDetail'
 import Landing from './Landing'
 import Register from './auth/Register'
 import Login from './auth/Login'
+import UserProfile from './UserProfile';
 import * as goalsJCR from '../copy/goals.json'
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utility/authToken';
@@ -51,6 +52,7 @@ class Main extends Component{
                 <Route exact path= "/" component={Landing} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <Route exact path="/profile" component={UserProfile} />
                 <Route exact path = "/calendar" render={()=>(
                     <section className="main-container">
                     <h1>Welcome Back {this.props.auth.user.name}</h1>
