@@ -10,16 +10,35 @@ import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
+import {updateMonth} from '../redux/actions'
+import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
-import Goals from './Goals';
+import Goals from './Goals'
+import DayDetail from './DayDetail'
+import Landing from './Landing'
+import Register from './auth/Register'
+import Login from './auth/Login'
+import UserProfile from './UserProfile';
+import * as goalsJCR from '../copy/goals.json'
+import jwt_decode from 'jwt-decode';
+import setAuthToken from '../utility/authToken';
+import { setCurrentUser } from '../redux/actions';
+import store from '../store';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
                 ' October', ' November', ' December'
                 ];
 
-
-
+// check for the user's authorization token
+if(localStorage.jwtToken) {
+    // set the token header
+    setAuthToken(localStorage.jwtToken);
+    // decode the token and get user info
+    const userData = jwt_decode(localStorage.jwtToken);
+    // set the current user
+    store.dispatch(setCurrentUser(userData));
+}
 
 class Main extends Component{
     constructor(props) {
@@ -27,20 +46,21 @@ class Main extends Component{
     }
 
     render(){
-
-        console.log(this.props)
         return (
-
             <div>
                 <NavBar onNavigate = {this.navigate}/>
-                <Route exact path = "/" render={()=>(
+                <Route exact path= "/" component={Landing} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/profile" component={UserProfile} />
+                <Route exact path = "/calendar" render={()=>(
                     <section className="main-container">
-
+                    <h1>Welcome Back {this.props.auth.user.name}</h1>
                         <h2>{Months[this.props.month] + ","+this.props.year}</h2>
-
-                        <Calendar  weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month}  /> 
-
-                        <CalendarController updateDays={this.props.updateDays}  updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                        <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
+                        <Calendar user = {this.props.auth.user.name} weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
+                        <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
+                        updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
                     </section>
                 )}/>
                 <Switch>
@@ -48,9 +68,8 @@ class Main extends Component{
                     <Route path="/LogOff" exact component={LogOff}/>
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
-                    <Route path = "/goals" component={Goals}/>
+                    <Route path = "/goals" render={(props) => <Goals {...props} responses={goalsJCR.goals.responses}/>}/>
                 </Switch>
-                
             </div>
         )
     }

@@ -8,7 +8,9 @@ function mapStateToProps(state){
     return {
         days: state.days,
         month: state.month,
-        year: state.year
+        year: state.year,
+        dayVisible: state.dayVisible,
+        auth: state.auth
     }
 }
 

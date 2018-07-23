@@ -2,9 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Import user model
 const User = require('../models/users');
+
+// Import key
+const keys = require('../config/keys');
 
 // POST to users/register
 // Register a user
@@ -18,8 +22,16 @@ router.post('/register', (req, res) => {
 		.then(user => {
 			if(user) { // email was found
 				errors.email = 'Email already exists';
-				return res.status(400).json({errors});
+				return res.status(400).json(errors);
 			} else {
+
+				User.findOne({ username: req.body.username })
+					.then(user => {
+						if(user) {
+							errors.username = 'Username already exists';
+							return res.status(400).json(errors)
+						}
+					})
 				// Create new user
 				const newUser = new User({
 					email: req.body.email,
@@ -65,7 +77,15 @@ router.post('/login', (req, res) => {
 			bcrypt.compare(password, user.password)
 				.then(match => {
 					if(match) {
-						res.json({msg: 'success'});
+						// user matched
+						// create jwt payload
+						const payload = {id: user.id, name: user.name};
+
+						// sign the token
+						jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 }, (err, token) => {
+							res.json({ success: true, token: "Bearer " + token });
+						})
+
 					} else {
 						errors.password = 'Password incorrect';
 						return res.status(400).json({errors});
