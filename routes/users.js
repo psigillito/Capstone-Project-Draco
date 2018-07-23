@@ -70,7 +70,7 @@ router.post('/login', (req, res) => {
 		.then(user => {
 			if(!user) {
 				errors.email = 'No user exists with that email';
-				return res.status(404).json({errors});
+				return res.status(404).json(errors);
 			} 
 
 			// check for correct password
@@ -88,7 +88,7 @@ router.post('/login', (req, res) => {
 
 					} else {
 						errors.password = 'Password incorrect';
-						return res.status(400).json({errors});
+						return res.status(400).json(errors);
 					}
 				})
 		});
