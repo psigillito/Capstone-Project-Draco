@@ -3,6 +3,7 @@ import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
 import {selectedDayVisible} from '../data/weekData'
 import {userName} from '../data/weekData'
+import {currentTrainingPlans} from '../data/weekData'
 import { combineReducers } from 'redux'
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import isEmpty from '../utility/isEmpty';
@@ -84,6 +85,15 @@ function errors(state = {}, action) {
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user})
+function trainingPlans(state = currentTrainingPlans, action){
+    switch(action.type){
+        case "SET_TRAINING_PLAN":
+            state = action.data;
+        default:
+            return state;
+    }
+}
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, trainingPlans })
 
 export default rootReducer
