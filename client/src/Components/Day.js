@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import DayDetail from './DayDetail'
+import {currentDay} from '../data/weekData'
 
 class Day extends Component {
 
@@ -9,25 +10,34 @@ class Day extends Component {
     }
 
     handleVisibleChange = (newValue) => (e) =>{
-        console.log("RENDER FIRED!")
         this.props.updateDayVisible(newValue);
     }
 
 
     render(){
         if(this.props.date != 'X'){            
-            return(
-                
-                <div>
-                    <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton">{this.props.date}</button>
-                </div>
-                
-            )
-        }else {
-            return(
-                <span></span>
-            )
-        }
+            
+                if(this.props.date == currentDay){
+                    return(        
+                    <div>
+                        <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
+                    </div>
+                    )
+                }
+                else{
+                    return(
+                    <div>
+                        <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton ">{this.props.date}</button>
+                    </div>
+                    )
+                }
+            }
+            else
+            {
+                return(
+                    <span></span>
+                )
+            }
     }   
 }
 
