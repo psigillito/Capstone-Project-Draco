@@ -29,6 +29,7 @@ import { connect } from 'react-redux';
 import reducer from '../redux/reducer';
 import axios from 'axios';
 import MainMenu from './MainMenu';
+import Recommendation from './Recommendation';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -108,6 +109,7 @@ class Main extends Component{
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
                     <Route path = "/goals" render={(props) => <Goals {...props} responses={goalsJCR.goals.responses}/>}/>
+                    <Route path="/recommend" render={(props) => <Recommendation {...props} title="Recommendation" text="You should exercise at least 150 minutes this week!" />}/>
                 </Switch>
             </div>
         )
