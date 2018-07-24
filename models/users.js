@@ -25,7 +25,18 @@ const userSchema = new Schema({
   },
 
   location: String,
-  goals: {},
+  goals: {
+    primaryGoal: Number,
+    health: Array,
+    loseWeight: {
+      currentWeight: Number,
+      goalWeight: Number,
+      time: Number,
+      autoSelectTime: Boolean
+    },
+    fitness: Array,
+    sport: Number
+  },
   trainingPlans: {
     type: Array
   },

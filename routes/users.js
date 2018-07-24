@@ -70,7 +70,7 @@ router.post('/login', (req, res) => {
 		.then(user => {
 			if(!user) {
 				errors.email = 'No user exists with that email';
-				return res.status(404).json({errors});
+				return res.status(404).json(errors);
 			} 
 
 			// check for correct password
@@ -88,10 +88,25 @@ router.post('/login', (req, res) => {
 
 					} else {
 						errors.password = 'Password incorrect';
-						return res.status(400).json({errors});
+						return res.status(400).json(errors);
 					}
 				})
 		});
+});
+
+router.patch('/', (req, res) => {
+	console.log(JSON.stringify(req.body));
+	if (req.body.id) {
+		User.findOneAndUpdate({_id: req.body.id}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
+		if (error) {
+			console.log(error);
+			console.log(doc);
+		}
+	});
+	res.json({ success: true });
+} else {
+	res.status(406).json({ message: "Request must contain a valid user ID" });
+}
 });
 
 module.exports = router;

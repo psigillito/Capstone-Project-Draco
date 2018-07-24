@@ -5,7 +5,7 @@ import {selectedDayVisible} from '../data/weekData'
 import {userName} from '../data/weekData'
 import {currentTrainingPlans} from '../data/weekData'
 import { combineReducers } from 'redux'
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import isEmpty from '../utility/isEmpty';
 
 
@@ -50,7 +50,7 @@ function dayVisible(state = selectedDayVisible, action){
     }
 }
 
-// initial state for registration
+
 function user(state = userName, action){
     switch(action.type){
         case 'UPDATE_USER':
@@ -60,6 +60,7 @@ function user(state = userName, action){
     }
 }
 
+// set initial state
 const initialState = {
     isAuthenticated: false,
     user: {}
@@ -68,7 +69,7 @@ const initialState = {
 // authorization reducer
 function auth(state = initialState, action) {
     switch(action.type) {
-      case 'SET_CURRENT_USER':
+      case SET_CURRENT_USER:
         return {
           isAuthenticated: !isEmpty(action.payload),
           user: action.payload
@@ -94,6 +95,28 @@ function trainingPlans(state = currentTrainingPlans, action){
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, trainingPlans })
+const profileState = {
+    profile: null
+}
+
+// profile reducer
+function profile(state = profileState, action) {
+    switch(action.type) {
+        case GET_PROFILE: 
+            return {
+                ...state,
+                profile: action.payload
+            }
+        case CLEAR_PROFILE:
+            return {
+                ...state,
+                profile: null
+            }
+        default: return state;
+    }
+}
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, profile, trainingPlans})
+
 
 export default rootReducer

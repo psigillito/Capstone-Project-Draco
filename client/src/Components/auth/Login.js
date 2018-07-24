@@ -36,7 +36,7 @@ class Login extends Component {
 
     const user = {
       email: this.state.email,
-      password: this.state.password,
+      password: this.state.password
     }
 
     this.props.loginUser(user);
@@ -65,6 +65,7 @@ class Login extends Component {
                   name="email" 
                   value={this.state.email}
                   onChange={this.onChange}
+                  required
                 />
                 { errors.email && (<div className="invalid-feedback">{errors.email}</div>) }
               </div>
@@ -78,6 +79,7 @@ class Login extends Component {
                   name="password" 
                   value={this.state.password}
                   onChange={this.onChange}
+                  required
                 />
                 { errors.password && (<div className="invalid-feedback">{errors.password}</div>) }
               </div>

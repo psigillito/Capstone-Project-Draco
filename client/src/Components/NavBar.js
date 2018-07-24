@@ -5,14 +5,18 @@ import Settings from './Settings'
 import About from './About'
 import LogOff from './LogOff'
 import PairDevice from './PairDevice'
+import UserProfile from './UserProfile'
+import Goals from './Goals';
 import { logout } from '../redux/actions';
+import { clearProfile } from '../redux/actions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class NavBar extends Component {
     logoutClick(e) {
         e.preventDefault();
-        this.props.logout();
+        this.props.clearProfile();
+        this.props.logout();    
     }
 
     render(){
@@ -28,6 +32,8 @@ class NavBar extends Component {
                     <Link className="dropdown-item" to="/PairDevice">Pair Device</Link>
                     <Link className="dropdown-item" to="/Settings">Settings</Link>
                     <Link className="dropdown-item" to="/About">About</Link>
+                    <Link className="dropdown-item" to="/profile">Profile</Link>
+                    <Link className="dropdown-item" to="/goals">Goals</Link>
                     <a href="#" onClick={this.logoutClick.bind(this)} className="dropdown-item">Log Off</a>
                 </div>
             </div>
@@ -66,4 +72,4 @@ const mapStateToProps = function(state) {
   return { auth: state.auth, errors: state.errors }
 }
 
-export default connect(mapStateToProps, { logout })(NavBar);
+export default connect(mapStateToProps, { logout, clearProfile })(NavBar);

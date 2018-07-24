@@ -21,6 +21,9 @@ app.use(bodyParser.json());
 // Passport middleware
 app.use(passport.initialize());
 
+// include passport configuration
+require('./config/passport')(passport);
+
 // React build middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
 
