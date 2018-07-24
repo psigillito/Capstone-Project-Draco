@@ -54,9 +54,15 @@ const userName = 'jman';
 const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)}
 
-const currentTrainingPlans = {
-                                data: [],
-                             };
+const currentTrainingPlans = { data: []};
+
+const dayDetailsJSON = {
+
+    
+}
+
+
+
 
 //export default weekData
 module.exports =    {
