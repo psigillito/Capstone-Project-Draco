@@ -94,4 +94,19 @@ router.post('/login', (req, res) => {
 		});
 });
 
+router.patch('/', (req, res) => {
+	console.log(JSON.stringify(req.body));
+	if (req.body.id) {
+		User.findOneAndUpdate({_id: req.body.id}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
+		if (error) {
+			console.log(error);
+			console.log(doc);
+		}
+	});
+	res.json({ success: true });
+} else {
+	res.status(406).json({ message: "Request must contain a valid user ID" });
+}
+});
+
 module.exports = router;

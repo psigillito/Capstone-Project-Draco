@@ -1,10 +1,12 @@
 import React from 'react'
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import { Redirect } from 'react-router'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
 import Alert from './Alert';
 import FieldGroup from './FieldGroup';
 import NumericValidation from './NumericValidation';
+import axios from 'axios';
 
 var healthAreas = [];
 var loseWeight = {};
@@ -14,7 +16,7 @@ var warningShown = false;
 class Goals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: { goals: { primaryGoal: 1 } }, validationState: {sunday: null, monday: null, tuesday: null, wednesday: null, thursday: null, friday: null, saturday: null}, showWarning: false };
+    this.state = { user: { goals: { primaryGoal: 1 } }, validationState: {sunday: null, monday: null, tuesday: null, wednesday: null, thursday: null, friday: null, saturday: null}, showWarning: false, toHome: false };
     this.handlePrimaryGoalChange = this.handlePrimaryGoalChange.bind(this);
     this.handleSportsChange = this.handleSportsChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,6 +26,7 @@ class Goals extends React.Component {
 
   showAlert() {
     this.setState({ showWarning: true });
+    warningShown = true;
   }
 
   handlePrimaryGoalChange(event) {
@@ -140,21 +143,53 @@ class Goals extends React.Component {
         break;
       case 5:
         if (!warningShown) {
+          console.log("The value of warningShow is: " + warningShown);
           this.showAlert();
+          return;
         }
         break;
       default:
         console.log("This shouldn't get executed!");
     }
+    console.log(JSON.stringify(this.state));
     //POST to the DB
-    event.preventDefault();
+    axios.patch('/users', {
+      user: this.state.user.id,
+      goals: {
+        primaryGoal: this.state.user.goals.primaryGoal,
+        health: (typeof(this.state.user.goals.health) != "undefined") ? this.state.user.goals.health : null,
+        fitness: (typeof(this.state.user.goals.fitness) != "undefined") ? this.state.user.goals.fitness : null,
+        loseWeight: {
+          currentWeight: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
+          goalWeight: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
+          time: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.time : null,
+          autoSelectTime: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
+        },
+        sport: (typeof(this.state.user.goals.sport) != "undefined") ? this.state.user.goals.sport : null
+      },
+      logistics: {
+        daysPerWeek: this.state.user.logistics.daysPerWeek,
+        hoursPerDay: this.state.user.hoursPerDay
+      }
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     //Navigate Home
+    this.setState({ toHome: true });
+    event.preventDefault();
   }
 
   render() {
+    if (this.state.toHome === true) {
+      return (<Redirect to='/' />);
+    }
     const daysPerWeek = [1, 2, 3, 4, 5, 6, 7].map((day) => <option value={day}>{day}</option>);
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);
-  const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <FormGroup check><Input type="checkbox" value={response.value} />{' '}{response.text}</FormGroup>);
+    const improveHealthResponses = goalsJCR.improveHealth.responses.map((response) => <FormGroup check><Input type="checkbox" value={response.value} />{' '}{response.text}</FormGroup>);
     const improveFitnessResponses = goalsJCR.improveFitness.responses.map((response) => <FormGroup check><Input type="checkbox" value={response.value} />{' '}{response.text}</FormGroup>);
     const improveSportsResponses = goalsJCR.sportPerformance.responses.map((response) => <option value={response.value}>{response.text}</option>);
     const title = "Exercise Goals";
