@@ -43,13 +43,26 @@ function getMonthWeeks( year, month){
     return weekArray;
 } 
 
-const selectedYear = 2018;
-const selectedMonth = 0;
+
+var dt = new Date();
+const selectedYear = dt.getFullYear();
+const selectedMonth = dt.getMonth();
+const currentDay = dt.getDate();
 const weekData = getMonthWeeks(selectedYear, selectedMonth);
 const selectedDayVisible = true;
 const userName = 'jman';
 const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)}
+
+const currentTrainingPlans = { data: []};
+
+const dayDetailsJSON = {
+
+    
+}
+
+
+
 
 //export default weekData
 module.exports =    {
@@ -58,6 +71,8 @@ module.exports =    {
     selectedMonth,
     getMonthWeeks,
     selectedDayVisible,
-    userName
+    userName,
+    currentTrainingPlans,
+    currentDay
 }
 

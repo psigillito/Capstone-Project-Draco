@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
 	const query = TrainingPlan.find();
 	query.exec((err, docs) => {
 		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		console.log(docs);
 		return res.json({ msg: 'success', data: docs });
 	});
 });
@@ -24,5 +25,18 @@ router.post('/', (req, res) => {
 		.then(plan => res.json(plan))
 		.catch(err => console.log(err));
 });
+
+//get current user workouts based on query
+router.get('/currentUserPlans', (req, res) => {
+	const query = TrainingPlan.find(req.query);
+	query.exec((err, docs) => {
+		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		return res.json(docs);
+	});
+});
+
+
+
+
 
 module.exports = router;

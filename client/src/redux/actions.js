@@ -12,6 +12,7 @@ export function updateCurrentYear(newYear){
     }
 }
 
+
 export function updateMonth(newMonth){
 
     return {
@@ -71,13 +72,26 @@ export const loginUser = (userData) => dispatch => {
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }))
 };
 
+
+
+export function getCurrentTrainingPlans (response) {
+    return {
+        type: 'SET_TRAINING_PLAN',
+        data: response
+    }
+}
+
+
+
 // set the currently logged in user
 export const setCurrentUser = (data) => {
   return {
-    type: 'SET_CURRENT_USER',
+    type: 'SET_CURRENT_USER', 
     payload: data
   }
 }
+
+
 
 // log the user out
 export const logout = () => dispatch => {

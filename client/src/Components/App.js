@@ -10,7 +10,8 @@ function mapStateToProps(state){
         month: state.month,
         year: state.year,
         dayVisible: state.dayVisible,
-        auth: state.auth
+        auth: state.auth,
+        trainingPlans: state.trainingPlans
     }
 }
 
