@@ -1,5 +1,8 @@
 /node_modules
-package-lock.json
+/package-lock.json
 /client/node_modules
-/client/build
+/client/build/static
+/client/build/index.html
+/client/build/service-worker.js
+/client/build/asset-manifest.json
 /secrets.js

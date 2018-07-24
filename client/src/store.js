@@ -6,11 +6,24 @@ const initialState = {};
 
 const middleware = [thunk];
 
+const STATUS = process.env.IS_PROD;
+
+if(STATUS) {
+	const store = createStore(
+	rootReducer, 
+	initialState, 
+	compose(applyMiddleware(...middleware),
+	// this is for the chrome redux dev tools extension - comment out for production 
+	// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	));
+}
+
 const store = createStore(
 	rootReducer, 
 	initialState, 
 	compose(applyMiddleware(...middleware),
-	// this is for the chrome redux dev tools extension 
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+	// this is for the chrome redux dev tools extension - comment out for production 
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	));
 
 export default store;

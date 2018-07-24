@@ -6,6 +6,7 @@ import About from './About'
 import LogOff from './LogOff'
 import PairDevice from './PairDevice'
 import UserProfile from './UserProfile'
+import Goals from './Goals';
 import { logout } from '../redux/actions';
 import { clearProfile } from '../redux/actions';
 import PropTypes from 'prop-types';
@@ -32,6 +33,7 @@ class NavBar extends Component {
                     <Link className="dropdown-item" to="/Settings">Settings</Link>
                     <Link className="dropdown-item" to="/About">About</Link>
                     <Link className="dropdown-item" to="/profile">Profile</Link>
+                    <Link className="dropdown-item" to="/goals">Goals</Link>
                     <a href="#" onClick={this.logoutClick.bind(this)} className="dropdown-item">Log Off</a>
                 </div>
             </div>
