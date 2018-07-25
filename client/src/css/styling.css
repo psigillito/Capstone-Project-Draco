@@ -111,3 +111,12 @@ input[type="button"]{
     height:60px;
 
 }
+
+.drop-down-list{
+    list-style-type: none;
+    padding:0;
+}
+
+.card-body{
+    padding:0;
+}
