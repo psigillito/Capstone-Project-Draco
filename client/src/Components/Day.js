@@ -10,6 +10,10 @@ class Day extends Component {
     constructor(props){
         super(props);
         this.handleDaySelected = this.handleDaySelected.bind(this);
+        this.state = {
+            presentMonth : new Date().getMonth(),
+            presentYear : new Date().getFullYear()
+        }     
     }
 
     handleDaySelected = (newValue) => (e) =>{
@@ -24,7 +28,7 @@ class Day extends Component {
     render(){
         if(this.props.date != 'X'){            
             
-                if(this.props.date == currentDay){
+                if(this.props.date == currentDay && this.state.presentYear == this.props.year && this.state.presentMonth == this.props.month){
                     return(        
                     <div>
                         <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
