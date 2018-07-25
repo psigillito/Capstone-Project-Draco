@@ -100,3 +100,13 @@ input[type="button"]{
 .currentDay{
     background:#ec8917;
 }
+
+.drop-down-list{
+    list-style-type: none;
+    padding:0;
+}
+
+.card-body{
+    padding:0;
+
+}

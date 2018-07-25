@@ -8,17 +8,12 @@ class DropDown extends Component{
     
         this.state = {
             listOpen: false,
-            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May','Jun', 'Jul', 'Aug', 'Sep','Oct', 'Nov', 'Dec']
+            months: ['January', 'February', 'March', 'April', 'May','June', 'July', 'August', 'September','October',
+                     'November', 'December']
         }
 
         this.handleDateChange = this.handleDateChange.bind(this);
     
-    }
-
-    toggleList(){
-        this.setState(prevState => ({
-          listOpen: !prevState.listOpen
-        }))
     }
 
     handleDateChange = (year, month)=> (e) =>{
@@ -31,12 +26,10 @@ class DropDown extends Component{
         const listOpen = this.state.listOpen;
         const months = this.state.months;
         return(
-            <div className="dd-wrapper">
-                <div className="dd-header" onClick={() => this.toggleList()}>
-                    <div className="dd-header-title">{this.props.year}</div>
-                </div>
-                {listOpen && <ul className="dd-list">
-                    {months.map( (item, index) => (<li onClick={this.handleDateChange(this.props.year, index)}>{item}</li>)) }
+            <div>
+                {
+                    <ul className="drop-down-list">
+                        {months.map( (item, index) => (<li onClick={this.handleDateChange(this.props.year, index)}>{item}</li>)) }
                     </ul>
                 }
             </div>

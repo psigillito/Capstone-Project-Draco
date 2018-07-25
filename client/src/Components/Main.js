@@ -76,7 +76,6 @@ class Main extends Component{
     
     render(){
 
-
         let loadingMainMenu = this.props.trainingPlans.data;
         return (
             <div>
