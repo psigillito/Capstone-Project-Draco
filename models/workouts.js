@@ -53,8 +53,8 @@ const workoutSchema = new Schema({
   date: [{
   	type: Date
   }],
-  dayOfWeek: {
-    type: String
+  daysOfWeek: {
+    type: Array
   },
   user: {
     type: String,
