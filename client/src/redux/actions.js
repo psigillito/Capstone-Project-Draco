@@ -73,7 +73,6 @@ export const loginUser = (userData) => dispatch => {
 };
 
 
-
 export function getCurrentTrainingPlans (response) {
     return {
         type: 'SET_TRAINING_PLAN',
@@ -81,7 +80,12 @@ export function getCurrentTrainingPlans (response) {
     }
 }
 
-
+export function getCurrentWorkouts(response) {
+    return {
+        type: 'SET_WORKOUTS',
+        data: response
+    }
+}
 
 // set the currently logged in user
 export const setCurrentUser = (data) => {
@@ -90,8 +94,6 @@ export const setCurrentUser = (data) => {
     payload: data
   }
 }
-
-
 
 // log the user out
 export const logout = () => dispatch => {
@@ -118,8 +120,22 @@ export const getProfile = () => dispatch => {
     }));
 }
 
+export function updateSelectedDay(response) {
+    return {
+        type: 'SET_SELECTED_DAY',
+        data: response
+    }
+}
+
 export const clearProfile = () => {
   return {
     type: CLEAR_PROFILE
   }  
+}
+
+export function updateCurrentWeekDay(response) {
+    return {
+        type: 'SET_CURRENT_WEEK_DAY',
+        data: response
+    }
 }

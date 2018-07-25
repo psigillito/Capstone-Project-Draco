@@ -1,16 +1,23 @@
 import React, {Component} from 'react'
 import DayDetail from './DayDetail'
 import {currentDay} from '../data/weekData'
+import { connect } from 'react-redux';
+import {updateSelectedDay} from '../redux/actions'
+import {updateCurrentWeekDay} from '../redux/actions'
 
 class Day extends Component {
 
     constructor(props){
         super(props);
-        this.handleVisibleChange = this.handleVisibleChange.bind(this);
+        this.handleDaySelected = this.handleDaySelected.bind(this);
     }
 
-    handleVisibleChange = (newValue) => (e) =>{
-        this.props.updateDayVisible(newValue);
+    handleDaySelected = (newValue) => (e) =>{
+        this.props.updateSelectedDay( this.props.date)
+        
+        //need to change 
+        var newWeekDay = new Date(this.props.year, this.props.month, this.props.date).getDay();
+        this.props.updateCurrentWeekDay(newWeekDay);
     }
 
 
@@ -20,14 +27,14 @@ class Day extends Component {
                 if(this.props.date == currentDay){
                     return(        
                     <div>
-                        <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
+                        <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
                     </div>
                     )
                 }
                 else{
                     return(
                     <div>
-                        <button onClick={this.handleVisibleChange(true)} data-toggle="modal" data-target="#dayModal" className="dayButton ">{this.props.date}</button>
+                        <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton ">{this.props.date}</button>
                     </div>
                     )
                 }
@@ -41,4 +48,8 @@ class Day extends Component {
     }   
 }
 
-export default Day
+const mapStateToProps = function(state) {
+    return { currentDay: state.currentDay, month:state.month, year:state.year}
+  }
+
+export default connect(mapStateToProps, { updateSelectedDay, updateCurrentWeekDay} )(Day);

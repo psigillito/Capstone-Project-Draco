@@ -12,8 +12,6 @@ const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
 class Calendar extends Component{
     constructor(props){
         super(props);
-
-
     }
 
     render(){

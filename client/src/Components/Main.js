@@ -11,6 +11,7 @@ import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
 import {getCurrentTrainingPlans} from '../redux/actions'
+import {getCurrentWorkouts} from '../redux/actions'
 import {updateMonth} from '../redux/actions'
 import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
@@ -51,20 +52,26 @@ class Main extends Component{
         super(props);
     }
 
-    componentDidMount(){
+    componentWillMount(){
+        //get all training plans 
         axios.get('/trainingPlans/currentUserPlans/', {
             params: {
                 user: this.props.auth.user.name  
               }
         }).then(res => {    
             this.props.getCurrentTrainingPlans(res);
-            for(var i = 0; i < this.props.trainingPlans.data.length;i++){
-
-            }
-            //console.log(this.props.trainingPlans);
         })
 
+        //get all workouts 
+        axios.get('/workouts/currentWorkouts', {
+            params: {
+                user: this.props.auth.user.name
+            }
+        }).then(res => {
+            this.props.getCurrentWorkouts(res);
+        })
     }
+        
     
     render(){
 
@@ -84,7 +91,7 @@ class Main extends Component{
                         <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
                         
                         
-                        <div class="container">
+                        <div className="container">
                             <div className="row">
                                 <div className = "col-sm">
                                     <MainMenu trainingPlans={this.props.trainingPlans}/>
@@ -115,7 +122,7 @@ class Main extends Component{
 }
 
 const mapStateToProps = function(state) {
-    return { trainingPlans: state.trainingPlans, errors: state.errors }
+    return { trainingPlans: state.trainingPlans, workouts:state.workouts, errors: state.errors }
   }
 
-export default connect(mapStateToProps, { getCurrentTrainingPlans })(Main);
+export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts} )(Main);
