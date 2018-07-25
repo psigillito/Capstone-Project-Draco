@@ -98,18 +98,7 @@ input[type="button"]{
 }
 
 .currentDay{
-    padding: 10px;
-    font-size: 15px;
-    border-radius: 100px;
     background:#ec8917;
-    border-color: #121a33;
-    color: white;
-    margin:3px;
-    border: solid;
-    border-width:1px;
-    width:60px;
-    height:60px;
-
 }
 
 .drop-down-list{
@@ -119,4 +108,5 @@ input[type="button"]{
 
 .card-body{
     padding:0;
+
 }

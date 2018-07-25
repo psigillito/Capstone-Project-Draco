@@ -50,17 +50,12 @@ const selectedMonth = dt.getMonth();
 const currentDay = dt.getDate();
 const weekData = getMonthWeeks(selectedYear, selectedMonth);
 const selectedDayVisible = true;
-const userName = 'jman';
+const userName = '';
 const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)}
 
 const currentTrainingPlans = { data: []};
-
-const dayDetailsJSON = {
-
-    
-}
-
+const currentWorkouts = { data: []};
 
 
 
@@ -73,6 +68,6 @@ module.exports =    {
     selectedDayVisible,
     userName,
     currentTrainingPlans,
-    currentDay
+    currentDay,
+    currentWorkouts
 }
-

@@ -49,4 +49,16 @@ router.post('/', (req, res) => {
     });
 });
 
+router.get('/currentWorkouts', (req, res) => {
+    console.log('QUERY IS:');
+    console.log(req.query)
+	const query = Workout.find(req.query);
+	query.exec((err, docs) => {
+		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		console.log(docs)
+		return res.json(docs);
+	});
+});
+
+
 module.exports = router;

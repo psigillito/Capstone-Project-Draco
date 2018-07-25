@@ -6,12 +6,16 @@ import {withRouter} from 'react-router'
 
 function mapStateToProps(state){
     return {
+        //days is array of days in a month 
         days: state.days,
+        auth: state.auth,
+        trainingPlans: state.trainingPlans,
+        workouts: state.workouts,
+        day: state.day,
         month: state.month,
         year: state.year,
-        dayVisible: state.dayVisible,
-        auth: state.auth,
-        trainingPlans: state.trainingPlans
+        weekDay: state.weekDay
+
     }
 }
 

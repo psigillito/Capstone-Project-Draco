@@ -8,21 +8,14 @@ class MainMenu extends Component {
 
     }
 
-
-
-
-
     render(){
-        console.log("PASSED TRAINING PLANS");//.props.trainingsPlans);
-        console.log(this.props.trainingPlans);
         return(
-
             <div>
                 <div>Active Training Plans:</div>
                 <div>
                     {this.props.trainingPlans.data.length > 0 &&
                         <div>
-                            {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) => <div>{plan.name}</div>)} 
+                            {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) => <div key={index}>{plan.name}</div>)} 
                         </div>
                     }
                 </div>

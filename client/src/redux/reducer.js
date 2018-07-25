@@ -7,7 +7,7 @@ import {currentTrainingPlans} from '../data/weekData'
 import { combineReducers } from 'redux'
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import isEmpty from '../utility/isEmpty';
-
+import {currentWorkouts} from '../data/weekData';
 
 
 function days(state = weekData, action) {
@@ -95,6 +95,24 @@ function trainingPlans(state = currentTrainingPlans, action){
     }
 }
 
+function workouts(state = currentWorkouts, action){
+    switch(action.type){
+        case "SET_WORKOUTS":
+            state = action.data;
+        default:
+            return state;
+    }
+}
+
+function weekDay(state = 0, action){
+    switch(action.type){
+        case "SET_CURRENT_WEEK_DAY":
+            state = action.data;
+        default:
+            return state;
+    }
+}
+
 const profileState = {
     profile: null
 }
@@ -116,7 +134,17 @@ function profile(state = profileState, action) {
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, profile, trainingPlans})
+function day(state=0, action) {
+
+    switch(action.type){
+        case 'SET_SELECTED_DAY':
+            state = action.data
+        default:
+            return state;
+    }
+}
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, profile, trainingPlans, workouts, day, weekDay})
 
 
 export default rootReducer

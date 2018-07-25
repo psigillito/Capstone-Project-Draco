@@ -201,8 +201,8 @@ class Goals extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">{title}</h1>
-              <p className="lead text-center">{goalsJCR.goals.question}</p>
+              <h1 className="display-4">{title}</h1>
+              <p className="lead">{goalsJCR.goals.question}</p>
               <form onSubmit={this.handleSubmit}>
                 <Input type="select" onChange={this.handlePrimaryGoalChange}>
                   {jsxResponses}
@@ -215,7 +215,7 @@ class Goals extends React.Component {
           {this.state.user.goals.primaryGoal === 1 &&
             <div className="row">
               <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.improveHealth.question}</p>
+                <p className="lead">{goalsJCR.improveHealth.question}</p>
                 <form>
                   <FormGroup onChange={this.handleImproveHealthChange}>
                     {improveHealthResponses}
@@ -228,7 +228,7 @@ class Goals extends React.Component {
             <div>
               <div className="row">
                 <div className="col-md-8 m-auto">
-                  <p className="lead text-center">{goalsJCR.loseWeight.question}</p>
+                  <p className="lead">{goalsJCR.loseWeight.question}</p>
                   <form>
                     <FormGroup onChange={this.handleWeightLossChange}>
                       <FieldGroup
@@ -242,7 +242,7 @@ class Goals extends React.Component {
               </div>
               <div className="row">
                 <div className="col-md-8 m-auto">
-                  <p className="lead text-center">{goalsJCR.loseWeight.followUp[0].question}</p>
+                  <p className="lead">{goalsJCR.loseWeight.followUp[0].question}</p>
                   <form>
                     <FormGroup onChange={this.handleWeightLossChange}>
                       <FieldGroup
@@ -256,7 +256,7 @@ class Goals extends React.Component {
               </div>
               <div className="row">
                 <div className="col-md-8 m-auto">
-                  <p className="lead text-center">{goalsJCR.loseWeight.followUp[1].question}</p>
+                  <p className="lead">{goalsJCR.loseWeight.followUp[1].question}</p>
                   <form>
                     <FormGroup onChange={this.handleWeightLossChange}>
                       <FieldGroup
@@ -277,7 +277,7 @@ class Goals extends React.Component {
           {this.state.user.goals.primaryGoal === 3 &&
             <div className="row">
               <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.improveFitness.question}</p>
+                <p className="lead">{goalsJCR.improveFitness.question}</p>
                 <form>
                   <FormGroup onChange={this.handleFitnessChange}>
                     {improveFitnessResponses}
@@ -289,7 +289,7 @@ class Goals extends React.Component {
           {this.state.user.goals.primaryGoal === 4 &&
             <div className="row">
               <div className="col-md-8 m-auto">
-                <p className="lead text-center">{goalsJCR.sportPerformance.question}</p>
+                <p className="lead">{goalsJCR.sportPerformance.question}</p>
                 <form>
                   <Input type="select" onChange={this.handleSportsChange}>
                     {improveSportsResponses}
@@ -300,7 +300,7 @@ class Goals extends React.Component {
           }
           <div className="row">
               <div className="col-md-8 m-auto">
-                <p className="lead text-center">{logistics.daysPerWeek.question}</p>
+                <p className="lead">{logistics.daysPerWeek.question}</p>
                 <form>
                   <Input type="select" onChange={this.handleDaysPerWeekChange}>
                     {daysPerWeek}
@@ -311,7 +311,7 @@ class Goals extends React.Component {
             <br/>
             <div className="row">
               <div className="col-md-8 m-auto">
-                <p className="lead text-center">{logistics.hoursPerDay.question}</p>
+                <p className="lead">{logistics.hoursPerDay.question}</p>
                 <Form>
                   <NumericValidation id="frmCntrlSunday" validationState={this.state.validationState.sunday} label="Sunday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                   <NumericValidation id="frmCntrlMonday" validationState={this.state.validationState.monday} label="Monday" onChange={this.handleHoursPerDayChange} help={helpText}/>
