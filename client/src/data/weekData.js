@@ -11,8 +11,7 @@ function getMonthWeeks( year, month){
     var newDate = new Date(year, month, 1);
     var startWeekDay = newDate.getDay(); 
 
-    var numberOfDays = new Date(year, (month+2)%13, 0).getDate();
-    var numberOfDaysThisMonth = new Date(year, month, 0).getDate();
+    var numberOfDays = new Date(year, (month+1)%13, 0).getDate();
 
     var weekArray = []
     
@@ -30,7 +29,7 @@ function getMonthWeeks( year, month){
             if(i == 0 && x < startWeekDay){
                 aWeek[x] = 'X';
             //if day later than current
-            }else if(counter > numberOfDaysThisMonth){
+            }else if(counter > numberOfDays){
                 aWeek[x] = 'X';
             }else{
                 aWeek[x] = counter;

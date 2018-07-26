@@ -1,3 +1,6 @@
+li{ 
+    cursor: pointer; 
+}
 
 .dayButton{
     padding: 10px;
@@ -110,3 +113,4 @@ input[type="button"]{
     padding:0;
 
 }
+

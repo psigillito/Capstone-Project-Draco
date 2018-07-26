@@ -17,47 +17,103 @@ class DayDetail extends Component {
 
     render(){
 
-        return(
 
-            <div>
-                {
-                    <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h4 className="modal-title"> {this.props.day}/{this.props.month}/{this.props.year}</h4>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise.name)).length;
+
+        if(workoutsCount){
+            return(
+
+                <div>
+                    {
+                        <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h4 className="modal-title"> {this.props.day}/{this.props.month+1}/{this.props.year}</h4>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <h4>Weight Training Workouts:</h4>
+                                            {
+                                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
+                                                                                        && this.props.selectedWorkoutList.includes(exercise.name)
+                                                                                        && exercise.mode =='Weight Training')
+                                            .map( (workout, index) =>
+                                                    <div key={index}>
+
+                                                        <h5>{workout.name}</h5>
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Sets</th>
+                                                                    <th>Reps</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <WorkOutDetail type="Weight Training" workout={workout}/>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                            )}
+                                            <br/>
+                                            <h4>Cardio Workouts:</h4>
+                                            {
+                                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
+                                                                                        && this.props.selectedWorkoutList.includes(exercise.name)
+                                                                                        && exercise.mode =='Running')
+                                            .map( (workout, index) =>
+                                                    <div key={index}>
+
+                                                        <h5>{workout.name}</h5>
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Distance</th>
+                                                                    <th>Duration</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <WorkOutDetail type="Running" workout={workout}/>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                            )}
+
+                                        </div>
+                                    <div className="modal-footer">
                                     </div>
-                                    <div className="modal-body">                                   
-                                        {this.props.workouts.data.length > 0 && 
-                                        this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise.name)  )
-                                        .map( (workout, index) =>
-                                                <div key={index}>
-                                                    <h5>{workout.name}</h5>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Name</th>
-                                                                <th>Sets</th>
-                                                                <th>Reps</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <WorkOutDetail workout={workout}/>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                        )}
-                                    </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-primary" onClick={this.handleSubmit}>Save</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        )
+                    }
+                </div>
+            )
+        }else{
+            return(
+
+                <div>
+                    {
+                        <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h4 className="modal-title"> {this.props.day}/{this.props.month+1}/{this.props.year}</h4>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div className="modal-body">                                   
+                                            No Exercises Today
+                                        </div>
+                                    <div className="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            )
+        }
     }
 }
 

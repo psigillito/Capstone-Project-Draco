@@ -11,13 +11,11 @@ class CalendarController extends Component {
         return(
 
             <div id="accordion">
-                <div className="card">
-                    <div className="card-header" id="headingOne">
-                            <button className="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                2017
-                            </button>
-                    </div>
-
+                <div className="card">  
+                    <button id="headingOne" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        2017
+                    </button>
+                   
                     <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                         <div className="card-body">
                             <DropDown year='2017' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/> 
@@ -26,11 +24,10 @@ class CalendarController extends Component {
                 </div>
 
                 <div className="card">
-                    <div className="card-header" id="headingTwo">
-                        <button className="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            2018
-                        </button>
-                    </div>
+
+                    <button id="headingTwo" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        2018
+                    </button>
                 
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div className="card-body">
@@ -40,12 +37,10 @@ class CalendarController extends Component {
                 </div>
 
                 <div className="card">
-                    <div className="card-header" id="headingThree">
-                        <button className="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            2019
-                        </button>
-                    </div>
-                
+                    
+                    <button id="headingThree" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        2019
+                    </button>
 
                     <div id="collapseThree" className="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                         <div className="card-body">
