@@ -17,11 +17,9 @@ class CalendarController extends Component {
             <div id="accordion">
                 <div className="card">
                     <div className="card-header" id="headingOne">
-                        <h5 class="mb-0">
                             <button className="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 2017
                             </button>
-                        </h5>
                     </div>
 
                     <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordion">

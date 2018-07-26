@@ -14,7 +14,8 @@ function mapStateToProps(state){
         day: state.day,
         month: state.month,
         year: state.year,
-        weekDay: state.weekDay
+        weekDay: state.weekDay,
+        selectedWorkoutList: state.selectedWorkoutList
 
     }
 }

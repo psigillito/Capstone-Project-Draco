@@ -4,6 +4,8 @@ import {currentDay} from '../data/weekData'
 import { connect } from 'react-redux';
 import {updateSelectedDay} from '../redux/actions'
 import {updateCurrentWeekDay} from '../redux/actions'
+import {updateSelectedWorkoutList} from '../redux/actions'
+import store from '../store';
 
 class Day extends Component {
 
@@ -19,9 +21,14 @@ class Day extends Component {
     handleDaySelected = (newValue) => (e) =>{
         this.props.updateSelectedDay( this.props.date)
         
-        //need to change 
         var newWeekDay = new Date(this.props.year, this.props.month, this.props.date).getDay();
         this.props.updateCurrentWeekDay(newWeekDay);
+
+        
+        var currentDate = new Date(this.props.year,this.props.month,this.props.date);
+
+        store.dispatch(updateSelectedWorkoutList(currentDate));
+
     }
 
 
@@ -53,7 +60,13 @@ class Day extends Component {
 }
 
 const mapStateToProps = function(state) {
-    return { currentDay: state.currentDay, month:state.month, year:state.year}
+    return { currentDay: state.currentDay, 
+             month:state.month, 
+             year:state.year,
+             day: state.day,
+             weekDay: state.weekDay,  
+             workouts:state.workouts,
+             trainingPlans:state.trainingPlans}
   }
 
-export default connect(mapStateToProps, { updateSelectedDay, updateCurrentWeekDay} )(Day);
+export default connect(mapStateToProps, { updateSelectedDay, updateCurrentWeekDay, updateSelectedWorkoutList} )(Day);

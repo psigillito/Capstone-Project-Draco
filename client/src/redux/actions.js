@@ -3,6 +3,7 @@ import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import setAuthToken from '../utility/authToken';
 import jwt_decode from 'jwt-decode';
+import store from '../store';
 
 export function updateCurrentYear(newYear){
 
@@ -137,5 +138,22 @@ export function updateCurrentWeekDay(response) {
     return {
         type: 'SET_CURRENT_WEEK_DAY',
         data: response
+    }
+}
+
+export function updateSelectedWorkoutList(currentDate){
+
+    console.log(currentDate);
+    var activeTrainingPlans = store.getState().trainingPlans.data.filter( (plan) => Date.parse(plan.startDate) <= Date.parse(currentDate) 
+                                                                                 && Date.parse(plan.endDate) >= Date.parse(currentDate));
+
+    var newWorkoutList = [];
+    for(var i = 0; i < activeTrainingPlans.length; i++){
+            newWorkoutList = newWorkoutList.concat(activeTrainingPlans[i].workouts)
+    }
+
+    return {
+        type: 'SET_SELECTED_WORKOUT_LIST',
+        data: newWorkoutList
     }
 }

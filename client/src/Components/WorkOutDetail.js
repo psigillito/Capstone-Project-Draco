@@ -7,7 +7,6 @@ class WorkOutDetail extends Component{
 
     render(){
 
-        console.log(this.props.workout)
         return(
             
                 this.props.workout.exercises.map( (exercise, index) => 

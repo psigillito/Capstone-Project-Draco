@@ -29,7 +29,7 @@ class DropDown extends Component{
             <div>
                 {
                     <ul className="drop-down-list">
-                        {months.map( (item, index) => (<li onClick={this.handleDateChange(this.props.year, index)}>{item}</li>)) }
+                        {months.map( (item, index) => (<li key={index} onClick={this.handleDateChange(this.props.year, index)}>{item}</li>)) }
                     </ul>
                 }
             </div>

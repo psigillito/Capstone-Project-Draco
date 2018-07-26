@@ -16,7 +16,12 @@ class DayDetail extends Component {
     }
 
     render(){
+
+        console.log("Workout List is:");
+        console.log(this.state.workoutList);
+
         return(
+
             <div>
                 {
                     <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
@@ -28,7 +33,7 @@ class DayDetail extends Component {
                                     </div>
                                     <div className="modal-body">                                   
                                         {this.props.workouts.data.length > 0 && 
-                                        this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay))
+                                        this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise.name)  )
                                         .map( (workout, index) =>
                                                 <div key={index}>
                                                     <h5>{workout.name}</h5>
@@ -60,13 +65,16 @@ class DayDetail extends Component {
 }
 
 
-//this relies so much on state I am having it load in directly to the component 
+//this relies so much on state it can be loaded in directly to the component 
 const mapStateToProps = function(state) {
     return { day: state.day,
              weekDay: state.weekDay, 
              month:state.month, 
              year:state.year, 
-             workouts:state.workouts}
+             workouts:state.workouts,
+             trainingPlans:state.trainingPlans,
+             selectedWorkoutList:state.selectedWorkoutList
+            }
   }
 
 export default connect(mapStateToProps)(DayDetail);

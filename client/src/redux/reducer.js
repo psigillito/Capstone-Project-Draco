@@ -144,7 +144,18 @@ function day(state=0, action) {
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, profile, trainingPlans, workouts, day, weekDay})
+function selectedWorkoutList(state=[], action){
+    
+    switch(action.type){
+        case 'SET_SELECTED_WORKOUT_LIST':
+            state=action.data
+        default:
+            return state;
+    }
+}
+
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, user, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList})
 
 
 export default rootReducer
