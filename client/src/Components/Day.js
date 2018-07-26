@@ -19,14 +19,11 @@ class Day extends Component {
     }
 
     handleDaySelected = (newValue) => (e) =>{
-        this.props.updateSelectedDay( this.props.date)
         
+        this.props.updateSelectedDay( this.props.date)  
         var newWeekDay = new Date(this.props.year, this.props.month, this.props.date).getDay();
         this.props.updateCurrentWeekDay(newWeekDay);
-
-        
         var currentDate = new Date(this.props.year,this.props.month,this.props.date);
-
         store.dispatch(updateSelectedWorkoutList(currentDate));
 
     }

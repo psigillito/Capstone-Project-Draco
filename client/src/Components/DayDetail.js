@@ -17,9 +17,6 @@ class DayDetail extends Component {
 
     render(){
 
-        console.log("Workout List is:");
-        console.log(this.state.workoutList);
-
         return(
 
             <div>

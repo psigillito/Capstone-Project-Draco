@@ -5,11 +5,7 @@ import DropDown from './DropDown'
 class CalendarController extends Component {
     constructor(props) {
         super(props);
-        //this.handleDateChange = this.handleDateChange.bind(this);
-        //this.toggleMenu = this.toggleMenu.bind(this);
-
     }
-
  
     render(){
         return(
