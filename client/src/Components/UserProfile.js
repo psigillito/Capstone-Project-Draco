@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import store from '../store';
 import axios from 'axios';
-import { getProfile } from '../redux/actions';
+import { getProfile, deleteAccount, logout } from '../redux/actions';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import logo from '../images/profile.png';
+import { Link } from 'react-router-dom';
 
 class UserProfile extends Component {
 	componentDidMount() {
 		this.props.getProfile();
+	}
+
+	deleteClick(e) {
+		this.props.deleteAccount();
+		this.props.logout();
 	}
 
 	render() {
@@ -29,7 +35,8 @@ class UserProfile extends Component {
 		            <p className="lead text-center"><b>Email:</b> {this.props.profile.profile.email}</p>
 		            <p className="lead text-center"><b>Username:</b> {this.props.profile.profile.username}</p>
 		            <p className="lead text-center"><b>Training Plans:</b> {this.props.profile.profile.plans}</p>
-		            <button className="btn btn-info btn-block" type="submit">Edit Profile</button>
+		            <Link to='/edit-profile' className="btn btn-info btn-block">Edit Profile</Link>
+		            <button onClick={this.deleteClick.bind(this)} className="btn btn-danger btn-block" type="submit">Delete Account</button>
 		          </div>
 		        </div>
 		      </div>
@@ -47,11 +54,12 @@ class UserProfile extends Component {
 UserProfile.propTypes = {
 	getProfile: PropTypes.func.isRequired,
 	profile: PropTypes.object.isRequired,
-	auth: PropTypes.object.isRequired
+	deleteAccount: PropTypes.func.isRequired,
+	logout: PropTypes.func.isRequired
 }
 
 const mapStateToProps = function(state) {
 	return {profile: state.profile}
 };
 
-export default connect(mapStateToProps, { getProfile })(UserProfile);
+export default connect(mapStateToProps, { getProfile, deleteAccount, logout })(UserProfile);

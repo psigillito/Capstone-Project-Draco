@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 // Import user model
 const User = require('../models/users');
@@ -92,6 +93,13 @@ router.post('/login', (req, res) => {
 					}
 				})
 		});
+});
+
+// delete user account
+router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
+	User.findOneAndDelete({ _id: req.user.id })
+		.then(res => console.log('user deleted'))
+		.catch(err => console.log(err));
 });
 
 router.patch('/', (req, res) => {

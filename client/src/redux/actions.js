@@ -113,12 +113,31 @@ export const getProfile = () => dispatch => {
   axios.get('/profile')
     .then(res => dispatch({
       type: GET_PROFILE,
-      payload: res.data
+      payload: res.data,
     }))
     .catch(err => dispatch({
       type: GET_PROFILE,
       payload: {}
     }));
+}
+
+// edit user account
+export const editUser = (userData, history) => dispatch => {
+    axios.post('/profile/edit-profile', userData)
+        .then(res => history.push('/profile'))
+        .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data}));
+}
+
+// delete user account
+export const deleteAccount = () => dispatch => {
+  if(window.confirm('Are you sure you wish to delete your account?')) {
+    axios.post('/users/delete')
+      .then(res => dispatch({
+        type: SET_CURRENT_USER,
+        payload: {}
+      }))
+      .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }))
+  }
 }
 
 export function updateSelectedDay(response) {
