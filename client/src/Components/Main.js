@@ -30,7 +30,7 @@ import store from '../store';
 import { connect } from 'react-redux';
 import reducer from '../redux/reducer';
 import axios from 'axios';
-import MainMenu from './MainMenu';
+import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
@@ -96,7 +96,7 @@ class Main extends Component{
                         <div className="container">
                             <div className="row">
                                 <div className = "col-sm">
-                                    <MainMenu trainingPlans={this.props.trainingPlans}/>
+                                    <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans}/>
                                 </div>
                                 <div className = "col-sm"> 
                                     <h2>{Months[this.props.month] + ","+this.props.year}</h2>                   
