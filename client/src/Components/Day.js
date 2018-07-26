@@ -14,7 +14,8 @@ class Day extends Component {
         this.handleDaySelected = this.handleDaySelected.bind(this);
         this.state = {
             presentMonth : new Date().getMonth(),
-            presentYear : new Date().getFullYear()
+            presentYear : new Date().getFullYear(),
+
         }     
     }
 
@@ -25,18 +26,32 @@ class Day extends Component {
         this.props.updateCurrentWeekDay(newWeekDay);
         var currentDate = new Date(this.props.year,this.props.month,this.props.date);
         store.dispatch(updateSelectedWorkoutList(currentDate));
-
     }
 
 
     render(){
+
+        var temp;
+        if(this.props.date != 'X'){
+
+            console.log("WEEKDAY IS:");
+            temp = new Date(this.props.year, this.props.month, this.props.date).getDay();
+            console.log(temp);
+        }
+
         if(this.props.date != 'X'){            
             
                 if(this.props.date == currentDay && this.state.presentYear == this.props.year && this.state.presentMonth == this.props.month){
                     return(        
-                    <div>
-                        <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
-                    </div>
+                        <div>
+                            <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton currentDay">{this.props.date}</button>
+                        </div>
+                    )
+                }else if( this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(temp)).length > 1) {
+                    return(
+                        <div>
+                            <button onClick={this.handleDaySelected(true)} data-toggle="modal" data-target="#dayModal" className="dayButton hasWorkout">{this.props.date}</button>
+                        </div>
                     )
                 }
                 else{
@@ -63,7 +78,8 @@ const mapStateToProps = function(state) {
              day: state.day,
              weekDay: state.weekDay,  
              workouts:state.workouts,
-             trainingPlans:state.trainingPlans}
+             trainingPlans:state.trainingPlans,
+             }
   }
 
 export default connect(mapStateToProps, { updateSelectedDay, updateCurrentWeekDay, updateSelectedWorkoutList} )(Day);

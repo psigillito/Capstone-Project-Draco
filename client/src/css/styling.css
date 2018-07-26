@@ -6,7 +6,7 @@ li{
     padding: 10px;
     font-size: 15px;
     border-radius: 100px;
-    background:#4e72e9;
+    background:#5277f0;
     border-color: #4e72e9;
     color: white;
     margin:3px;
@@ -93,15 +93,12 @@ input[type="button"]{
     padding-top: 30px;
 }
 
-.MainMenu{
-    
-    float: left;
-    background: red;
-
+.currentDay{
+    background: #ec8917;
 }
 
-.currentDay{
-    background:#ec8917;
+.hasWorkout{
+    background:#2fbb46;
 }
 
 .drop-down-list{
@@ -111,6 +108,5 @@ input[type="button"]{
 
 .card-body{
     padding:0;
-
 }
 
