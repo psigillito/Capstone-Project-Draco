@@ -31,7 +31,9 @@ class ActiveWorkoutsPanel extends Component {
                             </div>
                         )}
                     </div>
+                    <br/>
                     <button type="button" className="btn btn-primary btn-block">Create New Training Plan</button>
+                    <button type="button" className="btn btn-primary btn-block">Create New Workout</button>
             </div>
         )
     }
