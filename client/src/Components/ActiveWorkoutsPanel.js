@@ -4,21 +4,32 @@ import TrainingPlanCard from './TrainingPlanCard'
 class ActiveWorkoutsPanel extends Component {
     constructor(props){
         super(props);
+
         this.state = {
            activePlan: '',
-           activeStart: '',
-           activeEnd: '',
-           activeWorkouts: []
-        }
+           startDate: '',
+           endDate: '',
+           workouts: []
+        };
+
+        this.onChange = this.onChange.bind(this);
     }
 
     openModalWithPlan(plan) {
         this.setState({
             activePlan: plan.name,
-            activeStart: plan.startDate,
-            activeEnd: plan.endDate,
-            activeWorkouts: plan.workouts.map( (workout) => workout )
+            startDate: plan.startDate,
+            endDate: plan.endDate,
+            workouts: plan.workouts.map( (workout) => workout )
         })
+    }
+
+    createNewTrainingPlan() {
+
+    }
+
+    createNewWorkout() {
+        
     }
 
     onChange(e) {
@@ -53,9 +64,11 @@ class ActiveWorkoutsPanel extends Component {
                         )}
                     </div>
                     <br/>
-                    <button type="button" className="btn btn-primary btn-block">Create New Training Plan</button>
-                    <button type="button" className="btn btn-primary btn-block">Create New Workout</button>
+                    <button onClick={() => this.createNewTrainingPlan() } data-toggle="modal" data-target="#createNewPlan" type="button" className="btn btn-primary btn-block">Create New Training Plan</button>
+                    <button onClick={() => this.createNewWorkout() } data-toggle="modal" data-target="#createNewWorkout" type="button" className="btn btn-primary btn-block">Create New Workout</button>
             </div>
+
+        {/* EDIT TRAINING PLANS MODAL */}
 
             <div class="modal fade" id="trainingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
@@ -75,7 +88,7 @@ class ActiveWorkoutsPanel extends Component {
                      className="form-control form-control-lg" 
                      placeholder= "Start Date" 
                      name="startDate" 
-                     value={this.state.activeStart}
+                     value={this.state.startDate}
                      onChange={this.onChange}
                     />
                   </div>
@@ -87,7 +100,7 @@ class ActiveWorkoutsPanel extends Component {
                       className="form-control form-control-lg"
                       placeholder="End Date" 
                       name="endDate" 
-                      value={this.state.activeEnd}
+                      value={this.state.endDate}
                       onChange={this.onChange}
                     />
                   </div>
@@ -99,13 +112,57 @@ class ActiveWorkoutsPanel extends Component {
                       className="form-control form-control-lg"
                       placeholder="Workouts" 
                       name="workouts" 
-                      value={this.state.activeWorkouts}
+                      value={this.state.workouts}
                       onChange={this.onChange}
                     />
                   </div>
   
                   </div>
 
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        {/* CREATE NEW TRAINING PLANS MODAL */}
+
+            <div class="modal fade" id="createNewPlan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create New Training Plan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ...
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+         {/* CREATE NEW WORKOUT MODAL */}
+
+            <div class="modal fade" id="createNewWorkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create New Workout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ...
+                  </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
