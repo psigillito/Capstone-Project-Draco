@@ -32,6 +32,9 @@ import reducer from '../redux/reducer';
 import axios from 'axios';
 import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
+import TodaysExercisePanel from './TodaysExercisePanel';
+import MonthStatisticsPanel from './MonthStatisticsPanel';
+
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -87,9 +90,10 @@ class Main extends Component{
                 <Route exact path="/profile" component={UserProfile} />
                 <Route exact path="/edit-profile" component={EditProfile} />
                 <Route exact path = "/calendar" render={()=>(
+                    
                     <section className="main-container">
-                    <h1>Welcome Back {this.props.auth.user.name}</h1>
-                        
+                    <h1 className="display-3 mb-4" >Welcome Back {this.props.auth.user.name}</h1>
+                        <br/>
                         <DayDetail dayVisible={this.props.dayVisible} updateDayVisible ={this.props.updateDayVisible}/>
                         
                         
@@ -104,8 +108,15 @@ class Main extends Component{
                                 </div>
                                 <div className = "col-sm"> 
                                 <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
-                        updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                                    updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="container">
+                            <div className="row">
+                                <TodaysExercisePanel className = "col-sm"/>
+                                <span className = "col-sm"/>
+                                <MonthStatisticsPanel className = "col-sm"/>
                             </div>
                         </div>
                         

@@ -1,55 +1,44 @@
 
 import React, {Component} from 'react'
-import DropDown from './DropDown'
 
 class CalendarController extends Component {
-    constructor(props) {
-        super(props);
+    constructor(props){
+        super(props)
+    
+        this.state = {
+            months: ['January', 'February', 'March', 'April', 'May','June', 'July', 'August', 'September','October',
+                     'November', 'December']
+        }
+        this.handleYearChange = this.handleYearChange.bind(this);
+        this.handleMonthChange = this.handleMonthChange.bind(this);
     }
- 
+
+    handleMonthChange = (month)=> (e) =>{
+        this.props.updateDays( month, this.props.year);
+        this.props.updateMonth(month);
+    }
+
+    handleYearChange = (year) => (e) => {
+        this.props.updateCurrentYear(year);
+        this.props.updateDays( this.props.month, year);
+    }
+
     render(){
+        const months = this.state.months;
         return(
-
-            <div id="accordion">
-                <div className="card">  
-                    <button id="headingOne" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        2017
-                    </button>
-                   
-                    <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div className="card-body">
-                            <DropDown year='2017' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/> 
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card">
-
-                    <button id="headingTwo" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        2018
-                    </button>
-                
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div className="card-body">
-                            <DropDown year='2018' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card">
-                    
-                    <button id="headingThree" className="btn btn-link card-header" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        2019
-                    </button>
-
-                    <div id="collapseThree" className="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                        <div className="card-body">
-                        <DropDown year='2019' updateMonth={this.props.updateMonth} updateCurrentYear = {this.props.updateCurrentYear} updateDays={this.props.updateDays}/>                        
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <div>
+                <tr>
+                    <ul className="triple-column">
+                        <li  onClick={this.handleYearChange(2016)}>2016</li>
+                        <li  onClick={this.handleYearChange(2017)}>2017</li>
+                        <li  onClick={this.handleYearChange(2018)}>2018</li>
+                        <li  onClick={this.handleYearChange(2019)}>2019</li>
+                        <li  onClick={this.handleYearChange(2020)}>2020</li>
+                        <li  onClick={this.handleYearChange(2020)}>2021</li>
+                        {months.map( (item, index) => (<li key={index} onClick={this.handleMonthChange(index)}>{item}</li>)) }
+                    </ul>
+                </tr>
+            </div>       
         )
     }
 }

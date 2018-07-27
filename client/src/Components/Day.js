@@ -15,7 +15,6 @@ class Day extends Component {
         this.state = {
             presentMonth : new Date().getMonth(),
             presentYear : new Date().getFullYear(),
-
         }     
     }
 
@@ -33,10 +32,7 @@ class Day extends Component {
 
         var temp;
         if(this.props.date != 'X'){
-
-            console.log("WEEKDAY IS:");
             temp = new Date(this.props.year, this.props.month, this.props.date).getDay();
-            console.log(temp);
         }
 
         if(this.props.date != 'X'){            
@@ -80,6 +76,6 @@ const mapStateToProps = function(state) {
              workouts:state.workouts,
              trainingPlans:state.trainingPlans,
              }
-  }
+    }
 
 export default connect(mapStateToProps, { updateSelectedDay, updateCurrentWeekDay, updateSelectedWorkoutList} )(Day);

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
 
 
-
 class DayDetail extends Component {
 
     constructor(props){
@@ -16,7 +15,6 @@ class DayDetail extends Component {
     }
 
     render(){
-
 
         var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise.name)).length;
 
@@ -83,6 +81,8 @@ class DayDetail extends Component {
 
                                         </div>
                                     <div className="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm">New Exercise</button>
+                                        <button type="button" class="btn btn-secondary btn-sm">Save</button>
                                     </div>
                                 </div>
                             </div>

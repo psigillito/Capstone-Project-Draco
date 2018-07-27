@@ -2,6 +2,16 @@ li{
     cursor: pointer; 
 }
 
+ul {
+    list-style-type: none;
+  }
+
+h1{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
 .dayButton{
     padding: 10px;
     font-size: 15px;
@@ -26,7 +36,7 @@ input[type="button"]{
 }
 
 .main-container{
-    width:70%;
+    width:100%;
     margin:auto;
 }
 
@@ -110,3 +120,9 @@ input[type="button"]{
     padding:0;
 }
 
+
+.triple-column{
+    -webkit-columns: 3; /* Chrome, Safari, Opera */
+    -moz-columns: 3; /* Firefox */
+    columns: 3;
+}

@@ -16,6 +16,7 @@ class WorkOutDetail extends Component{
                         <td>{exercise.name}</td>
                         <td>{exercise.sets}</td>
                         <td>{exercise.reps}</td>
+                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
                     </tr>
                 )
             )
@@ -26,6 +27,7 @@ class WorkOutDetail extends Component{
                         <td>{this.props.workout.name}</td>
                         <td>{this.props.workout.distance}</td>
                         <td>{this.props.workout.duration}</td>
+                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
                     </tr>
             )
         }
