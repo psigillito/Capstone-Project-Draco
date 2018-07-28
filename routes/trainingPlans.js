@@ -17,8 +17,11 @@ router.get('/', (req, res) => {
 // create a new training plan
 router.post('/', (req, res) => {
 	const newTrainingPlan = new TrainingPlan({
+		user: req.body.user,
 		name: req.body.name,
-		workouts: req.body.workouts
+		workouts: req.body.workouts,
+		startDate: (req.body.startDate) ? new Date(req.body.startDate) : null,
+		endDate: (req.body.endDate) ? new Date(req.body.endDate) : null
 	});
 
 	newTrainingPlan.save()
@@ -35,8 +38,19 @@ router.get('/currentUserPlans', (req, res) => {
 	});
 });
 
-
-
-
+router.patch('/', (req, res) => {
+	console.log(JSON.stringify(req.body));
+	if (req.body.user) {
+		User.findOneAndUpdate({_id: req.body.user}, {workouts: workouts.push(req.body.workout)}, (error, doc) => {
+		if (error) {
+			console.log(error);
+			console.log(doc);
+		}
+	});
+	res.json({ success: true });
+} else {
+	res.status(406).json({ message: "Request must contain a valid user ID" });
+}
+});
 
 module.exports = router;
