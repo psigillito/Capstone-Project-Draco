@@ -104,8 +104,8 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
 
 router.patch('/', (req, res) => {
 	console.log(JSON.stringify(req.body));
-	if (req.body.id) {
-		User.findOneAndUpdate({_id: req.body.id}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
+	if (req.body.user) {
+		User.findOneAndUpdate({_id: req.body.user}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
 		if (error) {
 			console.log(error);
 			console.log(doc);

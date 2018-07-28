@@ -7,6 +7,8 @@ import Alert from './Alert';
 import FieldGroup from './FieldGroup';
 import NumericValidation from './NumericValidation';
 import axios from 'axios';
+//import { getProfile } from '../redux/actions';
+//import { dispatch } from 'react-redux';
 
 var healthAreas = [];
 var loseWeight = {};
@@ -22,6 +24,8 @@ class Goals extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showAlert = this.showAlert.bind(this);
     this.handleHoursPerDayChange = this.handleHoursPerDayChange.bind(this);
+    this.handleDaysPerWeekChange = this.handleDaysPerWeekChange.bind(this);
+    console.log(this.props.user);
   }
 
   showAlert() {
@@ -84,36 +88,56 @@ class Goals extends React.Component {
     this.setState({ user: { goals: { primaryGoal: 4, sport: parseInt(event.target.value, 10) } } });
   }
 
+  handleDaysPerWeekChange(event) {
+    var returnState = JSON.parse(JSON.stringify(this.state));
+    if (returnState.user.logistics)
+      returnState.user.logistics.daysPerWeek = event.target.value;
+    else
+      returnState.user.logistics = {daysPerWeek: event.target.value, hoursPerDay:[0, 0, 0, 0, 0, 0, 0]};
+    this.setState(returnState);
+  }
+
   handleHoursPerDayChange(event) {
     //console.log(event.target.value);
     var numHours = parseInt(event.target.value, 10);
     //console.log(numHours);
     var dayOfWeek = "";
+    var numDay = 0;
     var returnObj = JSON.parse(JSON.stringify(this.state));
+    if (!returnObj.user.logistics)
+      returnObj.user.logistics = {daysPerWeek: 0, hoursPerDay:[0, 0, 0, 0, 0, 0, 0]};
     if (event.target.id.indexOf("Sunday") > -1) {
       dayOfWeek = "sunday";
+      numDay = 0;
     }
     else if (event.target.id.indexOf("Monday") > -1) {
       dayOfWeek = "monday";
+      numDay = 1;
     }
     else if (event.target.id.indexOf("Tuesday") > -1) {
       dayOfWeek = "tuesday";
+      numDay = 2;
     }
     else if (event.target.id.indexOf("Wednesday") > -1) {
       dayOfWeek = "wednesday";
+      numDay = 3;
     }
     else if (event.target.id.indexOf("Thursday") > -1) {
       dayOfWeek = "thursday";
+      numDay = 4;
     }
     else if (event.target.id.indexOf("Friday") > -1) {
       dayOfWeek = "friday";
+      numDay = 5;
     }
     else if (event.target.id.indexOf("Saturday") > -1) {
       dayOfWeek = "saturday";
+      numDay = 6;
     }
     //console.log(dayOfWeek);
     if (numHours > 0 && numHours <= 24) {
       returnObj['validationState'][dayOfWeek] = true;
+      returnObj.user.logistics.hoursPerDay[numDay] = parseInt(event.target.value, 10);
     } else {
       returnObj['validationState'][dayOfWeek] = false;
     }
@@ -137,8 +161,10 @@ class Goals extends React.Component {
         break;
       case 4:
         console.log("Sports performance");
-        if (!this.state.user.goals.sport) {
-          this.setState({ user: { goals: { primaryGoal: 4, sport: 1 }}});
+        if (typeof this.state.user.goals.sport === "undefined") {
+          var newState = this.state;
+          newState.user.goals = {primaryGoal: 4, sport: 1};
+          this.setState(newState);
         }
         break;
       case 5:
@@ -152,9 +178,10 @@ class Goals extends React.Component {
         console.log("This shouldn't get executed!");
     }
     console.log(JSON.stringify(this.state));
+    //console.log(dispatch(getProfile));
     //POST to the DB
     axios.patch('/users', {
-      user: this.state.user.id,
+      user: this.props.user,
       goals: {
         primaryGoal: this.state.user.goals.primaryGoal,
         health: (typeof(this.state.user.goals.health) != "undefined") ? this.state.user.goals.health : null,
