@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import { Button, Form, FormGroup, Input } from 'reactstrap'
 import { Redirect } from 'react-router'
 import * as goalsJCR from '../copy/goals.json'
 import * as  logistics from '../copy/logistics.json'
@@ -7,8 +7,6 @@ import Alert from './Alert';
 import FieldGroup from './FieldGroup';
 import NumericValidation from './NumericValidation';
 import axios from 'axios';
-//import { getProfile } from '../redux/actions';
-//import { dispatch } from 'react-redux';
 
 var healthAreas = [];
 var loseWeight = {};
@@ -25,7 +23,7 @@ class Goals extends React.Component {
     this.showAlert = this.showAlert.bind(this);
     this.handleHoursPerDayChange = this.handleHoursPerDayChange.bind(this);
     this.handleDaysPerWeekChange = this.handleDaysPerWeekChange.bind(this);
-    console.log(this.props.user);
+    //console.log(this.props.user);
   }
 
   showAlert() {
@@ -38,7 +36,7 @@ class Goals extends React.Component {
   }
 
   handleImproveHealthChange(event) {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     var index = healthAreas.indexOf(event.target.value);
     if (index > -1) {
       // element is already in the array
@@ -46,12 +44,12 @@ class Goals extends React.Component {
     } else {
       healthAreas.push(event.target.value);
     }
-    console.log("The array contains: " + healthAreas);
+    //console.log("The array contains: " + healthAreas);
   }
 
   handleWeightLossChange(event) {
-    console.log(event.target.value);
-    console.log(event.target.id);
+    //console.log(event.target.value);
+    //console.log(event.target.id);
     switch (event.target.id) {
       case "formControlsCurrentWeight":
         loseWeight['currentWeight'] = parseInt(event.target.value, 10);
@@ -69,11 +67,11 @@ class Goals extends React.Component {
         // to get rid of the console warning :)
     }
     
-    console.log("The object contains: " + JSON.stringify(loseWeight));
+    //console.log("The object contains: " + JSON.stringify(loseWeight));
   }
 
   handleFitnessChange(event) {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     var index = fitnessAreas.indexOf(event.target.value);
     if (index > -1) {
       // element is already in the array
@@ -81,7 +79,7 @@ class Goals extends React.Component {
     } else {
       fitnessAreas.push(event.target.value);
     }
-    console.log("The array contains: " + fitnessAreas);
+    //console.log("The array contains: " + fitnessAreas);
   }
 
   handleSportsChange(event) {
@@ -149,18 +147,18 @@ class Goals extends React.Component {
     switch (this.state.user.goals.primaryGoal) {
       case 1:
         this.setState({ user: { goals: { primaryGoal: 1, health: healthAreas }}});
-        console.log("Improving Health");
+        //console.log("Improving Health");
         break;
       case 2:
-        console.log("Lose Weight");
+        //console.log("Lose Weight");
         this.setState({ user: { goals: { primaryGoal: 2, loseWeight: { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect } } } });
         break;
       case 3:
-        console.log("Improve fitness");
+        //console.log("Improve fitness");
         this.setState({ user: { goals: { primaryGoal: 3, fitness: fitnessAreas }}});
         break;
       case 4:
-        console.log("Sports performance");
+        //console.log("Sports performance");
         if (typeof this.state.user.goals.sport === "undefined") {
           var newState = this.state;
           newState.user.goals = {primaryGoal: 4, sport: 1};
@@ -169,30 +167,29 @@ class Goals extends React.Component {
         break;
       case 5:
         if (!warningShown) {
-          console.log("The value of warningShow is: " + warningShown);
+          //console.log("The value of warningShow is: " + warningShown);
           this.showAlert();
           return;
         }
         break;
       default:
-        console.log("This shouldn't get executed!");
+        //console.log("This shouldn't get executed!");
     }
-    console.log(JSON.stringify(this.state));
-    //console.log(dispatch(getProfile));
+    //console.log(JSON.stringify(this.state));
     //POST to the DB
     axios.patch('/users', {
       user: this.props.user,
       goals: {
         primaryGoal: this.state.user.goals.primaryGoal,
-        health: (typeof(this.state.user.goals.health) != "undefined") ? this.state.user.goals.health : null,
-        fitness: (typeof(this.state.user.goals.fitness) != "undefined") ? this.state.user.goals.fitness : null,
+        health: (typeof(this.state.user.goals.health) !== "undefined") ? this.state.user.goals.health : null,
+        fitness: (typeof(this.state.user.goals.fitness) !== "undefined") ? this.state.user.goals.fitness : null,
         loseWeight: {
-          currentWeight: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
-          goalWeight: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
-          time: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.time : null,
-          autoSelectTime: (typeof(this.state.user.goals.loseWeight) != "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
+          currentWeight: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
+          goalWeight: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
+          time: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.time : null,
+          autoSelectTime: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
         },
-        sport: (typeof(this.state.user.goals.sport) != "undefined") ? this.state.user.goals.sport : null
+        sport: (typeof(this.state.user.goals.sport) !== "undefined") ? this.state.user.goals.sport : null
       },
       logistics: {
         daysPerWeek: this.state.user.logistics.daysPerWeek,
