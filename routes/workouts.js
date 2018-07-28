@@ -33,14 +33,20 @@ router.post('/', (req, res) => {
     const newWorkout = new Workout({
         name: req.body.name,
         mode: req.body.mode,
+        user: req.body.user,
+        trainingPlan: req.body.trainingPlan,
+        duration: (req.body.duration) ? req.body.duration : null,
+        exercises: (req.body.exercises) ? req.body.exercises : null,
+        intervals: (req.body.intervals) ? req.body.intervals : null,
+        daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
         date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
-    if (!newWorkout.name || !newWorkout.mode) {
+    if (!newWorkout.name || !newWorkout.mode || !newWorkout.user || !newWorkout.trainingPlan || !newWorkout.date) {
         // we should throw an error. we can do this check on the front end
         return res.json({
             success: false,
-            error: 'You must provide a name and mode'
+            error: 'You must provide a name, mode, user, training plan, and date'
         });
     }
     newWorkout.save(err => {

@@ -40,7 +40,7 @@ const workoutSchema = new Schema({
    *       unit: "min",
    *       intensity: "jog"
    *    },
-  *     setRest: {
+   *     setRest: {
    *       duration: 4,
    *       unit: "min",
    *       intensity: "jog"
@@ -51,7 +51,8 @@ const workoutSchema = new Schema({
     type: Array
   },
   date: [{
-  	type: Date
+    type: Date,
+    required: true
   }],
   daysOfWeek: {
     type: Array
