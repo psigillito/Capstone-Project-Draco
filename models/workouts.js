@@ -32,7 +32,7 @@ const workoutSchema = new Schema({
    * }
    */
   exercises: {
-    type: Array
+    type: Object
   },
   /* intverals will be used exclusively for endurance training
    * intervals : {
@@ -54,7 +54,7 @@ const workoutSchema = new Schema({
    * }
    */
   intervals: {
-    type: Array
+    type: Object
   },
   date: [{
     type: Date,
