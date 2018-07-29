@@ -4,6 +4,7 @@ const router = express.Router();
 // import model
 const TrainingPlan = require('../models/trainingPlans');
 const Workout = require('../models/workouts');
+const User = require('../models/users');
 
 // currently only gets all training plans in database
 router.get('/', (req, res) => {
@@ -25,8 +26,38 @@ router.post('/', (req, res) => {
 		endDate: (req.body.endDate) ? new Date(req.body.endDate) : null
 	});
 
+	// Update a user's numTrainingPlans
+	User.findById(req.body.user, (error, doc) => {
+		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans; 
+		userNumPlans++;
+		console.log("Number of training plans: " + userNumPlans); 
+		User.findByIdAndUpdate(req.body.user, { numTrainingPlans: userNumPlans }, (error, doc) => {
+			if (error) {
+				console.log(error);
+				console.log(doc);
+			}
+		});
+		if (error) {
+			console.log(error);
+			console.log(doc);
+		}
+	});
+	
 	newTrainingPlan.save()
-		.then(plan => res.json(plan))
+		.then(plan => {
+			User.findById(req.body.user, (error, doc) => {
+				//console.log(doc);
+				var userPlans = JSON.parse(JSON.stringify(doc)).trainingPlans;
+				//console.log("Here is the id: " + plan._id.toString());
+				userPlans.push(plan._id.toString());
+				User.findByIdAndUpdate(req.body.user, {trainingPlans: userPlans}, (error, doc) => {
+					if (error) {
+						console.log(error);
+						console.log(doc);
+					}
+				});
+			});
+			res.json(plan)})
 		.catch(err => console.log(err));
 });
 
