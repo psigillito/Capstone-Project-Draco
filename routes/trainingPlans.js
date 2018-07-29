@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 // import model
 const TrainingPlan = require('../models/trainingPlans');
@@ -16,11 +17,12 @@ router.get('/', (req, res) => {
 });
 
 // create a new training plan
-router.post('/', (req, res) => {
+router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 	const newTrainingPlan = new TrainingPlan({
-		user: req.body.user,
+		user: req.user.id,
 		name: req.body.name,
 		workouts: req.body.workouts,
+		active: true,
 		startDate: (req.body.startDate) ? new Date(req.body.startDate) : null,
 		endDate: (req.body.endDate) ? new Date(req.body.endDate) : null
 	});
@@ -49,7 +51,8 @@ router.patch('/', (req, res) => {
 			if (error) {
 				console.log(error);
 			}
-			planWorkouts.workouts.push(req.body.workoutId);
+			// this should eventually store the workout id, not name
+			planWorkouts.workouts.push(req.body.workout.name);
 			TrainingPlan.findOneAndUpdate({_id: req.body.id}, {workouts: planWorkouts.workouts}, (error, doc) => {
 				if (error) {
 					console.log(error);

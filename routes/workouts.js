@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 const Workout = require('../models/workouts');
 
@@ -29,17 +30,17 @@ router.get('/', (req, res) => {
 });
 
 // add workout
-router.post('/', (req, res) => {
+router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     const newWorkout = new Workout({
         name: req.body.name,
         mode: req.body.mode,
-        user: req.body.user,
+        user: req.user.id,
         trainingPlan: req.body.trainingPlan,
         duration: (req.body.duration) ? req.body.duration : null,
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
         daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
-        date: new Date(req.body.date)
+        //date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
     if (!newWorkout.name || !newWorkout.mode || !newWorkout.user || !newWorkout.trainingPlan || !newWorkout.date) {

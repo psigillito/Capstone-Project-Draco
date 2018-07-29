@@ -24,6 +24,10 @@ const trainingPlanSchema = new Schema({
   // a JSON string representing the end date of the training plan
   endDate: {
     type: Date
+  },
+  // boolean representing whether plan is active or not
+  active: {
+    type: Boolean
   }
 });
 
