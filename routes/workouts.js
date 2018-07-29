@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Workout = require('../models/workouts');
+const User = require('../models/users');
 
 // display workout
 router.get('/', (req, res) => {
@@ -49,10 +50,24 @@ router.post('/', (req, res) => {
             error: 'You must provide a name, mode, user, training plan, and date'
         });
     }
-    newWorkout.save(err => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true });
-    });
+    newWorkout.save()
+        .then(workout => {
+            User.findById(req.body.user, (error, doc) => {
+                var userNumWorkouts = JSON.parse(JSON.stringify(doc)).numWorkouts;
+                userNumWorkouts++;
+                User.findByIdAndUpdate(req.body.user, { numWorkouts: userNumWorkouts }, (error, doc) => {
+                    if (error) {
+                        console.log(error);
+                        console.log(doc);
+                    }
+                });
+            });
+            res.json({ success: true });
+        });
+        /*.catch (err => {
+        if (err)
+            return res.json({ success: false, error: err });
+    });*/
 });
 
 router.get('/currentWorkouts', (req, res) => {
