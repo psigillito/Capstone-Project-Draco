@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 });
 
 // create a new training plan
-router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const newTrainingPlan = new TrainingPlan({
 		user: req.user.id,
 		name: req.body.name,
@@ -30,9 +30,9 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
 	// Update a user's numTrainingPlans
 	User.findById(req.body.user, (error, doc) => {
-		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans; 
+		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans;
 		userNumPlans++;
-		console.log("Number of training plans: " + userNumPlans); 
+		console.log("Number of training plans: " + userNumPlans);
 		User.findByIdAndUpdate(req.body.user, { numTrainingPlans: userNumPlans }, (error, doc) => {
 			if (error) {
 				console.log(error);
@@ -44,7 +44,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 			console.log(doc);
 		}
 	});
-	
+
 	newTrainingPlan.save()
 		.then(plan => {
 			User.findById(req.body.user, (error, doc) => {
@@ -52,14 +52,15 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 				var userPlans = JSON.parse(JSON.stringify(doc)).trainingPlans;
 				//console.log("Here is the id: " + plan._id.toString());
 				userPlans.push(plan._id.toString());
-				User.findByIdAndUpdate(req.body.user, {trainingPlans: userPlans}, (error, doc) => {
+				User.findByIdAndUpdate(req.body.user, { trainingPlans: userPlans }, (error, doc) => {
 					if (error) {
 						console.log(error);
 						console.log(doc);
 					}
 				});
 			});
-			res.json(plan)})
+			res.json(plan)
+		})
 		.catch(err => console.log(err));
 });
 
@@ -103,9 +104,6 @@ router.patch('/', (req, res) => {
 				updateObj.startDate = req.body.startDate;
 				messageStr += "Start Date "
 			}
-			// this should eventually store the workout id, not name
-			planWorkouts.workouts.push(req.body.workout.name);
-			TrainingPlan.findOneAndUpdate({_id: req.body.id}, {workouts: planWorkouts.workouts}, (error, doc) => {
 			if (req.body.endDate) {
 				updateObj.endDate = req.body.endDate;
 				messageStr += "End Date "
@@ -117,9 +115,9 @@ router.patch('/', (req, res) => {
 				}
 			});
 			res.json({ success: true, message: messageStr + "field(s) updated" });
+		} else {
+			res.status(406).json({ message: "Request must contain a valid training plan ID" });
 		}
-	} else {
-		res.status(406).json({ message: "Request must contain a valid training plan ID" });
 	}
 });
 
