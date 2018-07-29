@@ -46,7 +46,6 @@ class ActiveWorkoutsPanel extends Component {
         this.setState({
             name:'',
             mode:'',
-            duration:'',
             daysOfWeek: [],
             trainingPlan:''
         })
@@ -60,7 +59,10 @@ class ActiveWorkoutsPanel extends Component {
                 sets:'',
                 reps:'',
                 weight:'',
-                unit:''
+                unit:'',
+                duration:'',
+                distance:'',
+                distanceUnit:''
             })
         } 
     }
@@ -72,6 +74,8 @@ class ActiveWorkoutsPanel extends Component {
         createdExercise['reps'] = this.state.reps;
         createdExercise['weight'] = this.state.weight;
         createdExercise['unit'] = this.state.unit;
+        createdExercise['distanceUnit'] = this.state.distanceUnit;
+        createdExercise['distance'] = this.state.distance;
         allExercises.push(createdExercise);
         alert('Exercise saved');
         createdExercise = {};
@@ -83,7 +87,6 @@ class ActiveWorkoutsPanel extends Component {
             name: this.state.name,
             mode: this.state.mode,
             exercises: allExercises,
-            duration: this.state.duration,
             daysOfWeek: exerciseDays,
             trainingPlan: this.state.trainingPlan,
         }
@@ -270,7 +273,7 @@ class ActiveWorkoutsPanel extends Component {
                       />
                       <label className="form-check-label" for="inlineRadio2">Running</label>
                   </div>
-                  <div className="form-check form-check-inline">
+                  {/* <div className="form-check form-check-inline">
                       <input className="form-check-input" 
                       type="radio" 
                       name="mode" 
@@ -278,7 +281,7 @@ class ActiveWorkoutsPanel extends Component {
                       value="Swimming"
                       onChange={this.onChange}
                       />
-                      <label className="form-check-label" for="inlineRadio2">Swimming</label>
+                <label className="form-check-label" for="inlineRadio2">Swimming(not yet supported)</label>
                   </div>
                   <div className="form-check form-check-inline">
                       <input className="form-check-input" 
@@ -288,21 +291,11 @@ class ActiveWorkoutsPanel extends Component {
                       value="Cycling"
                       onChange={this.onChange}
                       />
-                      <label className="form-check-label" for="inlineRadio2">Cycling</label>
-                  </div>
+                      <label className="form-check-label" for="inlineRadio2">Cycling(not yet supported)</label>
+                  </div> */}
                   </div>
 
-                  <label for='name'><b>Duration:</b> (fix me)</label>
-                  <div className="form-group">
-                    <input 
-                      type="text" 
-                      className="form-control form-control-lg"
-                      placeholder="Duration" 
-                      name="duration" 
-                      value={this.state.duration}
-                      onChange={this.onChange}
-                    />
-                  </div>
+                 
 
                   
                 {/* WEIGHT TRAINING LOGIC */}
@@ -345,9 +338,30 @@ class ActiveWorkoutsPanel extends Component {
                     </form>
                     </div> }
 
+                    {this.state.mode != 'Weight Training' && this.state.mode != '' && 
+                    <div>
+                <label for='name'><b>Duration:</b> (fix me)</label>
+                    <form>
+                      <div class="form-row">
+                        <div class="col">
+                          <input type="text" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+                        </div>
+                        <div class="col">
+                         <select id="inputState" name="distanceUnit" class="form-control" onChange={this.onChange}>
+                            <option selected>...</option>
+                            <option name="distanceUnit" value="mi">Mi</option>
+                            <option name="distanceUnit" value="km">Km</option>
+                         </select>
+                        </div>
+                      </div>
+                    </form>
+                    </div>
+
+                    }
+
                     </div> }
 
-               
+                    {this.state.mode != '' &&
                   <div>
                   <br/>
                   {this.state.addExercise === false &&
@@ -361,7 +375,8 @@ class ActiveWorkoutsPanel extends Component {
                     </div>
                     }
                     <br/>
-                  </div> 
+                  </div> }
+                   
                 
 
                   {/*<label for='name'><b>Intervals:</b> (fix me)</label>
