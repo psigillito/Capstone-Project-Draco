@@ -108,7 +108,7 @@ router.patch('/', (req, res) => {
 				updateObj.endDate = req.body.endDate;
 				messageStr += "End Date "
 			}
-			TrainingPlan.findByIdAndUpdate({ _id: req.body.id }, updateObj, (error, doc) => {
+			TrainingPlan.findByIdAndUpdate(req.body.id, updateObj, (error, doc) => {
 				if (error) {
 					console.log(error);
 					console.log(doc);
