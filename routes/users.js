@@ -38,7 +38,10 @@ router.post('/register', (req, res) => {
 					email: req.body.email,
 					name: req.body.name,
 					username: req.body.username,
-					password: req.body.password
+					password: req.body.password,
+					trainingPlans: [],
+					numTrainingPlans: 0,
+					numWorkouts: 0
 				});
 
 				// Encrypt password
