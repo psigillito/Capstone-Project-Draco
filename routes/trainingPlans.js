@@ -56,8 +56,8 @@ router.patch('/', (req, res) => {
 					console.log(doc);
 				}
 		});
+		res.json({ success: true });
 	});
-	res.json({ success: true });
 } else {
 	res.status(406).json({ message: "Request must contain a valid training plan ID" });
 }
