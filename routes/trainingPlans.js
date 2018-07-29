@@ -9,7 +9,7 @@ const Workout = require('../models/workouts');
 router.get('/', (req, res) => {
 	const query = TrainingPlan.find();
 	query.exec((err, docs) => {
-		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		if (err) return res.status(400).json({ msg: 'failure', error: err });
 		console.log(docs);
 		return res.json({ msg: 'success', data: docs });
 	});
@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
 router.get('/currentUserPlans', (req, res) => {
 	const query = TrainingPlan.find(req.query);
 	query.exec((err, docs) => {
-		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		if (err) return res.status(400).json({ msg: 'failure', error: err });
 		return res.json(docs);
 	});
 });
@@ -44,23 +44,47 @@ router.patch('/', (req, res) => {
 	console.log(JSON.stringify(req.body));
 	if (req.body.id) {
 		// make a GET request to get the workouts array for a given training plan
-		TrainingPlan.findById(req.body.id, (error, doc) => {
-			planWorkouts = JSON.parse(JSON.stringify(doc));
-			if (error) {
-				console.log(error);
+		if (req.body.workoutId) {
+			TrainingPlan.findById(req.body.id, (error, doc) => {
+				planWorkouts = JSON.parse(JSON.stringify(doc));
+				if (error) {
+					console.log(error);
+				}
+				planWorkouts.workouts.push(req.body.workoutId);
+				TrainingPlan.findOneAndUpdate({ _id: req.body.id }, { workouts: planWorkouts.workouts }, (error, doc) => {
+					if (error) {
+						console.log(error);
+						console.log(doc);
+					}
+				});
+				res.json({ success: true });
+			});
+		} else if (req.body.name || req.body.startDate || req.body.endDate) {
+			var updateObj = {};
+			var messageStr = "";
+			if (req.body.name) {
+				updateObj.name = req.body.name;
+				messageStr += "Name "
 			}
-			planWorkouts.workouts.push(req.body.workoutId);
-			TrainingPlan.findOneAndUpdate({_id: req.body.id}, {workouts: planWorkouts.workouts}, (error, doc) => {
+			if (req.body.startDate) {
+				updateObj.startDate = req.body.startDate;
+				messageStr += "Start Date "
+			}
+			if (req.body.endDate) {
+				updateObj.endDate = req.body.endDate;
+				messageStr += "End Date "
+			}
+			TrainingPlan.findByIdAndUpdate({ _id: req.body.id }, updateObj, (error, doc) => {
 				if (error) {
 					console.log(error);
 					console.log(doc);
 				}
-		});
-		res.json({ success: true });
-	});
-} else {
-	res.status(406).json({ message: "Request must contain a valid training plan ID" });
-}
+			});
+			res.json({ success: true, message: messageStr + "field(s) updated" });
+		}
+	} else {
+		res.status(406).json({ message: "Request must contain a valid training plan ID" });
+	}
 });
 
 module.exports = router;
