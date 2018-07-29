@@ -4,14 +4,12 @@ import Calendar from './Calendar'
 import NavBar from './NavBar'
 import BootStrap from 'bootstrap'
 import {Route, Switch} from 'react-router-dom'
-import LogOff from './LogOff'
+
 import About from './About'
 import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
-import {getCurrentTrainingPlans} from '../redux/actions'
-import {getCurrentWorkouts} from '../redux/actions'
 import {updateMonth} from '../redux/actions'
 import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
@@ -55,28 +53,7 @@ if(localStorage.jwtToken) {
 class Main extends Component{
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount(){
-        //get all training plans 
-        axios.get('/trainingPlans/currentUserPlans/', {
-            params: {
-                user: this.props.auth.user.name  
-              }
-        }).then(res => {    
-            this.props.getCurrentTrainingPlans(res);
-        })
-
-        //get all workouts 
-        axios.get('/workouts/currentWorkouts', {
-            params: {
-                user: this.props.auth.user.name
-            }
-        }).then(res => {
-            this.props.getCurrentWorkouts(res);
-        })
-    }
-        
+    }    
     
     render(){
 
@@ -124,7 +101,6 @@ class Main extends Component{
                 )}/>
                 <Switch>
                     <Route path="/About" exact component={About}/>
-                    <Route path="/LogOff" exact component={LogOff}/>
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
                     <Route path = "/goals" render={(props) => <Goals {...props} user={this.props.auth.user.id} responses={goalsJCR.goals.responses}/>}/>
@@ -139,4 +115,4 @@ const mapStateToProps = function(state) {
     return { trainingPlans: state.trainingPlans, workouts:state.workouts, errors: state.errors }
   }
 
-export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts} )(Main);
+export default connect(mapStateToProps)(Main);

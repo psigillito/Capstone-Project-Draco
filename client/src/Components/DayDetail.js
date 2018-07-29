@@ -16,7 +16,7 @@ class DayDetail extends Component {
 
     render(){
 
-        var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise.name)).length;
+        var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise._id)).length;
 
         if(workoutsCount){
             return(
@@ -34,7 +34,7 @@ class DayDetail extends Component {
                                             <h4>Weight Training Workouts:</h4>
                                             {
                                             this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
-                                                                                        && this.props.selectedWorkoutList.includes(exercise.name)
+                                                                                        && this.props.selectedWorkoutList.includes(exercise._id)
                                                                                         && exercise.mode =='Weight Training')
                                             .map( (workout, index) =>
                                                     <div key={index}>
@@ -58,7 +58,7 @@ class DayDetail extends Component {
                                             <h4>Cardio Workouts:</h4>
                                             {
                                             this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
-                                                                                        && this.props.selectedWorkoutList.includes(exercise.name)
+                                                                                        && this.props.selectedWorkoutList.includes(exercise._id)
                                                                                         && exercise.mode =='Running')
                                             .map( (workout, index) =>
                                                     <div key={index}>
