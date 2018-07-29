@@ -87,20 +87,18 @@ class ActiveWorkoutsPanel extends Component {
             daysOfWeek: exerciseDays,
             trainingPlan: this.state.trainingPlan,
         }
-        //console.log(newWorkout);
+        console.log(newWorkout);
 
         axios.post('/workouts', newWorkout)
-            .then(res => console.log(res))
+            .then(res => {
+                 axios.patch('/trainingPlans', {
+                    id: this.state.trainingPlan,
+                    workoutId: res.data._id
+                })
+                    .then(res => {console.log(res); window.location.reload();})
+                    .catch(err => console.log(err));
+                })
             .catch(err => console.log(err));
-
-        axios.patch('/trainingPlans', {
-            id: this.state.trainingPlan,
-            workout: newWorkout
-        })
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-
-        window.location.reload();
     }
 
     submitTrainingPlan() {
@@ -378,9 +376,10 @@ class ActiveWorkoutsPanel extends Component {
                     />
                   </div> */}
 
-                  <label for='name'><b>Days Of Week:</b> (fix me)</label>
-                  <div className="form-group">
+                    {/* Day of week selection */}
 
+                  <label for='name'><b>Days Of Week:</b></label>
+                  <div className="form-group">
                   <div className="form-check form-check-inline">
                       <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='0'/>
                       <label className="form-check-label" for="inlineCheckbox1">Sunday</label>
@@ -408,8 +407,7 @@ class ActiveWorkoutsPanel extends Component {
                     <div className="form-check form-check-inline">
                       <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='6'/>
                       <label className="form-check-label" for="inlineCheckbox1">Saturday</label>
-                    </div>
-                  
+                    </div>   
                   </div>
 
                   <label for='name'><b>Training Plan:</b></label>

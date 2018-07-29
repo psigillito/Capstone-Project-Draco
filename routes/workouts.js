@@ -53,17 +53,17 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     }
     newWorkout.save()
         .then(workout => {
-            User.findById(req.body.user, (error, doc) => {
+            User.findById(req.user.id, (error, doc) => {
                 var userNumWorkouts = JSON.parse(JSON.stringify(doc)).numWorkouts;
                 userNumWorkouts++;
-                User.findByIdAndUpdate(req.body.user, { numWorkouts: userNumWorkouts }, (error, doc) => {
+                User.findByIdAndUpdate(req.user.id, { numWorkouts: userNumWorkouts }, (error, doc) => {
                     if (error) {
                         console.log(error);
                         console.log(doc);
                     }
                 });
             });
-            res.json({ success: true });
+            res.json(newWorkout);
         });
         /*.catch (err => {
         if (err)
