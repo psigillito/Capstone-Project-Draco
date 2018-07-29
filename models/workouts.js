@@ -10,8 +10,14 @@ const workoutSchema = new Schema({
     type: String,
     required: true
   },
+  /* An object that contains a value and a unit 
+  * duration: {
+  *    value: 7,
+  *    units: "mi"
+  * }
+  * */
   duration: {
-    type: Number
+    type: Object
   },
   /* exercises will be used exclusively for strength training
    * exercises : {
