@@ -30,7 +30,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 
 	// Update a user's numTrainingPlans
-	User.findById(req.body.user, (error, doc) => {
+	User.findById(req.user.id, (error, doc) => {
 		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans;
 		userNumPlans++;
 		console.log("Number of training plans: " + userNumPlans);
@@ -43,12 +43,12 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 
 	newTrainingPlan.save()
 		.then(plan => {
-			User.findById(req.body.user, (error, doc) => {
+			User.findById(req.user.id, (error, doc) => {
 				//console.log(doc);
 				var userPlans = JSON.parse(JSON.stringify(doc)).trainingPlans;
 				//console.log("Here is the id: " + plan._id.toString());
 				userPlans.push(plan._id.toString());
-				User.findByIdAndUpdate(req.body.user, { trainingPlans: userPlans }, (error, doc) => {
+				User.findByIdAndUpdate(req.user.id, { trainingPlans: userPlans }, (error, doc) => {
 					if (error) {
 						console.log(error);
 						console.log(doc);
