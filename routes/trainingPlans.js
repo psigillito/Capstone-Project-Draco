@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const queries = require('./queries');
 
 // import model
 const TrainingPlan = require('../models/trainingPlans');
@@ -33,12 +34,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans;
 		userNumPlans++;
 		console.log("Number of training plans: " + userNumPlans);
-		User.findByIdAndUpdate(req.body.user, { numTrainingPlans: userNumPlans }, (error, doc) => {
-			if (error) {
-				console.log(error);
-				console.log(doc);
-			}
-		});
+		queries.updateUser(req.body.user, { numTrainingPlans: userNumPlans })
 		if (error) {
 			console.log(error);
 			console.log(doc);
@@ -85,12 +81,7 @@ router.patch('/', (req, res) => {
 					console.log(error);
 				}
 				planWorkouts.workouts.push(req.body.workoutId);
-				TrainingPlan.findOneAndUpdate({ _id: req.body.id }, { workouts: planWorkouts.workouts }, (error, doc) => {
-					if (error) {
-						console.log(error);
-						console.log(doc);
-					}
-				});
+				queries.updateTrainingPlan(req.body.id, { workouts: planWorkouts.workouts });
 				res.json({ success: true });
 			});
 		} else if (req.body.name || req.body.startDate || req.body.endDate) {
@@ -108,16 +99,46 @@ router.patch('/', (req, res) => {
 				updateObj.endDate = req.body.endDate;
 				messageStr += "End Date "
 			}
-			TrainingPlan.findByIdAndUpdate(req.body.id, updateObj, (error, doc) => {
-				if (error) {
-					console.log(error);
-					console.log(doc);
-				}
-			});
+			queries.updateTrainingPlan(req.body.id, updateObj);
 			res.json({ success: true, message: messageStr + "field(s) updated" });
 		} else {
 			res.status(406).json({ message: "Request must contain a valid training plan ID" });
 		}
+	}
+});
+
+router.delete('/', (req, res) => {
+	var planWorkouts  = [];
+	if (req.query && req.body.user) {
+		if (req.query.id) {
+			TrainingPlan.findById(req.query.id, (error, doc) => {
+				// Save the array of workouts associated with this plan
+				planWorkouts = JSON.parse(JSON.stringify(doc)).workouts;
+				if (error) {
+					console.log(error);
+				}
+				TrainingPlan.findByIdAndRemove(req.query.id, (error, doc) => {
+					if (error) {
+						console.log(error);
+						console.log(doc);
+					}
+				});
+				// Remove the training plan from the user's plans
+				User.findById()
+				for (var workout of planWorkouts) {
+					// DELETE the individual workouts
+					Workout.findByIdAndRemove(workout, (error, doc) => {
+						if (error) {
+							console.log(error);
+							console.log(doc);
+						}
+					});
+				}
+				res.json({ success: true });
+			});
+		}
+	} else {
+		res.status(406).json({ message: "Invalid training plan ID or user ID"});
 	}
 });
 
