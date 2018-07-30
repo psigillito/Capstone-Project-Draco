@@ -94,6 +94,7 @@ class Main extends Component{
                                 <TodaysExercisePanel className = "col-sm"/>
                                 <span className = "col-sm"/>
                                 <MonthStatisticsPanel className = "col-sm"/>
+
                             </div>
                         </div>
                         

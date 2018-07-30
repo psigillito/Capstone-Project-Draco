@@ -29,12 +29,12 @@ class NavBar extends Component {
                 <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <Link className="dropdown-item" to="/PairDevice">Pair Device</Link>
-                    <Link className="dropdown-item" to="/Settings">Settings</Link>
-                    <Link className="dropdown-item" to="/About">About</Link>
                     <Link className="dropdown-item" to="/calendar">Calendar</Link>
                     <Link className="dropdown-item" to="/profile">Profile</Link>
                     <Link className="dropdown-item" to="/goals">Goals</Link>
+                    <Link className="dropdown-item" to="/PairDevice">Pair Device</Link>
+                    <Link className="dropdown-item" to="/Settings">Settings</Link>
+                    <Link className="dropdown-item" to="/About">About</Link>
                     <a href="#" onClick={this.logoutClick.bind(this)} className="dropdown-item">Log Off</a>
                 </div>
             </div>

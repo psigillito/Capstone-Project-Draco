@@ -81,8 +81,8 @@ class DayDetail extends Component {
 
                                         </div>
                                     <div className="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm">New Exercise</button>
-                                        <button type="button" class="btn btn-secondary btn-sm">Save</button>
+                                        <button type="button" className="btn btn-secondary btn-sm">New Exercise</button>
+                                        <button type="button" className="btn btn-secondary btn-sm">Save</button>
                                     </div>
                                 </div>
                             </div>

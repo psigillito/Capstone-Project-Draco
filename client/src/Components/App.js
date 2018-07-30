@@ -15,8 +15,8 @@ function mapStateToProps(state){
         month: state.month,
         year: state.year,
         weekDay: state.weekDay,
-        selectedWorkoutList: state.selectedWorkoutList
-
+        selectedWorkoutList: state.selectedWorkoutList,
+        stravaToken: state.stravaToken
     }
 }
 

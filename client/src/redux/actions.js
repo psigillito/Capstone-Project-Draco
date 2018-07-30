@@ -162,7 +162,7 @@ export function updateCurrentWeekDay(response) {
 
 export function updateSelectedWorkoutList(currentDate){
 
-    console.log(currentDate);
+    
     var activeTrainingPlans = store.getState().trainingPlans.data.filter( (plan) => Date.parse(plan.startDate) <= Date.parse(currentDate) 
                                                                                  && Date.parse(plan.endDate) >= Date.parse(currentDate));
 
@@ -175,4 +175,12 @@ export function updateSelectedWorkoutList(currentDate){
         type: 'SET_SELECTED_WORKOUT_LIST',
         data: newWorkoutList
     }
+}
+
+export function updateStravaToken(newToken){
+    return {
+        type: 'SET_STRAVA_TOKEN',
+        stravaToken: newToken
+    }
+
 }

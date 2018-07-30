@@ -154,8 +154,17 @@ function selectedWorkoutList(state=[], action){
     }
 }
 
+function stravaToken(state=0, action){
+    switch(action.type){
+        case 'SET_STRAVA_TOKEN':
+            state = action.stravaToken
+        default:
+            return state;
+    }
+}
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList})
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken})
 
 
 export default rootReducer

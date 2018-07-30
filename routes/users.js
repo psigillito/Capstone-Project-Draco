@@ -102,6 +102,25 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
 		.catch(err => console.log(err));
 });
 
+//set stravaToken on authorization
+router.patch('/setStravaToken', (req, res) =>{
+
+	User.update({_id: req.body.userId},{$set:{stravaToken: req.body.stravaToken }}, (error, doc) => {
+		if(error){
+			console.log(error);
+		}
+	})
+});
+
+//get User
+router.get('/getUser', (req, res) =>{
+	const query = User.find(req.query);
+	User.findOne({_id: req.query._id}, (err, docs) => {
+		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		return res.json(docs);
+	});
+})
+
 router.patch('/', (req, res) => {
 	console.log(JSON.stringify(req.body));
 	if (req.body.user) {

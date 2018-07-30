@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
 import {getCurrentTrainingPlans} from '../redux/actions'
 import {getCurrentWorkouts} from '../redux/actions'
+import {updateStravaToken} from '../redux/actions'
 
 
 const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
@@ -19,10 +20,7 @@ class Calendar extends Component{
         super(props);
 
         this.componentWillMount = this.componentWillMount.bind(this);
-
-
     }
-
 
     componentWillMount(){
         //get all training plans 
@@ -41,6 +39,15 @@ class Calendar extends Component{
             }
         }).then(res => {
             this.props.getCurrentWorkouts(res);
+        })
+        axios.get('/users/getUser', {
+            params:{
+                _id: this.props.auth.user.id
+            }
+        }).then(res => {
+            if(res.data.stravaToken){
+                this.props.updateStravaToken(res.data.stravaToken);
+            }
         })
     }
 
@@ -64,4 +71,4 @@ const mapStateToProps = function(state) {
     return { auth: state.auth, workouts:state.workouts, errors: state.errors }
   }
 
-export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts} )(Calendar);
+export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken} )(Calendar);

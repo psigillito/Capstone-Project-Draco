@@ -122,7 +122,14 @@ input[type="button"]{
 
 
 .triple-column{
-    -webkit-columns: 3; /* Chrome, Safari, Opera */
-    -moz-columns: 3; /* Firefox */
+    -webkit-columns: 3;
+    -moz-columns: 3;
     columns: 3;
+}
+
+.centered-section{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+
 }

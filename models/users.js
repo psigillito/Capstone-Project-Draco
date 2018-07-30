@@ -18,6 +18,11 @@ const userSchema = new Schema({
     type: String,
     require: true
   },
+
+  stravaToken:{
+    type: String,
+    require: false
+  },
   // a unique string representation for each user
   username: {
     type: String,
