@@ -135,6 +135,23 @@ var _findWorkoutsFromUser = function(userId) {
 
 }
 
+/*
+ * This function returns all the trainingPlans from a specified user
+ * @parameter {string} userId 
+ * @returns {array} containing ids of the trainingPlans
+**/
+var _findTrainingPlansFromUser = function(userId) {
+	// query workouts to get an array of workouts
+	TrainingPlan.find({user: userId}, '_id', (err, trainingPlan) => {
+		if (err) {
+			console.log(err);
+			console.log(trainingPlan);
+		}
+		return trainingPlan;
+	});
+
+}
+
 queries = {
 	createUser: _createUser,
 	updateUser: _updateUser,
@@ -146,7 +163,8 @@ queries = {
 	updateTrainingPlan: _updateTrainingPlan,
 	deleteTrainingPlan: _deleteTrainingPlan,
 	findWorkoutsFromTrainingPlan: _findWorkoutsFromTrainingPlan,
-	findWorkoutsFromUser: _findWorkoutsFromUser
+	findWorkoutsFromUser: _findWorkoutsFromUser,
+	findTrainingPlansFromUser: _findTrainingPlansFromUser
 }
 
 module.exports = queries;
