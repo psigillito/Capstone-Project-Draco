@@ -30,34 +30,15 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 
 	// Update a user's numTrainingPlans
-	User.findById(req.user.id, (error, doc) => {
-		var userNumPlans = JSON.parse(JSON.stringify(doc)).numTrainingPlans;
-		userNumPlans++;
-		console.log("Number of training plans: " + userNumPlans);
-		queries.updateUser(req.body.user, { numTrainingPlans: userNumPlans })
-		if (error) {
-			console.log(error);
-			console.log(doc);
-		}
-	});
+	var userNumPlans = queries.findNumTrainingPlansByUser(req.user.id);
+	userNumPlans++;
+	queries.updateUser(req.user.id, {numTrainingPlans: userNumPlans});
 
-	newTrainingPlan.save()
-		.then(plan => {
-			User.findById(req.user.id, (error, doc) => {
-				//console.log(doc);
-				var userPlans = JSON.parse(JSON.stringify(doc)).trainingPlans;
-				//console.log("Here is the id: " + plan._id.toString());
-				userPlans.push(plan._id.toString());
-				User.findByIdAndUpdate(req.user.id, { trainingPlans: userPlans }, (error, doc) => {
-					if (error) {
-						console.log(error);
-						console.log(doc);
-					}
-				});
-			});
-			res.json(plan)
-		})
-		.catch(err => console.log(err));
+	queries.createTrainingPlan(newTrainingPlan, (plan) => {
+		var userPlans = queries.findTrainingPlansByUser(req.user.id);
+		userPlans.push(plan._id.toString());
+		queries.updateUser(req.user.id, {trainingPlans: userPlans});
+	});
 });
 
 //get current user workouts based on query
