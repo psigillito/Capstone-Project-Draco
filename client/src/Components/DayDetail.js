@@ -46,6 +46,8 @@ class DayDetail extends Component {
                                                                     <th>Name</th>
                                                                     <th>Sets</th>
                                                                     <th>Reps</th>
+                                                                    <th>Weight</th>
+                                                                    <th>Unit</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -69,7 +71,7 @@ class DayDetail extends Component {
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Distance</th>
-                                                                    <th>Duration</th>
+                                                                    <th>Unit</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>

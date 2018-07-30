@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 const Workout = require('../models/workouts');
+const User = require('../models/users');
 
 // display workout
 router.get('/', (req, res) => {
@@ -29,17 +31,17 @@ router.get('/', (req, res) => {
 });
 
 // add workout
-router.post('/', (req, res) => {
+router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     const newWorkout = new Workout({
         name: req.body.name,
         mode: req.body.mode,
-        user: req.body.user,
+        user: req.user.id,
         trainingPlan: req.body.trainingPlan,
         duration: (req.body.duration) ? req.body.duration : null,
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
         daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
-        date: new Date(req.body.date)
+        //date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
     if (!newWorkout.name || !newWorkout.mode || !newWorkout.user || !newWorkout.trainingPlan || !newWorkout.date) {
@@ -49,10 +51,24 @@ router.post('/', (req, res) => {
             error: 'You must provide a name, mode, user, training plan, and date'
         });
     }
-    newWorkout.save(err => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true });
-    });
+    newWorkout.save()
+        .then(workout => {
+            User.findById(req.user.id, (error, doc) => {
+                var userNumWorkouts = JSON.parse(JSON.stringify(doc)).numWorkouts;
+                userNumWorkouts++;
+                User.findByIdAndUpdate(req.user.id, { numWorkouts: userNumWorkouts }, (error, doc) => {
+                    if (error) {
+                        console.log(error);
+                        console.log(doc);
+                    }
+                });
+            });
+            res.json(newWorkout);
+        });
+        /*.catch (err => {
+        if (err)
+            return res.json({ success: false, error: err });
+    });*/
 });
 
 router.get('/currentWorkouts', (req, res) => {
