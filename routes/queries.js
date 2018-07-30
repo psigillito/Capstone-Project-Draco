@@ -101,6 +101,40 @@ var _deleteWorkout = function(workoutId) {
 	});
 }
 
+/*
+ * This function returns all the workouts from a specified trainingPlan
+ * @parameter {string} trainingPlanId 
+ * @returns {array} containing ids of the workouts
+**/
+var _findWorkoutsFromTrainingPlan = function(trainingPlanId) {
+	// query workouts to get an array of workouts
+	Workout.find({trainingPlan: trainingPlanId}, '_id', (err, workout) => {
+		if (err) {
+			console.log(err);
+			console.log(workout);
+		}
+		return workout;
+	});
+
+}
+
+/*
+ * This function returns all the workouts from a specified user
+ * @parameter {string} userId 
+ * @returns {array} containing ids of the workouts
+**/
+var _findWorkoutsFromUser = function(userId) {
+	// query workouts to get an array of workouts
+	Workout.find({user: userId}, '_id', (err, workout) => {
+		if (err) {
+			console.log(err);
+			console.log(workout);
+		}
+		return workout;
+	});
+
+}
+
 queries = {
 	createUser: _createUser,
 	updateUser: _updateUser,
@@ -111,6 +145,8 @@ queries = {
 	createTrainingPlan: _createTrainingPlan,
 	updateTrainingPlan: _updateTrainingPlan,
 	deleteTrainingPlan: _deleteTrainingPlan,
+	findWorkoutsFromTrainingPlan: _findWorkoutsFromTrainingPlan,
+	findWorkoutsFromUser: _findWorkoutsFromUser
 }
 
 module.exports = queries;
