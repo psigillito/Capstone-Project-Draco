@@ -174,13 +174,14 @@ var _findNumTrainingPlansFromUser = function(userId) {
 **/
 var _findNumWorkoutsFromUser = function(userId) {
 	// query workouts to get an array of workouts
-	User.findById(userId, 'numWorkouts', (err, result) => {
+	var numWorkouts = User.findById(userId, 'numWorkouts', (err, result) => {
 		if (err) {
 			console.log(err);
 			console.log(result);
 		}
 		return result;
 	});
+	return numWorkouts;
 }
 
 queries = {
