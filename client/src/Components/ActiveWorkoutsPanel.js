@@ -46,13 +46,6 @@ class ActiveWorkoutsPanel extends Component {
             trainingPlan:''
         })
     }
-
-    
-
-    
-
-    
-
     
 
     onChange(e) {

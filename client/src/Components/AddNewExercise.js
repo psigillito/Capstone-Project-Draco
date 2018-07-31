@@ -49,7 +49,7 @@ class AddNewExercise extends Component {
     }
 
     submitExercise() { 
-        createdExercise['name'] = this.state.name;
+        createdExercise['name'] = this.state.exerciseName;
         createdExercise['sets'] = this.state.sets;
         createdExercise['reps'] = this.state.reps;
         createdExercise['weight'] = this.state.weight;
@@ -74,24 +74,12 @@ class AddNewExercise extends Component {
                         id: this.state.workoutId,
                         exercise: createdExercise
                     })
-                        .then(res => console.log(res))
+                        .then(res => {console.log(res); window.location.reload();})
                         .catch(err => console.log(err));
                 }
             })
             .catch(err => console.log(err)); 
 
-         this.setState({
-            name:'',
-            sets:'',
-            reps:'',
-            weight:'',
-            unit:'',
-            duration:'',
-            distance:'',
-            distanceUnit:''
-          })  
-
-         createdExercise = {};
     }
 
      saveExercise() {
