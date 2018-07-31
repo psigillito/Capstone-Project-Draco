@@ -18,7 +18,6 @@ class WorkOutDetail extends Component{
                         <td>{exercise.reps}</td>
                         <td>{exercise.weight}</td>
                         <td>{exercise.unit}</td>
-                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
                     </tr>
                 )
             )
@@ -29,10 +28,9 @@ class WorkOutDetail extends Component{
                         <td className="text-center">{exercise.name}</td>
                         <td className="text-center">{exercise.distance}</td>
                         <td className="text-center">{exercise.distanceUnit}</td>
-                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
                     </tr>
-                )
                     
+                )
             )
         }
     }
