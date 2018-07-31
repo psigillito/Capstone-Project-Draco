@@ -30,7 +30,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 
 	// Update a user's numTrainingPlans
-	var userNumPlans = queries.findNumTrainingPlansByUser(req.user.id);
+	var userNumPlans = queries.findNumTrainingPlansFromUser(req.user.id);
 	userNumPlans++;
 	queries.updateUser(req.user.id, {numTrainingPlans: userNumPlans});
 
