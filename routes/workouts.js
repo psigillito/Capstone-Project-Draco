@@ -71,6 +71,45 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     });*/
 });
 
+router.patch('/', (req, res) => {
+    var workoutExercises = [];
+    console.log(JSON.stringify(req.body));
+    if (req.body.id) {
+        // make a GET request to get the workouts array for a given training plan
+        if (req.body.exercise) {
+            Workout.findById(req.body.id, (error, doc) => {
+                workoutExercises = JSON.parse(JSON.stringify(doc));
+                if (error) {
+                    console.log(error);
+                }
+                //console.log('Exercise adding: ' + req.body.exercise);
+                workoutExercises.exercises.push(req.body.exercise);
+                queries.updateWorkout(req.body.id, { exercises: workoutExercises.exercises });
+                res.json({ success: true });
+            });
+        // } else if (req.body.name || req.body.startDate || req.body.endDate) {
+        //     var updateObj = {};
+        //     var messageStr = "";
+        //     if (req.body.name) {
+        //         updateObj.name = req.body.name;
+        //         messageStr += "Name "
+        //     }
+        //     if (req.body.startDate) {
+        //         updateObj.startDate = req.body.startDate;
+        //         messageStr += "Start Date "
+        //     }
+        //     if (req.body.endDate) {
+        //         updateObj.endDate = req.body.endDate;
+        //         messageStr += "End Date "
+        //     }
+        //     queries.updateTrainingPlan(req.body.id, updateObj);
+        //     res.json({ success: true, message: messageStr + "field(s) updated" });
+         } else {
+            res.status(406).json({ message: "Request must contain a valid training plan ID" });
+        }
+    }
+});
+
 router.get('/currentWorkouts', (req, res) => {
     console.log('QUERY IS:');
     console.log(req.query)
