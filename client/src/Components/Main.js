@@ -77,7 +77,7 @@ class Main extends Component{
                         <div className="container">
                             <div className="row">
                                 <div className = "col-sm">
-                                    <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans}/>
+                                    <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans} workouts={this.props.workouts}/>
                                 </div>
                                 <div className = "col-sm"> 
                                     <h2>{Months[this.props.month] + ","+this.props.year}</h2>                   

@@ -74,7 +74,7 @@ class ActiveWorkoutsPanel extends Component {
                                             <div><b>End Date:</b></div>
                                             <div>{plan.endDate}</div>
                                             <div><b>Workouts:</b></div>
-                                            {plan.workouts.map( (workout) => <div>{workout}</div> )}
+                                            {this.props.workouts.data.filter( (workout) => workout.trainingPlan === plan._id ).map((workout) => <div>{workout.name}</div>)}
                                             <br/> 
                                             <button onClick={() => this.editTrainingPlan(plan)} data-toggle="modal" data-target="#trainingPlan" type="button" className="btn btn-secondary btn-block">Edit Plan</button>
                                         </div>
