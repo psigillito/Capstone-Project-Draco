@@ -133,7 +133,7 @@ class Goals extends React.Component {
       numDay = 6;
     }
     //console.log(dayOfWeek);
-    if (numHours > 0 && numHours <= 24) {
+    if (numHours >= 0 && numHours <= 24) {
       returnObj['validationState'][dayOfWeek] = true;
       returnObj.user.logistics.hoursPerDay[numDay] = parseInt(event.target.value, 10);
     } else {
@@ -144,18 +144,25 @@ class Goals extends React.Component {
   }
 
   handleSubmit(event) {
+    var prevState = this.state;
     switch (this.state.user.goals.primaryGoal) {
       case 1:
-        this.setState({ user: { goals: { primaryGoal: 1, health: healthAreas }}});
+        prevState.user.goals.primaryGoal = 1;
+        prevState.user.goals.health = healthAreas;
+        this.setState(prevState);
         //console.log("Improving Health");
         break;
       case 2:
         //console.log("Lose Weight");
-        this.setState({ user: { goals: { primaryGoal: 2, loseWeight: { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect } } } });
+        prevState.user.goals.primaryGoal = 2;
+        prevState.user.goals.loseWeight = { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect };
+        this.setState(prevState);
         break;
       case 3:
         //console.log("Improve fitness");
-        this.setState({ user: { goals: { primaryGoal: 3, fitness: fitnessAreas }}});
+        prevState.user.goals.primaryGoal = 3;
+        prevState.user.goals.fitness = fitnessAreas;
+        this.setState(prevState);
         break;
       case 4:
         //console.log("Sports performance");
@@ -193,7 +200,7 @@ class Goals extends React.Component {
       },
       logistics: {
         daysPerWeek: this.state.user.logistics.daysPerWeek,
-        hoursPerDay: this.state.user.hoursPerDay
+        hoursPerDay: this.state.user.logistics.hoursPerDay
       }
     })
     .then(function (response) {

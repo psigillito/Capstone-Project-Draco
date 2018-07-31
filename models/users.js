@@ -50,6 +50,10 @@ const userSchema = new Schema({
     fitness: Array,
     sport: Number
   },
+  logistics: {
+    daysPerWeek: Number,
+    hoursPerDay: Array
+  },
   trainingPlans: {
     type: Array
   },

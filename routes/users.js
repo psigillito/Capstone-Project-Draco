@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const queries = require('./queries');
 
 // Import user model
 const User = require('../models/users');
@@ -125,18 +126,14 @@ router.get('/getUser', (req, res) =>{
 })
 
 router.patch('/', (req, res) => {
-	console.log(JSON.stringify(req.body));
+	//console.log(JSON.stringify(req.body));
+	//console.log(JSON.stringify(req.body.logistics));
 	if (req.body.user) {
-		User.findOneAndUpdate({_id: req.body.user}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
-		if (error) {
-			console.log(error);
-			console.log(doc);
-		}
-	});
+		queries.updateUser(req.body.user, {goals: req.body.goals, logistics: req.body.logistics});
 	res.json({ success: true });
-} else {
-	res.status(406).json({ message: "Request must contain a valid user ID" });
-}
+	} else {
+		res.status(406).json({ message: "Request must contain a valid user ID" });
+	}
 });
 
 module.exports = router;
