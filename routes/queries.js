@@ -167,6 +167,22 @@ var _findNumTrainingPlansFromUser = function(userId) {
 	});
 }
 
+/*
+ * This function returns the number of workouts from a specified user
+ * @parameter {string} userId 
+ * @returns {number} containing the total number of the workouts the user has created
+**/
+var _findNumWorkoutsFromUser = function(userId) {
+	// query workouts to get an array of workouts
+	User.findById(userId, 'numWorkouts', (err, result) => {
+		if (err) {
+			console.log(err);
+			console.log(result);
+		}
+		return result;
+	});
+}
+
 queries = {
 	createUser: _createUser,
 	updateUser: _updateUser,
@@ -180,7 +196,8 @@ queries = {
 	findWorkoutsFromTrainingPlan: _findWorkoutsFromTrainingPlan,
 	findWorkoutsFromUser: _findWorkoutsFromUser,
 	findTrainingPlansFromUser: _findTrainingPlansFromUser,
-	findNumTrainingPlansFromUser: _findNumTrainingPlansFromUser
+	findNumTrainingPlansFromUser: _findNumTrainingPlansFromUser,
+	findNumWorkoutsFromUser: _findNumWorkoutsFromUser
 }
 
 module.exports = queries;
