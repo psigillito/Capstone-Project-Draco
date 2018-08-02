@@ -5,18 +5,19 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "classnames": "^2.2.6",
+    "decode-google-map-polyline": "^1.0.1",
     "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-google-maps": "^9.4.5",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
     "reactstrap": "^6.3.0",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0",
-    "react-google-maps": "^9.4.5"
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

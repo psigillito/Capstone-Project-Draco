@@ -10,6 +10,7 @@ class PairDevice extends Component {
     constructor(props){
         super(props);
         this.postToGetToken = this.postToGetToken.bind(this);
+        this.getUserData = this.getUserData.bind(this);
     }
 
     postToGetToken = () =>{
@@ -17,7 +18,8 @@ class PairDevice extends Component {
         let url = new URL(document.URL);
         
         var clientId = 27338; 
-        var clientSecret = process.env.CLIENT_SECRET;
+        var clientSecret = process.env.REACT_APP_CLIENT_SECRET;
+        console.log("CLIENT SECRET IS:"+clientSecret);
         var clientCode = url.searchParams.get('code');
         var token;
         let postUrl= 'https://www.strava.com/oauth/token?client_id='+clientId+'&client_secret='+clientSecret+'&code='+clientCode;
@@ -30,7 +32,15 @@ class PairDevice extends Component {
             //update state
             this.props.updateStravaToken(token);
         })
-        
+
+    }
+
+    getUserData = () => (e) => {
+
+        console.log("strava Token is: "+this.props.stravaToken)
+
+        fetch('https://www.strava.com/api/v3/routes/14694348?access_token='+this.props.stravaToken)
+        .then((results) => console.log(results.json()));
     }
 
     render(){
@@ -46,7 +56,8 @@ class PairDevice extends Component {
                     <p>You can now pair routes you've made in Strava with cardio workouts!</p>
                     <GoogleMap/>
                     <a type="btn" href="/calendar">Return Back to Calendar Page</a>
-
+                    <a href ="https://www.strava.com/api/v3/athlete?access_token=503b305fb6fdd3b5dcbbc7c47176fe5b2a3ecb5b">asdf</a>
+                    <button onClick={this.getUserData()}>DRAW ON MAP</button>
                 </div>
             )
 
