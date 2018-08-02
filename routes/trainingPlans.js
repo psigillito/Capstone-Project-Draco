@@ -35,7 +35,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	queries.updateUser(req.user.id, {numTrainingPlans: userNumPlans});
 
 	queries.createTrainingPlan(newTrainingPlan, (plan) => {
-		var userPlans = queries.findTrainingPlansByUser(req.user.id);
+		var userPlans = queries.findTrainingPlansFromUser(req.user.id);
 		userPlans.push(plan._id.toString());
 		queries.updateUser(req.user.id, {trainingPlans: userPlans});
 	});
@@ -88,9 +88,9 @@ router.patch('/', (req, res) => {
 	}
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 	var planWorkouts  = [];
-	if (req.query && req.body.user) {
+	if (req.query) {
 		if (req.query.id) {
 			TrainingPlan.findById(req.query.id, (error, doc) => {
 				// Save the array of workouts associated with this plan
