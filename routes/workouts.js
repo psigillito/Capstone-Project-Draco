@@ -110,6 +110,20 @@ router.patch('/', (req, res) => {
     }
 });
 
+// delete workout
+router.delete('/', (req, res) => {
+    if(req.query) {
+            Workout.findById(req.query, (error, doc) => {
+                if(error) {
+                    console.log(error);
+                }
+               queries.deleteWorkout(req.query.id);
+               res.json({ success: true });
+            })
+        
+    }
+});
+
 router.get('/currentWorkouts', (req, res) => {
     console.log('QUERY IS:');
     console.log(req.query)
