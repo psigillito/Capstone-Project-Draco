@@ -41,7 +41,7 @@ class DeleteWorkout extends Component {
       return(
         <div>
           <div class="modal-body">
-            <label for='name'><b>Select workout to edit exercises:</b></label>
+            <label for='name'><b>Select workout to delete:</b></label>
             <select id="inputState" name="workout" class="form-control" onChange={this.onChange}>
               <option selected>Choose...</option>
               { this.props.workouts.data.map( (workout, index) =>
