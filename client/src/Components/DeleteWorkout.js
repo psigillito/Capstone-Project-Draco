@@ -7,7 +7,8 @@ class DeleteWorkout extends Component {
         super(props);
 
         this.state = {
-          workout:''
+          workoutId:'',
+          trainingPlanId:''
         }
 
         this.onChange = this.onChange.bind(this);
@@ -15,17 +16,19 @@ class DeleteWorkout extends Component {
 
     clearState() {
       this.setState({
-        workout:''
+        workoutId:'',
+        trainingPlanId:''
       })
     }
 
     deleteWorkout() {
       axios.delete('/workouts', {
         params: {
-          id: this.state.workout
+          wid: this.state.workoutId,
+          tpid: this.state.trainingPlanId
         }
       })
-          .then(res => {window.location.reload();})
+          .then(() => { window.location.reload(); })
           .catch(err => console.log(err));
     }
 
@@ -41,15 +44,38 @@ class DeleteWorkout extends Component {
       return(
         <div>
           <div class="modal-body">
-            <label for='name'><b>Select workout to delete:</b></label>
-            <select id="inputState" name="workout" class="form-control" onChange={this.onChange}>
-              <option selected>Choose...</option>
-              { this.props.workouts.data.map( (workout, index) =>
-                            <option key={index} value={workout._id}>{workout.name}</option>
-                              )
-                     }
+            <label for="trainingPlan"><b>Training Plan to delete workout from:</b></label>
+            <select id="inputState" 
+              name="trainingPlanId" 
+              class="form-control" 
+              value={this.state.trainingPlanId ? this.state.trainingPlanId : ''} 
+              onChange={this.onChange}
+            >
+            <option selected>Choose...</option>
+             {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
+                <option key={index} value={plan._id}>{plan.name}</option>
+                )
+              }
             </select>
             <br/>
+
+            {this.state.trainingPlanId !== '' &&
+            <div>
+              <label for='name'><b>Select workout to delete:</b></label>
+              <select id="inputState" 
+                name="workoutId" 
+                class="form-control" 
+                value={this.state.workoutId ? this.state.workoutId : ''} 
+                onChange={this.onChange}
+              >
+                <option selected>Choose...</option>
+                { this.props.workouts.data.map( (workout, index) =>
+                  <option key={index} value={workout._id}>{workout.name}</option>
+                  )
+                }
+              </select>
+            </div> 
+            }
           </div>
         
             <div class="modal-footer">
@@ -57,16 +83,13 @@ class DeleteWorkout extends Component {
               <button type="button"  onClick={() => this.deleteWorkout() } class="btn btn-danger">Delete</button>
             </div>
 
-        </div>
-           
+        </div>         
       )
     }
-
-
 }
 
 const mapStateToProps = function(state) {
-    return { workouts:state.workouts }
+    return { workouts: state.workouts, trainingPlans: state.trainingPlans }
   }
 
 export default connect(mapStateToProps)(DeleteWorkout);
