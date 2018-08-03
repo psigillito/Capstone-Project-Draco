@@ -111,10 +111,12 @@ router.patch('/', (req, res) => {
 });
 
 // delete workout
-router.delete('/', (req, res) => {
-    if(req.query) {
+router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+    if(req.query.wid && req.query.tpid) {
         queries.deleteWorkoutFromTrainingPlan(req.query.tpid, req.query.wid);
-        queries.deleteWorkout(req.query.wid);
+        queries.deleteWorkout(req.query.wid, res);
+    } else {
+        res.json({success: false, error: "Must specify workout and training plan"});
     }
 });
 

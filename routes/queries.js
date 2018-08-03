@@ -97,12 +97,12 @@ var _updateWorkout = function(workoutId, updateObj) {
 /*
  * This function deletes a workout specified by workoutId
 **/
-var _deleteWorkout = function(workoutId) {
+var _deleteWorkout = function(workoutId, res) {
 	Workout.findByIdAndRemove(workoutId, (error, doc) => {
 		if (error) {
 			console.log(error);
-			console.log(doc);
 		}
+		res.json({action: "delete", entityId: workoutId});
 	});
 }
 
@@ -228,7 +228,8 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 			console.log(error);
 		}
 		var indexToRemove = result.workouts.indexOf(workoutId);
-		var newWorkouts = result.workouts.splice(indexToRemove, 1);
+		var newWorkouts = result.workouts;
+		newWorkouts.splice(indexToRemove, 1);
 		this.updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
 	});
 }
