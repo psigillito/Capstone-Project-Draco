@@ -13,12 +13,15 @@ var _createUser = function(newUser, callback) {
 /*
  * This function updates a user specified by userId
  * with the object defined in updateObj
+ * @parameter res {object} OPTIONAL the response object from the route
 **/
-var _updateUser = function(userId, updateObj) {
+var _updateUser = function(userId, updateObj, res) {
 	User.findByIdAndUpdate(userId, updateObj, (error, doc) => {
 		if (error) {
 			console.log(error);
-			console.log(doc);
+		}
+		if (typeof res !== "undefined") {
+			res.json(doc);
 		}
 	});
 }
@@ -47,11 +50,13 @@ var _createTrainingPlan = function(newTrainingPlan, callback) {
  * This function updates a trainingPlan specified by trainingPlanId
  * with the object defined in updateObj
 **/
-var _updateTrainingPlan = function(trainingPlanId, updateObj) {
+var _updateTrainingPlan = function(trainingPlanId, updateObj, res) {
 	TrainingPlan.findByIdAndUpdate(trainingPlanId, updateObj, (error, doc) => {
 		if (error) {
 			console.log(error);
-			console.log(doc);
+		}
+		if (typeof res !== "undefined") {
+			res.json(doc);
 		}
 	});
 }
@@ -108,14 +113,14 @@ var _deleteWorkout = function(workoutId) {
 **/
 var _findWorkoutsFromTrainingPlan = function(trainingPlanId) {
 	// query workouts to get an array of workouts
-	Workout.find({trainingPlan: trainingPlanId}, '_id', (err, workout) => {
+	var workouts = Workout.find({trainingPlan: trainingPlanId}, {_id:1}, (err, workout) => {
 		if (err) {
 			console.log(err);
 			console.log(workout);
 		}
 		return workout;
 	});
-
+	return workouts;
 }
 
 /*
@@ -172,16 +177,60 @@ var _findNumTrainingPlansFromUser = function(userId) {
  * @parameter {string} userId 
  * @returns {number} containing the total number of the workouts the user has created
 **/
-var _findNumWorkoutsFromUser = function(userId) {
-	// query workouts to get an array of workouts
-	var numWorkouts = User.findById(userId, 'numWorkouts', (err, result) => {
+var _findNumWorkoutsFromUser = function(userId, res) {
+	User.findById(userId, { numWorkouts: 1, _id:0 }, (err, result) => {
 		if (err) {
 			console.log(err);
-			console.log(result);
 		}
-		return result;
+		res.json(result);
 	});
-	return numWorkouts;
+}
+
+/*
+ * This function updates the number of workouts a specified user has created
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _updateUsersNumWorkouts = function(userId, res) {
+	User.findById(userId, 'numWorkouts', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		var num = result.numWorkouts + 1;
+		this.updateUser(userId, {numWorkouts: num}, res);
+	});
+}
+
+/*
+ * This function updates the number of training plans a specified user has created
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _updateUsersNumTrainingPlans = function(userId, res) {
+	User.findById(userId, 'numTrainingPlans', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		var num = result.numTrainingPlans + 1;
+		this.updateUser(userId, {numTrainingPlans: num}, res);
+	});
+}
+
+/*
+ * This function deletes a reference to a workout from a specified training plan
+ * @parameter {string} trainingPlanId
+ * @parameter {string} workoutId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
+	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		var indexToRemove = result.workouts.indexOf(workoutId);
+		var newWorkouts = result.workouts.splice(indexToRemove, 1);
+		this.updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+	});
 }
 
 queries = {
@@ -198,7 +247,10 @@ queries = {
 	findWorkoutsFromUser: _findWorkoutsFromUser,
 	findTrainingPlansFromUser: _findTrainingPlansFromUser,
 	findNumTrainingPlansFromUser: _findNumTrainingPlansFromUser,
-	findNumWorkoutsFromUser: _findNumWorkoutsFromUser
+	findNumWorkoutsFromUser: _findNumWorkoutsFromUser,
+	updateUsersNumWorkouts: _updateUsersNumWorkouts,
+	updateUsersNumTrainingPlans: _updateUsersNumTrainingPlans,
+	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan
 }
 
 module.exports = queries;

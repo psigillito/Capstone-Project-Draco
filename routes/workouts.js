@@ -113,14 +113,8 @@ router.patch('/', (req, res) => {
 // delete workout
 router.delete('/', (req, res) => {
     if(req.query) {
-            Workout.findById(req.query, (error, doc) => {
-                if(error) {
-                    console.log(error);
-                }
-               queries.deleteWorkout(req.query.id);
-               res.json({ success: true });
-            })
-        
+        queries.deleteWorkoutFromTrainingPlan(req.query.tpid, req.query.wid);
+        queries.deleteWorkout(req.query.wid);
     }
 });
 
@@ -133,6 +127,16 @@ router.get('/currentWorkouts', (req, res) => {
 		console.log(docs)
 		return res.json(docs);
 	});
+});
+
+router.get('/test', (req, res) => {
+    var obj = {
+        key1: "key1",
+        key2: "key2",
+        key3: "key3"
+    }
+    queries.deleteWorkoutFromTrainingPlan("5b5cf522e9105c1622b2dcbe", "5b5d0aac4cf0331abcd282d4", res);
+    //res.json(obj);
 });
 
 
