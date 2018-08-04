@@ -60,15 +60,24 @@ var _deleteUser = function(userId, res) {
 
 /*
  * This function gets a trainingPlan object by specified trainingPlanId
- * @parameter {object} trainingPlanId, the id string specifying the trainingPlan to fetch
+ * @parameter {object} trainingPlanId, the id string specifying the user to fetch trainingPlans for
  * @parameter {object} res, the response object from the route
 **/
-var _getTrainingPlan = function(trainingPlanId, res) {
-	TrainingPlan.findById(trainingPlanId, (error, doc) => {
+var _getTrainingPlan = function(userId, res) {
+	TrainingPlan.find({user: userId}, (error, result) => {
 		if (error) {
 			console.log(error);
+			res.statusCode = 500;
+			return res.json({errors: 'Could not retrieve training plans'});
 		}
-		res.json(doc);
+		if (result === null) {
+			res.statusCode = 404;
+			return res.json({errors: 'Training plans not found'});
+		}
+		if (typeof res !== "undefined") {
+			res.statusCode = 200;
+			return res.json(result);
+		}
 	});
 }
 
@@ -85,15 +94,19 @@ var _createTrainingPlan = function(newTrainingPlan, callback) {
  * This function updates a trainingPlan specified by trainingPlanId
  * @parameter {string} trainingPlanId, the id string specifying the trainingPlan to update
  * @parameter {object} updateObj, object specifying that fields to be updated
- * @parameter {object} res OPTIONAL the response object from the route
+ * @parameter {object} res, the response object from the route
 **/
 var _updateTrainingPlan = function(trainingPlanId, updateObj, res) {
-	TrainingPlan.findByIdAndUpdate(trainingPlanId, updateObj, (error, doc) => {
+	TrainingPlan.findByIdAndUpdate(trainingPlanId, updateObj, {new: true}, (error, result) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({errors: 'Could not retrieve training plans'});
 		}
-		if (typeof res !== "undefined") {
-			res.json(doc);
+		else if (result === null) {
+			res.status(404).json({errors: 'Training plan not found'})
+		}
+		else {
+			res.status(200).json(result);
 		}
 	});
 }
@@ -104,12 +117,17 @@ var _updateTrainingPlan = function(trainingPlanId, updateObj, res) {
  * @parameter {object} OPTIONAL res, the response object from the Express route
 **/
 var _deleteTrainingPlan = function(trainingPlanId, res) {
-	TrainingPlan.findByIdAndRemove(trainingPlanId, (error, doc) => {
+	TrainingPlan.findByIdAndRemove(trainingPlanId, (error, result) => {
+		console.log(result);
 		if (error) {
 			console.log(error);
+			res.status(500).json({errors: 'Could not retrieve training plans'});
 		}
-		if (typeof res !== "undefined") {
-			res.json({action: "deleted", entityId: trainingPlanId});
+		else if (result === null) {
+			res.json({errors: 'Training plan not found'});
+		}
+		else {
+			res.status(200).json(result);
 		}
 	});
 }
@@ -223,6 +241,23 @@ var _deleteAllUserData = function(userId, res) {
 }
 
 /*
+ * This function adds a reference to a workout to a specified training plan
+ * @parameter {string} trainingPlanId
+ * @parameter {string} workoutId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _addWorkoutToTrainingPlan = function(trainingPlanId, workoutId, res) {
+	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		var newWorkouts = result.workouts;
+		newWorkouts.push(workoutId);
+		this._updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+	});
+}
+
+/*
  * This function deletes a reference to a workout from a specified training plan
  * @parameter {string} trainingPlanId
  * @parameter {string} workoutId
@@ -259,12 +294,30 @@ var _deleteWorkoutFromUser = function(workoutId, userId, res) {
 }
 
 /*
+ * This function adds a reference to a trainingPlan to a specified user
+ * @parameter {string} trainingPlanId
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _addTrainingPlanToUser = function(trainingPlanId, userId, res) {
+	User.findById(userId, 'trainingPlans', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		var newTPs = result.trainingPlans;
+		newTPs.push(trainingPlanId);
+		this._updateUser(userId, {trainingPlans: newTPs}, res);
+	});
+}
+
+/*
  * This function deletes a reference to a trainingPlan from a specified user
  * @parameter {string} trainingPlanId
  * @parameter {string} userId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
 var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
+	console.log(userId);
 	User.findById(userId, 'trainingPlans', (error, result) => {
 		if (error) {
 			console.log(error);
@@ -272,7 +325,7 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
 		var indexToRemove = result.trainingPlans.indexOf(trainingPlanId);
 		var newTPs = result.trainingPlans;
 		newTPs.splice(indexToRemove, 1);
-		this._updateUser(userId, {trainingPlans: newTPs}, res);
+		_updateUser(userId, {trainingPlans: newTPs}, res);
 	});
 }
 
@@ -287,7 +340,7 @@ var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
 			console.log(error);
 		}
 		result.workouts.forEach(workout => {
-			this._deleteWorkout(workout);
+			_deleteWorkout(workout);
 		});
 		if (typeof res !== "undefined") {
 			res.json({action: "deleted", entityId: userId});
@@ -311,8 +364,10 @@ queries = {
 	deleteAllUserData: _deleteAllUserData,
 	updateUsersNumWorkouts: _updateUsersNumWorkouts,
 	updateUsersNumTrainingPlans: _updateUsersNumTrainingPlans,
+	addWorkoutToTrainingPlan: _addWorkoutToTrainingPlan,
 	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan,
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
+	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
 	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts
 }

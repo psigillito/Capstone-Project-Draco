@@ -8,14 +8,42 @@ const TrainingPlan = require('../models/trainingPlans');
 const Workout = require('../models/workouts');
 const User = require('../models/users');
 
-// currently only gets all training plans in database
-router.get('/', (req, res) => {
-	const query = TrainingPlan.find();
-	query.exec((err, docs) => {
-		if (err) return res.status(400).json({ msg: 'failure', error: err });
-		console.log(docs);
-		return res.json({ msg: 'success', data: docs });
+function lookUpUser(req, res) {
+	var userId = req.params.id;
+	queries.getUser(userId, res);
+	next();
+}
+
+function lookUpWorkout() {
+
+}
+
+function lookUpTrainingPlan(req, res, next) {
+	var trainingPlanId = req.params.id;
+	req.trainingPlan = TrainingPlan.findById(trainingPlanId, (error, result) => {
+		if (error) {
+			res.statusCode = 500;
+			return res.json({errors: 'Could not retrieve training plan'});
+		}
+		else if (result === null) {
+			res.statusCode = 404;
+			return res.json({errors: 'Training plan not found'});
+		}
+		req.trainingPlan = result;
+		next();
 	});
+}
+
+// gets a specified user's training plans in database
+router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+	console.log(req.user);
+	queries.getTrainingPlan(req.user._id.valueOf(), res);
+});
+
+// gets a specified training plan by Id
+router.get('/:id', passport.authenticate('jwt', {session: false}), lookUpTrainingPlan, (req, res) => {
+	res.statusCode = 200;
+	res.json(req.trainingPlan);
 });
 
 // create a new training plan
@@ -30,14 +58,11 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 
 	// Update a user's numTrainingPlans
-	var userNumPlans = queries.findNumTrainingPlansFromUser(req.user.id);
-	userNumPlans++;
-	queries.updateUser(req.user.id, {numTrainingPlans: userNumPlans});
+	queries.updateUsersNumTrainingPlans(user);
 
 	queries.createTrainingPlan(newTrainingPlan, (plan) => {
-		var userPlans = queries.findTrainingPlansFromUser(req.user.id);
-		userPlans.push(plan._id.toString());
-		queries.updateUser(req.user.id, {trainingPlans: userPlans});
+		queries.addTrainingPlanToUser(plan._id.valueOf());
+		res.json({action: "create", data: plan});
 	});
 });
 
@@ -50,77 +75,27 @@ router.get('/currentUserPlans', (req, res) => {
 	});
 });
 
-router.patch('/', (req, res) => {
-	var planWorkouts = [];
-	console.log(JSON.stringify(req.body));
-	if (req.body.id) {
-		// make a GET request to get the workouts array for a given training plan
-		if (req.body.workoutId) {
-			TrainingPlan.findById(req.body.id, (error, doc) => {
-				planWorkouts = JSON.parse(JSON.stringify(doc));
-				if (error) {
-					console.log(error);
-				}
-				planWorkouts.workouts.push(req.body.workoutId);
-				queries.updateTrainingPlan(req.body.id, { workouts: planWorkouts.workouts });
-				res.json({ success: true });
-			});
-		} else if (req.body.name || req.body.startDate || req.body.endDate) {
-			var updateObj = {};
-			var messageStr = "";
-			if (req.body.name) {
-				updateObj.name = req.body.name;
-				messageStr += "Name "
-			}
-			if (req.body.startDate) {
-				updateObj.startDate = req.body.startDate;
-				messageStr += "Start Date "
-			}
-			if (req.body.endDate) {
-				updateObj.endDate = req.body.endDate;
-				messageStr += "End Date "
-			}
-			queries.updateTrainingPlan(req.body.id, updateObj);
-			res.json({ success: true, message: messageStr + "field(s) updated" });
-		} else {
-			res.status(406).json({ message: "Request must contain a valid training plan ID" });
+router.patch('/:id', (req, res) => {
+	if (req.body.name || req.body.startDate || req.body.endDate) {
+		var updateObj = {};
+		if (req.body.name) {
+			updateObj.name = req.body.name;
 		}
+		if (req.body.startDate) {
+			updateObj.startDate = req.body.startDate;
+		}
+		if (req.body.endDate) {
+			updateObj.endDate = req.body.endDate;
+		}
+		queries.updateTrainingPlan(req.params.id, updateObj, res);
+	} else {
+		res.status(400).json({ message: "The request was malformed or invalid" });
 	}
 });
 
-router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-	var planWorkouts  = [];
-	if (req.query) {
-		if (req.query.id) {
-			TrainingPlan.findById(req.query.id, (error, doc) => {
-				// Save the array of workouts associated with this plan
-				planWorkouts = JSON.parse(JSON.stringify(doc)).workouts;
-				if (error) {
-					console.log(error);
-				}
-				TrainingPlan.findByIdAndRemove(req.query.id, (error, doc) => {
-					if (error) {
-						console.log(error);
-						console.log(doc);
-					}
-				});
-				// Remove the training plan from the user's plans
-				User.findById()
-				for (var workout of planWorkouts) {
-					// DELETE the individual workouts
-					Workout.findByIdAndRemove(workout, (error, doc) => {
-						if (error) {
-							console.log(error);
-							console.log(doc);
-						}
-					});
-				}
-				res.json({ success: true });
-			});
-		}
-	} else {
-		res.status(406).json({ message: "Invalid training plan ID or user ID"});
-	}
+router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+	queries.deleteTrainingPlanFromUser(req.params.id, req.user._id.valueOf());
+	queries.deleteTrainingPlan(req.params.id, res);
 });
 
 module.exports = router;
