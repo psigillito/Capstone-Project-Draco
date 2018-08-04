@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
-
+import {connect} from 'react-redux';
 import GoogleMap from './GoogleMap';
 import {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
 
@@ -24,10 +23,10 @@ class AddNewWorkout extends Component {
           selectedPolyLine: "",
           selectedDistance: 10,
           allExercises: [],
-          distanceUnit: 'Mi',
+          distanceUnit: 'mi',
           exerciseDays: [],
           createExercise: {},
-          unit: 'Lbs'
+          unit: 'lbs'
         }
         this.handleRouteChange = this.handleRouteChange.bind(this);
         this.handleStravaChecked = this.handleStravaChecked.bind(this);
@@ -35,7 +34,6 @@ class AddNewWorkout extends Component {
         this.handleDayChange = this.handleDayChange.bind(this);
         this.getAthleteId = this.getAthleteId.bind(this);
         this.removeExercise = this.removeExercise.bind(this);
-        
     }
 
     saveExercise() {
@@ -56,14 +54,13 @@ class AddNewWorkout extends Component {
           sets:'',
           reps:'',
           weight:'',
-          unit:'',
           duration:'',
           distance:'',
-          distanceUnit:'',
         })
     }
 
     submitWorkout() {
+ 
         const newWorkout = {
             name: this.state.name,
             mode: this.state.mode,
@@ -216,7 +213,9 @@ class AddNewWorkout extends Component {
                         {this.props.currentRoute != -1 &&
                           <div>
                           <br/>
-                          <GoogleMap selectedPolyLine={this.props.currentRoute.map.polyline}/>
+                            <div className="centered-section">
+                              <GoogleMap selectedPolyLine={this.props.currentRoute.map.polyline}/>
+                            </div>
                           </div>
                         }
                         
@@ -244,7 +243,6 @@ class AddNewWorkout extends Component {
                 name="name" 
                 value={this.state.name}
                 onChange={this.onChange}
-                required
               />
             </div>
 
@@ -287,6 +285,7 @@ class AddNewWorkout extends Component {
             <label for='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
             <div className="form-group">
               <select id="inputState" name="trainingPlan" class="form-control" onChange={this.onChange}>
+                  <option>...</option>
                   {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
                       <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
                   )}
@@ -323,13 +322,13 @@ class AddNewWorkout extends Component {
               <form>
                 <div class="form-row">
                   <div class="col">
-                    <input type="text" class="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
+                    <input type="number" class="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
                   </div>
                   <div class="col">
-                    <input type="text" class="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
+                    <input type="number" class="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
                   </div>
                   <div class="col">
-                    <input type="text" class="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
+                    <input type="number" class="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
                   </div>
                   <div class="col">
                    <select id="inputState" name="unit" class="form-control" onChange={this.onChange}>
@@ -372,7 +371,7 @@ class AddNewWorkout extends Component {
                 <form>
                   <div class="form-row">
                     <div class="col">
-                      <input type="text" id="inputDistance" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+                      <input type="number" id="inputDistance" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
                     </div>
                     <div class="col">
                     <select id="inputState" name="distanceUnit" class="form-control" onChange={this.onChange}>
@@ -424,7 +423,7 @@ class AddNewWorkout extends Component {
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#addWorkout">Close</button>
-        <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" class="btn btn-primary">Save Workout</button>
+        <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" class="btn btn-success">Save Workout</button>
       </div>
     </div>
     )}
