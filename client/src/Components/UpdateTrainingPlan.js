@@ -86,7 +86,7 @@ class UpdateTrainingPlan extends Component {
               </label>
               <div className="form-group">
                 <input
-                  type="text"
+                  type="date"
                   className="form-control form-control-lg"
                   placeholder="Start Date"
                   name="startDate"
@@ -100,7 +100,7 @@ class UpdateTrainingPlan extends Component {
               </label>
               <div className="form-group">
                 <input
-                  type="text"
+                  type="date"
                   className="form-control form-control-lg"
                   placeholder="End Date"
                   name="endDate"
