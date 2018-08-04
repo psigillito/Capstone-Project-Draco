@@ -170,41 +170,6 @@ var _deleteWorkout = function(workoutId, res) {
 	});
 }
 
-
-
-/*
- * This function returns all the trainingPlans from a specified user
- * @parameter {string} userId 
- * @returns {array} containing ids of the trainingPlans
-**/
-var _findTrainingPlansFromUser = function(userId) {
-	// query workouts to get an array of workouts
-	TrainingPlan.find({user: userId}, '_id', (err, trainingPlan) => {
-		if (err) {
-			console.log(err);
-			console.log(trainingPlan);
-		}
-		return trainingPlan;
-	});
-}
-
-/*
- * This function returns the number of trainingPlans from a specified user
- * @parameter {string} userId 
- * @returns {number} containing the total number of the trainingPlans the user has created
-**/
-var _findNumTrainingPlansFromUser = function(userId) {
-	// query workouts to get an array of workouts
-	User.findById(userId, 'numTrainingPlans', (err, result) => {
-		if (err) {
-			console.log(err);
-			console.log(result);
-		}
-		return result;
-	});
-}
-
-
 /*
  * This function updates the number of workouts a specified user has created
  * @parameter {string} userId
@@ -276,49 +241,57 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 }
 
 /*
- * This function returns all the workouts from a specified trainingPlan
- * @parameter {string} trainingPlanId 
- * @returns {array} containing ids of the workouts
+ * This function deletes a reference to a workout from a specified user
+ * @parameter {string} workoutId
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _findWorkoutsFromTrainingPlan = function(trainingPlanId) {
-	// query workouts to get an array of workouts
-	var workouts = Workout.find({trainingPlan: trainingPlanId}, {_id:1}, (err, workout) => {
-		if (err) {
-			console.log(err);
-			console.log(workout);
+var _deleteWorkoutFromUser = function(workoutId, userId, res) {
+	User.findById(userId, 'workouts', (error, result) => {
+		if (error) {
+			console.log(error);
 		}
-		return workout;
-	});
-	return workouts;
-}
-
-/*
- * This function returns all the workouts from a specified user
- * @parameter {string} userId 
- * @returns {array} containing ids of the workouts
-**/
-var _findWorkoutsFromUser = function(userId) {
-	// query workouts to get an array of workouts
-	Workout.find({user: userId}, '_id', (err, workout) => {
-		if (err) {
-			console.log(err);
-			console.log(workout);
-		}
-		return workout;
+		var indexToRemove = result.workouts.indexOf(workoutId);
+		var newWorkouts = result.workouts;
+		newWorkouts.splice(indexToRemove, 1);
+		this._updateUser(userId, {workouts: newWorkouts}, res);
 	});
 }
 
 /*
- * This function returns the number of workouts from a specified user
- * @parameter {string} userId 
- * @returns {number} containing the total number of the workouts the user has created
+ * This function deletes a reference to a trainingPlan from a specified user
+ * @parameter {string} trainingPlanId
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _findNumWorkoutsFromUser = function(userId, res) {
-	User.findById(userId, { numWorkouts: 1, _id:0 }, (err, result) => {
-		if (err) {
-			console.log(err);
+var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
+	User.findById(userId, 'trainingPlans', (error, result) => {
+		if (error) {
+			console.log(error);
 		}
-		res.json(result);
+		var indexToRemove = result.trainingPlans.indexOf(trainingPlanId);
+		var newTPs = result.trainingPlans;
+		newTPs.splice(indexToRemove, 1);
+		this._updateUser(userId, {trainingPlans: newTPs}, res);
+	});
+}
+
+/*
+ * This function deletes all of a trainingPlans's workouts before the trainingPlan entity itself is deleted
+ * @parameter {string} trainingPlanId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
+	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		result.workouts.forEach(workout => {
+			this._deleteWorkout(workout);
+		});
+		if (typeof res !== "undefined") {
+			res.json({action: "deleted", entityId: userId});
+		}
 	});
 }
 
@@ -336,14 +309,12 @@ queries = {
 	updateTrainingPlan: _updateTrainingPlan,
 	deleteTrainingPlan: _deleteTrainingPlan,
 	deleteAllUserData: _deleteAllUserData,
-	findWorkoutsFromTrainingPlan: _findWorkoutsFromTrainingPlan,
-	findWorkoutsFromUser: _findWorkoutsFromUser,
-	findTrainingPlansFromUser: _findTrainingPlansFromUser,
-	findNumTrainingPlansFromUser: _findNumTrainingPlansFromUser,
-	findNumWorkoutsFromUser: _findNumWorkoutsFromUser,
 	updateUsersNumWorkouts: _updateUsersNumWorkouts,
 	updateUsersNumTrainingPlans: _updateUsersNumTrainingPlans,
-	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan
+	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan,
+	deleteWorkoutFromUser: _deleteWorkoutFromUser,
+	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
+	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts
 }
 
 module.exports = queries;
