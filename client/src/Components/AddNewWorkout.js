@@ -1,18 +1,12 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import AddNewExercise from './AddNewExercise';
+
 import GoogleMap from './GoogleMap';
-import {setAthleteId} from '../redux/actions';
-import {setAthleteRoutes} from '../redux/actions';
-import {setSelectedRoute} from '../redux/actions';
-import {setCurrentRoute} from '../redux/actions';
-import ReactDOM from 'react-dom';
+import {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
 
-
-let allExercises = [];
-let exerciseDays = [];
 let createdExercise = {};
+let weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 class AddNewWorkout extends Component {
     constructor(props){
@@ -27,14 +21,21 @@ class AddNewWorkout extends Component {
           trainingPlan: '',
           addExercise: false,
           stravaChecked: false,
-          selectedPolyLine: "o~}nG~{ioVci@mTLw@?@}@]Js@_EgBLw@gErWt@X{F}BER[OZN}CzRXLmEeB_F}B~E|BeKno@oDuAuCvQAxFQbGvPI]zFDtZ^i@_@h@?bGxRS?m@?l@rDEh@ZRFtB?@`^pA@xJAzO??yA?xAU?N}\\MaAIEO@Pwj@?uGIaBBuHc@CiNEgBeB}CcCkDcB{Ak@lCsPdBcLnWjKpB}KjEhBjA`@kAa@?c@rEuX\\N",
+          selectedPolyLine: "",
           selectedDistance: 10,
+          allExercises: [],
+          distanceUnit: 'Mi',
+          exerciseDays: [],
+          createExercise: {},
+          unit: 'Lbs'
         }
         this.handleRouteChange = this.handleRouteChange.bind(this);
         this.handleStravaChecked = this.handleStravaChecked.bind(this);
         this.onChange = this.onChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
         this.getAthleteId = this.getAthleteId.bind(this);
+        this.removeExercise = this.removeExercise.bind(this);
+        
     }
 
     saveExercise() {
@@ -47,10 +48,8 @@ class AddNewWorkout extends Component {
         createdExercise['distance'] = this.state.distance;
         createdExercise['stravaRoute'] = this.props.selectedRoute;
 
-        allExercises.push(createdExercise);
+        this.state.allExercises.push(createdExercise);
         createdExercise = {};
-        console.log("All exercisesa are now:" )
-        console.log(allExercises);
 
         this.setState({
           exerciseName:'',
@@ -68,11 +67,10 @@ class AddNewWorkout extends Component {
         const newWorkout = {
             name: this.state.name,
             mode: this.state.mode,
-            exercises: allExercises,
-            daysOfWeek: exerciseDays,
+            exercises: this.state.allExercises,
+            daysOfWeek: this.state.exerciseDays,
             trainingPlan: this.state.trainingPlan,
         }
-        console.log(newWorkout);
 
         axios.post('/workouts', newWorkout)
             .then(res => {
@@ -94,6 +92,10 @@ class AddNewWorkout extends Component {
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
 
+        if(e.target.type == 'radio'){
+          this.setState({ allExercises: [] })
+        }
+        
         //if running exercise selected
         if(e.target.value == 'Running'){
 
@@ -107,11 +109,11 @@ class AddNewWorkout extends Component {
     }
 
     handleDayChange(e) {
-        if(exerciseDays.includes(e.target.value)) {
-            const index = exerciseDays.indexOf(e.target.value);
-            exerciseDays.splice(index, 1);
+        if(this.state.exerciseDays.includes(e.target.value)) {
+            const index = this.state.exerciseDays.indexOf(e.target.value);
+            this.state.exerciseDays.splice(index, 1);
         } else {
-            exerciseDays.push(parseInt(e.target.value));
+            this.state.exerciseDays.push(parseInt(e.target.value));
         }
     }
 
@@ -185,6 +187,15 @@ class AddNewWorkout extends Component {
       }
     }
 
+
+    removeExercise(e){
+      var name = e.nativeEvent.target.value;
+
+      this.setState({
+        allExercises: this.state.allExercises.filter(e => e.name != name)
+      })
+    }
+
     render() {
 
       let hiddenOptions = this.state.stravaChecked ? '': 'hidden';
@@ -224,7 +235,7 @@ class AddNewWorkout extends Component {
 
           <div class="modal-body ">
 
-            <label for='name'><b>Name:</b></label>
+            <label for='name'><b>Workout Name:</b></label>
             <div className="form-group">
               <input 
                 type="text" 
@@ -233,10 +244,11 @@ class AddNewWorkout extends Component {
                 name="name" 
                 value={this.state.name}
                 onChange={this.onChange}
+                required
               />
             </div>
 
-            <label for='mode'><b>Mode:</b></label>
+            <label for='mode'><b>Workout Type:</b></label>
             <div className="form-group">
               <div className="form-check form-check-inline">
                   <input className="form-check-input" 
@@ -261,42 +273,20 @@ class AddNewWorkout extends Component {
               </div>
             </div>
 
-            <label for='name'><b>Days Of Week:</b></label>
+            <label for='name'><b>Days:</b> (select which days you will do this workout)</label>
             <div className="form-group">
-            <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='0'/>
-                <label className="form-check-label" for="inlineCheckbox1">Sunday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='1'/>
-                <label className="form-check-label" for="inlineCheckbox2">Monday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='2'/>
-                <label className="form-check-label" for="inlineCheckbox1">Tuesday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='3'/>
-                <label className="form-check-label" for="inlineCheckbox2">Wednesday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='4'/>
-                <label className="form-check-label" for="inlineCheckbox1">Thursday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='5'/>
-                <label className="form-check-label" for="inlineCheckbox2">Friday</label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value='6'/>
-                <label className="form-check-label" for="inlineCheckbox1">Saturday</label>
-              </div>   
+              {weekDays.map( (weekDay, index) => 
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value={index}/>
+                  <label className="form-check-label" for="inlineCheckbox1">{weekDay}</label>
+                </div>
+                )
+              }
             </div>
 
-            <label for='name'><b>Training Plan:</b></label>
+            <label for='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
             <div className="form-group">
               <select id="inputState" name="trainingPlan" class="form-control" onChange={this.onChange}>
-                  <option selected>Choose...</option>
                   {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
                       <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
                   )}
@@ -315,9 +305,10 @@ class AddNewWorkout extends Component {
            
             {/* Exercises - Weight training */}
             {this.state.mode === 'Weight Training' && this.state.mode != '' &&
+            <fieldset>
             <div>
               <div class="modal-header">
-                <h5>Add Exercises</h5>
+                <h5>Add Exercise</h5>
               </div>
               <div className="form-group">
                 <input 
@@ -342,7 +333,6 @@ class AddNewWorkout extends Component {
                   </div>
                   <div class="col">
                    <select id="inputState" name="unit" class="form-control" onChange={this.onChange}>
-                      <option selected>...</option>
                       <option name="unit" value="lbs">Lbs</option>
                       <option name="unit" value="kg">Kg</option>
                    </select>
@@ -352,13 +342,14 @@ class AddNewWorkout extends Component {
               <br />
             <div>
                 <button type="button" onClick={() => this.saveExercise()} class="btn btn-primary btn-block">
-                  Save Current Exercise To Workout
+                  Add Exercise To Workout
                 </button>
             </div>
             </div>
+            </fieldset>
           }
 
-        {/* Exercises - Running */}
+          {/* Exercises - Running */}
           {this.state.mode === 'Running' && this.state.mode != '' && 
           <div>
           <div class="modal-header">
@@ -395,28 +386,51 @@ class AddNewWorkout extends Component {
               <br />
               <div>
                   <button type="button" onClick={() => this.saveExercise()} class="btn btn-primary btn-block">
-                    Save Current Exercise To Workout
+                    Add Exercise To Workout
                   </button>
               </div>
           </div>
         }       
-
-      </div>
-
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#addWorkout">
-                Close
-              </button>
-              <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" class="btn btn-primary">
-                Save changes
-              </button>
+          {/*Display Pending Workouts*/}
+          <br/>
+          <div>
+            <h4>Workout Summary</h4>
+            <table className="table"> 
+              <thead>
+                <th>Exercise Name</th>
+                <th>{ (this.state.mode == 'Running') ? 'Distance' : 'Weight' }</th>
+                <th>Units</th>
+                <th>{ (this.state.mode == 'Running') ? '' : 'Reps' }</th>
+                <th>{ (this.state.mode == 'Running') ? '' : 'Sets' }</th>
+                <th></th>
+              </thead>
+              <tbody>
+                {this.state.allExercises.map( (exercise) =>
+                  <tr>
+                    <td>{exercise.name}</td> 
+                    <td>{ (this.state.mode == 'Running') ? exercise.distance : exercise.weight }</td>
+                    <td>{ (this.state.mode == 'Running') ? exercise.distanceUnit : exercise.unit }</td>
+                    <td>{ (this.state.mode == 'Running') ? '' : exercise.reps }</td>
+                    <td>{ (this.state.mode == 'Running') ? '' : exercise.sets }</td>
+                    <td><button className="btn btn-danger" value={exercise.name} onClick={this.removeExercise}>X</button></td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+          <br/>
       </div>
-      )
-    }
-}
 
-const mapStateToProps = function(state) {
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#addWorkout">Close</button>
+        <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" class="btn btn-primary">Save Workout</button>
+      </div>
+    </div>
+    )}
+  }
+
+  const mapStateToProps = function(state) {
     return {  trainingPlans: state.trainingPlans, stravaToken: state.stravaToken, athleteRoutes: state.athleteRoutes,
               currentRoute: state.currentRoute, selectedRoute: state.selectedRoute}
   }

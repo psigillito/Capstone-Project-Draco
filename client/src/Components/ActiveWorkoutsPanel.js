@@ -105,10 +105,10 @@ class ActiveWorkoutsPanel extends Component {
 
         {/* CREATE NEW WORKOUT */}
 
-        <div class="modal" id="addWorkout" tabIndex="-1" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
+        <div className="modal " id="addWorkout" tabIndex="-1" role="dialog">
+          <div className="modal-dialog  modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
                 <AddNewWorkout title={this.state.title} />
               </div>
             </div>
