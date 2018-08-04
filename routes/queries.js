@@ -164,7 +164,9 @@ var _deleteWorkout = function(workoutId, res) {
 		if (error) {
 			console.log(error);
 		}
-		res.json({action: "delete", entityId: workoutId});
+		if (typeof res !== "undefined") {
+			res.json({action: "delete", entityId: workoutId});
+		}
 	});
 }
 
@@ -234,6 +236,28 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 }
 
 /*
+ * This function deletes all of a user's data before the user entity itself is deleted
+ * @parameter {string} userId
+ * @parameter {object} res, the response object from the route OPTIONAL
+**/
+var _deleteAllUserData = function(userId, res) {
+	User.findById(userId, 'workouts trainingPlans', (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		result.workouts.forEach(workout => {
+			this._deleteWorkout(workout);
+		});
+		result.trainingPlans.forEach(trainingPlan => {
+			this._deleteTrainingPlan(trainingPlan);
+		});
+		if (typeof res !== "undefined") {
+			res.json({action: "deleted", entityId: userId});
+		}
+	});
+}
+
+/*
  * This function deletes a reference to a workout from a specified training plan
  * @parameter {string} trainingPlanId
  * @parameter {string} workoutId
@@ -247,7 +271,7 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 		var indexToRemove = result.workouts.indexOf(workoutId);
 		var newWorkouts = result.workouts;
 		newWorkouts.splice(indexToRemove, 1);
-		this.updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		this._updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
 	});
 }
 
@@ -307,10 +331,11 @@ queries = {
 	createWorkout: _createWorkout,
 	updateWorkout: _updateWorkout,
 	deleteWorkout: _deleteWorkout,
-	_getTrainingPlan: _getTrainingPlan,
+	getTrainingPlan: _getTrainingPlan,
 	createTrainingPlan: _createTrainingPlan,
 	updateTrainingPlan: _updateTrainingPlan,
 	deleteTrainingPlan: _deleteTrainingPlan,
+	deleteAllUserData: _deleteAllUserData,
 	findWorkoutsFromTrainingPlan: _findWorkoutsFromTrainingPlan,
 	findWorkoutsFromUser: _findWorkoutsFromUser,
 	findTrainingPlansFromUser: _findTrainingPlansFromUser,
