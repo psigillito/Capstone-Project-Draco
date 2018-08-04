@@ -25,9 +25,9 @@ class WorkOutDetail extends Component{
             return(
                     this.props.workout.exercises.map( (exercise, index) => 
                     <tr key={index}>
-                        <td className="text-center">{exercise.name}</td>
-                        <td className="text-center">{exercise.distance}</td>
-                        <td className="text-center">{exercise.distanceUnit}</td>
+                        <td className="td-fixed-width">{exercise.name}</td>
+                        <td className="td-fixed-width">{exercise.distance}</td>
+                        <td className="td-fixed-width">{exercise.distanceUnit}</td>
                     </tr>
                     
                 )

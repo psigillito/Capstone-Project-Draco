@@ -11,158 +11,132 @@ let createdExercise = {};
 let exerciseDays = [];
 
 class DayDetail extends Component {
-
     constructor(props){
-        super(props)
-
-        this.state = {
-            visible: this.props.dayVisible,
-        }
-
-        this.onChange = this.onChange.bind(this);
+      super(props)
+      this.state = {
+        visible: this.props.dayVisible,
+      }
+      this.onChange = this.onChange.bind(this);
     }
 
     onChange(e) {
-        this.setState({ [e.target.name]: e.target.value })
+      this.setState({ [e.target.name]: e.target.value })
     }
 
     render(){
+      var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise._id)).length;
 
-        var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise._id)).length;
-
-        if(workoutsCount){
-            return(
-
-                <div>
-                    {
-                        <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h4 className="modal-title"> {this.props.day}/{this.props.month+1}/{this.props.year}</h4>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div className="modal-body">
-                                            <h4>Weight Training Workouts:</h4>
-                                            {
-                                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
-                                                                                        && this.props.selectedWorkoutList.includes(exercise._id)
-                                                                                        && exercise.mode =='Weight Training')
-                                            .map( (workout, index) =>
-                                                    <div key={index}>
-
-                                                        <h5>{workout.name}</h5>
-                                                        <table>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Sets</th>
-                                                                    <th>Reps</th>
-                                                                    <th>Weight</th>
-                                                                    <th>Unit</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <WorkOutDetail type="Weight Training" workout={workout}/>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                            )}
-                                            <br/>
-                                            <h4>Cardio Workouts:</h4>
-                                            {
-                                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
-                                                                                        && this.props.selectedWorkoutList.includes(exercise._id)
-                                                                                        && exercise.mode =='Running')
-                                            .map( (workout, index) =>
-                                                    <div key={index}>
-
-                                                        <h5>{workout.name}</h5>
-                                                        <table>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Distance</th>
-                                                                    <th>Unit</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <WorkOutDetail type="Running" workout={workout}/>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                            )}
-
-                                        </div>
-                                    <div className="modal-footer">
-                                        <button type="button" data-toggle="modal" data-target="#editExercise" className="btn btn-secondary btn-sm">Edit Exercise</button>
-                                        <button type="button" data-toggle="modal" data-target="#addExercise" className="btn btn-secondary btn-sm">Add Exercise</button>
-                                    </div>
-
-                                    
-
-                                    
-                                </div>
-                            </div>
-                            {/* add exercise */}
-                            <div class="modal" id="addExercise" tabIndex="-1" role="dialog">
-                              <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-body">
-                                    <AddNewExercise />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            
-
-                            {/* edit exercise */}
-                            <div class="modal" id="editExercise" tabIndex="-1" role="dialog">
-                              <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-body">
-                                    <EditExercise />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>  
-
-                        </div>
-
-
-                    }
+      if(workoutsCount){
+        return(
+          <div>
+            {
+              <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
+                <div className="modal-dialog modal-lg" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title font-header-weight"> {this.props.month+1}/{this.props.day}/{this.props.year}</h4>
+                      <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
-                )
-        } else{
-            return(
-
-                <div>
-                    {
-                        <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h4 className="modal-title"> {this.props.day}/{this.props.month+1}/{this.props.year}</h4>
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        </div>
-                                        <div className="modal-body">                                   
-                                            No Exercises Today
-                                        </div>
-                                    <div className="modal-footer">
-                                    </div>
-                                </div>
+                    <div className="modal-body">
+                      <h4  className="font-header-weight" >Weight Training Workouts:</h4>
+                      {
+                        this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
+                          && this.props.selectedWorkoutList.includes(exercise._id) 
+                          && exercise.mode =='Weight Training').map( (workout, index) =>
+                            <div key={index}>
+                              <h5 className="font-header-weight">{workout.name}</h5>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Sets</th>
+                                            <th>Reps</th>
+                                            <th>Weight</th>
+                                            <th>Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      <WorkOutDetail type="Weight Training" workout={workout}/>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    }
+                        )}
+                        <br/>
+                        <h4 className="font-header-weight">Cardio Workouts:</h4>
+                        {
+                        this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
+                          && this.props.selectedWorkoutList.includes(exercise._id)
+                          && exercise.mode =='Running').map( (workout, index) =>
+                            <div key={index}>
+                              <h5 className="font-header-weight">{workout.name}</h5>
+                                <table className="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Name</th>
+                                          <th>Distance</th>
+                                          <th>Unit</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <WorkOutDetail type="Running" workout={workout}/>
+                                  </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" data-toggle="modal" data-target="#editExercise" className="btn btn-secondary btn-sm">Edit Exercise</button>
+                      <button type="button" data-toggle="modal" data-target="#addExercise" className="btn btn-primary btn-sm">Add Exercise</button>
+                    </div>
+                  </div>
                 </div>
-            )
+                {/* add exercise */}
+                <div className="modal" id="addExercise" tabIndex="-1" role="dialog">
+                  <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                      <div className="modal-body">
+                        <AddNewExercise />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* edit exercise */}
+                <div className="modal" id="editExercise" tabIndex="-1" role="dialog">
+                  <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                      <div className="modal-body">
+                        <EditExercise />
+                      </div>
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            }
+          </div>
+          )
+        }else{
+          return(
+            <div>
+              {
+                <div className="modal fade" id="dayModal" tabIndex="-1" role="dialog">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h4 className="modal-title"> {this.props.day}/{this.props.month+1}/{this.props.year}</h4>
+                          <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      </div>
+                      <div className="modal-body">No Exercises Today</div>
+                      <div className="modal-footer"></div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          )
         }
     }
 }
 
-
-//this relies so much on state it can be loaded in directly to the component 
 const mapStateToProps = function(state) {
     return { day: state.day,
              weekDay: state.weekDay, 
