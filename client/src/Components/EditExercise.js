@@ -5,8 +5,6 @@ import WorkOutDetail from './WorkOutDetail';
 
 let createdExercise = {};
 
-let exercises = [];
-
 class EditExercise extends Component {
     constructor(props){
         super(props);
@@ -30,15 +28,15 @@ class EditExercise extends Component {
     clearState() {
     	this.setState({
     	  name:'',
-          sets:'',
-          reps:'',
-          weight:'',
-          unit:'',
-          duration:'',
-          distance:'',
-          distanceUnit:'',
-          workoutId:'',
-          exerciseName:''
+        sets:'',
+        reps:'',
+        weight:'',
+        unit:'',
+        duration:'',
+        distance:'',
+        distanceUnit:'',
+        workoutId:'',
+        exerciseName:''
     	})
     }
 
@@ -47,60 +45,64 @@ class EditExercise extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    submitExercise() { 
-        createdExercise['name'] = this.state.exerciseName;
-        createdExercise['sets'] = this.state.sets;
-        createdExercise['reps'] = this.state.reps;
-        createdExercise['weight'] = this.state.weight;
-        createdExercise['unit'] = this.state.unit;
-        createdExercise['distanceUnit'] = this.state.distanceUnit;
-        createdExercise['distance'] = this.state.distance;
-        const workout = {id: this.state.workoutId};
-        
-        console.log('New Exercise: ' + createdExercise);
-                           
-
+    submitExercise() {  
+      // TODO             
     }
+
+    deleteExercise() {
+      // TODO
+    }
+
+    
 
 
     render() {
 
       return(
         <div>
-        
+          <div className="modal-header">
+            <h5 className="modal-title">Edit Exercise</h5>
+          </div>
+          <div class="modal-body">
+          <label for='name'><b>Select workout to edit exercises:</b></label>
+          <select id="inputState" 
+            name="workoutId" 
+            class="form-control" 
+            value={this.state.workoutId ? this.state.workoutId : ''} 
+            onChange={this.onChange}
+          >
+            <option selected>Choose...</option>
+            { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
+                                                    && this.props.selectedWorkoutList.includes(exercise._id))                                          
+                            .map( (workout, index) =>
+                                   <option key={index} value={workout._id}>{workout.name}</option>
+                            )
+            
+            }
+          </select>
+          <br/>
 
-  
-                <div class="modal-body">
-                <label for='name'><b>Select workout to edit exercises:</b></label>
-                <select id="inputState" name="workoutId" class="form-control" onChange={this.onChange}>
-                  <option selected>Choose...</option>
-                  { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
-                                                          && this.props.selectedWorkoutList.includes(exercise._id))                                          
-                                  .map( (workout, index) =>
-                                         <option key={index} value={workout._id}>{workout.name}</option>
-                                  )
-                  
-                         }
-                  </select>
-                  <br/>
+          {/* Bring in exercises */}
+          {this.state.workoutId !== '' &&
+          <div> 
+            <label for='name'><b>Select exercise to edit:</b></label>
+              <select id="inputState" 
+              name="exerciseName" 
+              class="form-control"
+              value={this.state.exerciseName ? this.state.exerciseName : ''} 
+              onChange={this.onChange}
+            >
+              <option selected>Choose...</option>
+                {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId)
 
-              {/* Bring in exercises */}
-              {this.state.workoutId !== '' &&
-              <div> 
-              <label for='name'><b>Select exercise to edit:</b></label>
-                <select id="inputState" name="exerciseName" class="form-control" onChange={this.onChange}>
-                <option selected>Choose...</option>
-                  {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId)
+                	.map( (workout) => workout.exercises.map( (exercise, index) => 
+                		
+                			<option key={index} value={exercise.name}>{exercise.name}</option>
 
-                  	.map( (workout) => workout.exercises.map( (exercise, index) => 
-                  		
-                  			<option key={index} value={exercise.name}>{exercise.name}</option>
-
-                  		))
-					
-                  }
-                  </select>
-                  <br />
+                		))
+                }
+              </select>
+              <br />
                  
                   
                    {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode === 'Weight Training')
@@ -109,16 +111,8 @@ class EditExercise extends Component {
                   		.map((exercise) =>  
                   		<div>
                   		<label for="newExercise"><b>Update Exercise:</b></label>
-                  			<div className="form-group">
-				                <input 
-				                  type="text" 
-				                  className="form-control form-control-lg"
-				                  placeholder={exercise.name} 
-				                  name="name" 
-				                  value={this.state.name}
-				                  onChange={this.onChange}
-				                />
-				              </div>
+                  			<h6>{exercise.name}</h6>
+				             
 				              <form>
 				                <div class="form-row">
 				                  <div class="col">
@@ -131,7 +125,12 @@ class EditExercise extends Component {
 				                    <input type="text" class="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder={exercise.weight}/>
 				                  </div>
 				                  <div class="col">
-				                   <select id="inputState" name="unit" class="form-control" onChange={this.onChange}>
+				                   <select 
+                             name="unit" 
+                             class="form-control"
+                             value={this.state.unit ? this.state.unit : ''} 
+                             onChange={this.onChange}
+                           >
 				                      <option selected>...</option>
 				                      <option name="unit" value="lbs">Lbs</option>
 				                      <option name="unit" value="kg">Kg</option>
@@ -139,6 +138,8 @@ class EditExercise extends Component {
 				                  </div>
 				                </div>
 				              </form>
+                      <br />
+                       <button type="button" onClick={() => this.deleteExercise() } class="btn btn-secondary" data-dismiss="modal">Delete Exercise</button>
 				            </div>
                   		)
 
@@ -160,16 +161,8 @@ class EditExercise extends Component {
                   		<div class="modal-header">
 				            <h5>Edit Exercise</h5>
 				          </div>
-				          <div className="form-group">
-				            <input 
-				              type="text" 
-				              className="form-control form-control-lg"
-				              placeholder={exercise.name} 
-				              name="exerciseName" 
-				              value={this.state.name}
-				              onChange={this.onChange}
-				            />
-				            </div>
+				          <h6>{exercise.name}</h6>
+				           
 				          <label for='duration'><b>Duration:</b></label>
 				              <form>
 				                <div class="form-row">
@@ -194,8 +187,6 @@ class EditExercise extends Component {
 
                   		)
 
-
-					
                   }
 
 
@@ -209,12 +200,8 @@ class EditExercise extends Component {
 
 
               </div>
-       
-
       )
     }
-
-
 }
 
 const mapStateToProps = function(state) {
