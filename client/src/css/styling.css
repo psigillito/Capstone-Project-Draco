@@ -137,3 +137,11 @@ input[type="button"]{
 .hidden{
     display: none;
 }
+
+.font-header-weight{
+  font-weight:1;
+}
+
+.td-fixed-width{
+  width:33%;
+}
