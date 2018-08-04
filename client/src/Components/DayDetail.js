@@ -3,7 +3,7 @@ import store from '../store';
 import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
 import AddNewExercise from './AddNewExercise';
-import AddNewWorkout from './AddNewWorkout';
+import EditExercise from './EditExercise';
 import axios from 'axios';
 
 let allExercises = [];
@@ -24,7 +24,6 @@ class DayDetail extends Component {
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
-        console.log(e.target.name, e.target.value);
     }
 
     render(){
@@ -96,8 +95,8 @@ class DayDetail extends Component {
 
                                         </div>
                                     <div className="modal-footer">
+                                        <button type="button" data-toggle="modal" data-target="#editExercise" className="btn btn-secondary btn-sm">Edit Exercise</button>
                                         <button type="button" data-toggle="modal" data-target="#addExercise" className="btn btn-secondary btn-sm">Add Exercise</button>
-                                        <button type="button" data-toggle="modal" data-target="#addWorkout" className="btn btn-secondary btn-sm">Add Workout</button>
                                     </div>
 
                                     
@@ -106,7 +105,7 @@ class DayDetail extends Component {
                                 </div>
                             </div>
                             {/* add exercise */}
-                            <div class="modal" id="addExercise" tabindex="-1" role="dialog">
+                            <div class="modal" id="addExercise" tabIndex="-1" role="dialog">
                               <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                   <div class="modal-body">
@@ -116,12 +115,14 @@ class DayDetail extends Component {
                               </div>
                             </div>
 
-                            {/* add workout */}
-                            <div class="modal" id="addWorkout" tabindex="-1" role="dialog">
-                              <div class="modal-dialog" role="document">
+                            
+
+                            {/* edit exercise */}
+                            <div class="modal" id="editExercise" tabIndex="-1" role="dialog">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                   <div class="modal-body">
-                                    <AddNewWorkout title={this.state.title} />
+                                    <EditExercise />
                                   </div>
                                 </div>
                               </div>

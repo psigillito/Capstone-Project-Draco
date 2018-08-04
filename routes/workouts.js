@@ -110,6 +110,16 @@ router.patch('/', (req, res) => {
     }
 });
 
+// delete workout
+router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => {
+    if(req.query.wid && req.query.tpid) {
+        queries.deleteWorkoutFromTrainingPlan(req.query.tpid, req.query.wid);
+        queries.deleteWorkout(req.query.wid, res);
+    } else {
+        res.json({success: false, error: "Must specify workout and training plan"});
+    }
+});
+
 router.get('/currentWorkouts', (req, res) => {
     console.log('QUERY IS:');
     console.log(req.query)
@@ -119,6 +129,16 @@ router.get('/currentWorkouts', (req, res) => {
 		console.log(docs)
 		return res.json(docs);
 	});
+});
+
+router.get('/test', (req, res) => {
+    var obj = {
+        key1: "key1",
+        key2: "key2",
+        key3: "key3"
+    }
+    queries.deleteWorkoutFromTrainingPlan("5b5cf522e9105c1622b2dcbe", "5b5d0aac4cf0331abcd282d4", res);
+    //res.json(obj);
 });
 
 

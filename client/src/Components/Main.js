@@ -32,6 +32,7 @@ import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
 import TodaysExercisePanel from './TodaysExercisePanel';
 import MonthStatisticsPanel from './MonthStatisticsPanel';
+import { logout } from '../redux/actions';
 
 
 const Months = ['January', ' February', ' March', ' April', ' May',
@@ -47,6 +48,16 @@ if(localStorage.jwtToken) {
     const userData = jwt_decode(localStorage.jwtToken);
     // set the current user
     store.dispatch(setCurrentUser(userData));
+
+    // check for expired token
+    const currentTime = Date.now() / 1000;
+    if(userData.exp < currentTime) {
+        // token has expired. log user out
+        store.dispatch(logout());
+        //redirect to login page
+        window.location.href = '/login';
+    }
+
 }
 
 

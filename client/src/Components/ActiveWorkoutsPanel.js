@@ -2,19 +2,17 @@ import React, {Component} from 'react'
 import TrainingPlanCard from './TrainingPlanCard'
 import UpdateTrainingPlan from './UpdateTrainingPlan';
 import AddNewWorkout from './AddNewWorkout';
+import DeleteWorkout from './DeleteWorkout';
+import DeleteTrainingPlan from './DeleteTrainingPlan';
 import axios from 'axios';
-
-let allExercises = [];
-let createdExercise = {};
-let exerciseDays = [];
 
 class ActiveWorkoutsPanel extends Component {
     constructor(props){
         super(props);
 
         this.state = {
-           addExercise: false
-        };
+            title:''
+        }
 
         this.onChange = this.onChange.bind(this);
     }
@@ -43,18 +41,16 @@ class ActiveWorkoutsPanel extends Component {
             name:'',
             mode:'',
             daysOfWeek: [],
+            exercises: [],
             trainingPlan:''
         })
     }
-    
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
     
-    
-
     render(){
         return(
             <div>
@@ -74,9 +70,10 @@ class ActiveWorkoutsPanel extends Component {
                                             <div><b>End Date:</b></div>
                                             <div>{plan.endDate}</div>
                                             <div><b>Workouts:</b></div>
-                                            {this.props.workouts.data.filter( (workout) => workout.trainingPlan === plan._id ).map((workout) => <div>{workout.name}</div>)}
+                                            {this.props.workouts.data.filter( (workout) => workout.trainingPlan === plan._id ).map((workout, index) => <div key={index}>{workout.name}</div>)}
                                             <br/> 
                                             <button onClick={() => this.editTrainingPlan(plan)} data-toggle="modal" data-target="#trainingPlan" type="button" className="btn btn-secondary btn-block">Edit Plan</button>
+                                            <button onClick={() => this.setState({ name: plan.name, planId: plan._id })} data-toggle="modal" data-target="#deleteTrainingPlan" type="button" className="btn btn-secondary btn-block">Delete Plan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -85,11 +82,13 @@ class ActiveWorkoutsPanel extends Component {
                         <br/>
                         <button onClick={() => this.createNewTrainingPlan() } type="button" data-toggle="modal" data-target="#trainingPlan" className="btn btn-primary btn-block">Create New Training Plan</button>
                         <button onClick={() => this.createNewWorkout() } data-toggle="modal" data-target="#addWorkout" type="button" className="btn btn-primary btn-block">Create New Workout</button>
+                        <button data-toggle="modal" data-target="#deleteWorkout" type="button" className="btn btn-primary btn-block">Delete Workout</button>
+
                 </div>
 
         {/* EDIT & CREATE TRAINING PLANS */}
 
-        <div class="modal" id="trainingPlan" tabindex="-1" role="dialog">
+        <div class="modal" id="trainingPlan" tabIndex="-1" role="dialog">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-body">
@@ -106,7 +105,7 @@ class ActiveWorkoutsPanel extends Component {
 
         {/* CREATE NEW WORKOUT */}
 
-        <div class="modal" id="addWorkout" tabindex="-1" role="dialog">
+        <div class="modal" id="addWorkout" tabIndex="-1" role="dialog">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-body">
@@ -114,7 +113,31 @@ class ActiveWorkoutsPanel extends Component {
               </div>
             </div>
           </div>
-        </div>    
+        </div>
+
+        {/* DELETE WORKOUT */}
+        <div class="modal" id="deleteWorkout" tabIndex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <DeleteWorkout />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* DELETE TRAINING PLAN */}
+        <div class="modal" id="deleteTrainingPlan" tabIndex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <DeleteTrainingPlan name={this.state.name} id={this.state.planId} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 
         </div>
 

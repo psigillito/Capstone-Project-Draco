@@ -105,7 +105,6 @@ class AddNewWorkout extends Component {
 
     handleDayChange(e) {
         if(exerciseDays.includes(e.target.value)) {
-            alert('Day already exists. Removing Day');
             const index = exerciseDays.indexOf(e.target.value);
             exerciseDays.splice(index, 1);
         } else {
@@ -269,7 +268,7 @@ class AddNewWorkout extends Component {
               <select id="inputState" name="trainingPlan" class="form-control" onChange={this.onChange}>
                   <option selected>Choose...</option>
                   {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
-                      <option name="trainingPlan" value={plan._id}>{plan.name}</option>
+                      <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
                   )}
               </select>
             </div>
@@ -374,7 +373,7 @@ class AddNewWorkout extends Component {
       </div>
 
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#addWorkout">
                 Close
               </button>
               <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" class="btn btn-primary">

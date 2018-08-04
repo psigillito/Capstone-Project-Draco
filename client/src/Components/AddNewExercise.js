@@ -123,7 +123,7 @@ class AddNewExercise extends Component {
                   { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                                                           && this.props.selectedWorkoutList.includes(exercise._id))                                          
                                   .map( (workout, index) =>
-                                         <option value={workout._id}>{workout.name}</option>
+                                         <option key={index} value={workout._id}>{workout.name}</option>
                                   )
                   
                          }
