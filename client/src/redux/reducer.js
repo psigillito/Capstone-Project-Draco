@@ -163,8 +163,44 @@ function stravaToken(state=0, action){
     }
 }
 
+function athleteId(state=-1, action){
+    switch(action.type){
+        case 'SET_ATHLETE_ID':
+            state = action.athleteId
+        default:
+            return state;
+    }
+}
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken})
+function athleteRoutes(state=[], action){
+    switch(action.type){
+        case 'SET_ATHLETE_ROUTES':
+            state = action.athleteRoutes
+        default:
+            return state;
+    }
+}
+
+function selectedRoute(state=-1, action){
+    switch(action.type){
+        case 'SET_SELECTED_ROUTE':
+            state = action.selectedRoute
+        default:
+            return state;
+    }
+}
+
+function currentRoute(state=-1, action){
+    switch(action.type){
+        case 'SET_CURRENT_ROUTE':
+            state = action.currentRoute
+        default:
+            return state;
+    }
+}
+
+const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken,
+                                     athleteId, athleteRoutes, selectedRoute, currentRoute})
 
 
 export default rootReducer

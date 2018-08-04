@@ -2,6 +2,12 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import AddNewExercise from './AddNewExercise';
+import GoogleMap from './GoogleMap';
+import {setAthleteId} from '../redux/actions';
+import {setAthleteRoutes} from '../redux/actions';
+import {setSelectedRoute} from '../redux/actions';
+import {setCurrentRoute} from '../redux/actions';
+
 
 let allExercises = [];
 let exerciseDays = [];
@@ -18,11 +24,17 @@ class AddNewWorkout extends Component {
           exercises: [],
           daysOfWeek: [], 
           trainingPlan: '',
-          addExercise: false
+          addExercise: false,
+          stravaChecked: false,
+          selectedPolyLine: "o~}nG~{ioVci@mTLw@?@}@]Js@_EgBLw@gErWt@X{F}BER[OZN}CzRXLmEeB_F}B~E|BeKno@oDuAuCvQAxFQbGvPI]zFDtZ^i@_@h@?bGxRS?m@?l@rDEh@ZRFtB?@`^pA@xJAzO??yA?xAU?N}\\MaAIEO@Pwj@?uGIaBBuHc@CiNEgBeB}CcCkDcB{Ak@lCsPdBcLnWjKpB}KjEhBjA`@kAa@?c@rEuX\\N",
+          selectedDistance: 10,
+          selectedRouteId: 0,
         }
-
+        this.handleRouteChange = this.handleRouteChange.bind(this);
+        this.handleStravaChecked = this.handleStravaChecked.bind(this);
         this.onChange = this.onChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
+        this.getAthleteId = this.getAthleteId.bind(this);
     }
 
     saveExercise() {
@@ -78,6 +90,17 @@ class AddNewWorkout extends Component {
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
+
+        //if running exercise selected
+        if(e.target.value == 'Running'){
+
+          if(this.props.stravaToken.length > 1)
+          {
+            //get user Id and update routes state 
+            this.getAthleteId()
+          }
+          
+        }
     }
 
     handleDayChange(e) {
@@ -90,17 +113,87 @@ class AddNewWorkout extends Component {
         }
     }
 
+    getAthleteId(){
+
+      fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
+      .then( (results) => {
+        
+        //set athleteId in store
+        this.props.setAthleteId(results.id);
+        
+        fetch('https://www.strava.com/api/v3/athletes/'+results.id+'/routes?access_token='+this.props.stravaToken)
+        .then((results) => results.json())
+        .then( (results) => {
+
+          //save route names and ids into store
+          var athleteRoutes =[];
+          for( var i=0; i < results.length; i++){
+            var tempRoute = { name: results[i].name, id: results[i].id}
+            athleteRoutes.push(tempRoute)
+          }
+
+          this.props.setAthleteRoutes(athleteRoutes)
+        })
+      })
+    }
+
+    handleStravaChecked(e){
+      this.setState({
+        stravaChecked: !this.state.stravaChecked
+      })
+    }
+    //sets new polyline based 
+    handleRouteChange(e)
+    {
+      var id = e.nativeEvent.target.value;
+
+      //set selectedId in state 
+      this.props.setSelectedRoute(e.nativeEvent.target.value)
+
+      //get route details
+      fetch('https://www.strava.com/api/v3/routes/'+id +'?access_token='+this.props.stravaToken)
+      .then((results) => results.json())
+      .then( (results) => {
+        this.props.setCurrentRoute(results);
+        this.setState({
+          distance: (this.props.currentRoute.distance * 0.00062137).toFixed(2),
+        })
+      })
+    }
+
     render() {
+
+      let hiddenOptions = this.state.stravaChecked ? '': 'hidden';
+      const hasStravaToken = (this.props.stravaToken.length > 1);
+      let useStrava;
+      if(hasStravaToken){
+        useStrava = <div>
+                      <input type="checkbox" defaultChecked={this.state.stravaChecked} onClick={this.handleStravaChecked}/> Use Strava Route 
+                      <div className={hiddenOptions}>
+                        <select id="inputState" className={hiddenOptions} class="form-control" onChange={this.handleRouteChange} >
+                          <option value={-1}>Select a Route</option>
+                          {this.props.athleteRoutes.map( (route) =>
+                          <option value={route.id}>{route.name}</option>
+                          )}
+                        </select>
+                        {this.props.currentRoute != -1 &&
+                          <GoogleMap selectedPolyLine={this.props.currentRoute.map.polyline}/>
+                        }
+                        
+                      </div>
+                    </div>      
+      }
+
       return(
         <div>
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Create New Workout</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">Create New Workout</h5>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
 
-          <div class="modal-body">
+          <div class="modal-body ">
 
             <label for='name'><b>Name:</b></label>
             <div className="form-group">
@@ -242,6 +335,7 @@ class AddNewWorkout extends Component {
           <div class="modal-header">
             <h5>Add Exercises</h5>
           </div>
+          {useStrava}
           <div className="form-group">
             <input 
               type="text" 
@@ -253,20 +347,21 @@ class AddNewWorkout extends Component {
             />
             </div>
           <label for='duration'><b>Duration:</b></label>
-              <form>
-                <div class="form-row">
-                  <div class="col">
-                    <input type="text" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+              <fieldset disabled={this.state.stravaChecked}>
+                <form>
+                  <div class="form-row">
+                    <div class="col">
+                      <input type="text" id="inputDistance" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+                    </div>
+                    <div class="col">
+                    <select id="inputState" name="distanceUnit" class="form-control" onChange={this.onChange}>
+                        <option selected name="distanceUnit" value="mi">Mi</option>
+                        <option name="distanceUnit" value="km">Km</option>
+                    </select>
+                    </div>
                   </div>
-                  <div class="col">
-                   <select id="inputState" name="distanceUnit" class="form-control" onChange={this.onChange}>
-                      <option selected>...</option>
-                      <option name="distanceUnit" value="mi">Mi</option>
-                      <option name="distanceUnit" value="km">Km</option>
-                   </select>
-                  </div>
-                </div>
-              </form>
+                </form>
+              </fieldset>
               <br />
               <div>
                   <button type="button" onClick={() => this.saveExercise()} class="btn btn-primary btn-block">
@@ -286,19 +381,14 @@ class AddNewWorkout extends Component {
                 Save changes
               </button>
           </div>
-
-          
-
-          
-
       </div>
-
       )
     }
 }
 
 const mapStateToProps = function(state) {
-    return {  trainingPlans:state.trainingPlans }
+    return {  trainingPlans: state.trainingPlans, stravaToken: state.stravaToken, athleteRoutes: state.athleteRoutes,
+              currentRoute: state.currentRoute}
   }
 
-export default connect(mapStateToProps)(AddNewWorkout);
+export default connect(mapStateToProps, {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute})(AddNewWorkout);

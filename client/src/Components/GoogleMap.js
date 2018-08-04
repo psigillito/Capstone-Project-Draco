@@ -7,7 +7,7 @@ class Map extends Component {
     super(props);
   
     this.state = {
-      path: [{lat:44.55928, lng:-123.26352}, {lat:44.56602,lng: -123.26009}] 
+      path: [] 
     }  
   
   }      
@@ -16,13 +16,10 @@ class Map extends Component {
   
   render() {
    
-
-    const myPolyLine= decodePolyline("o~}nG~{ioVci@mTLw@?@}@]Js@_EgBLw@gErWt@X{F}BER[OZN}CzRXLmEeB_F}B~E|BeKno@oDuAuCvQAxFQbGvPI]zFDtZ^i@_@h@?bGxRS?m@?l@rDEh@ZRFtB?@`^pA@xJAzO??yA?xAU?N}\\MaAIEO@Pwj@?uGIaBBuHc@CiNEgBeB}CcCkDcB{Ak@lCsPdBcLnWjKpB}KjEhBjA`@kAa@?c@rEuX\\N");
-
-
+    const myPolyLine= decodePolyline(this.props.selectedPolyLine);
 
     var GoogleMapRoute = withGoogleMap(props => (
-        <GoogleMap defaultCenter = { { lat: 44.5646, lng: -123.2620 } } defaultZoom = { 15 }>    
+        <GoogleMap defaultCenter = {myPolyLine[0] } defaultZoom = { 14 }>    
             <Polyline options={{strokeColor: '#2e10ff', geodesic: true }} path={myPolyLine} />
         </GoogleMap>
    ));
@@ -32,21 +29,9 @@ class Map extends Component {
    return(
       <div> 
         <GoogleMapRoute
-          containerElement={ <div style={{ height: `500px`, width: '500px' }} /> }
+          containerElement={ <div style={{ height: `425px`, width: '425px' }} /> }
           mapElement={ <div style={{ height: `100%` }} /> }
         />
-
-
-        
-
-
-
-
-
-
-
-
-
 
       </div>
    );

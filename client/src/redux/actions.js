@@ -182,5 +182,37 @@ export function updateStravaToken(newToken){
         type: 'SET_STRAVA_TOKEN',
         stravaToken: newToken
     }
+}
+
+export function setAthleteId(newId){
+    return {
+        type: 'SET_ATHLETE_ID',
+        athleteId: newId
+    }
+}
+
+export function setAthleteRoutes(routes){
+    return{
+        type: 'SET_ATHLETE_ROUTES',
+        athleteRoutes: routes
+    }
+}
+
+
+export function setSelectedRoute(routeId){
+
+    return{
+        type: 'SET_SELECTED_ROUTE',
+        selectedRoute: routeId
+    }
+
+}
+
+export function setCurrentRoute(route){
+
+    return{
+        type: 'SET_CURRENT_ROUTE',
+        currentRoute: route
+    }
 
 }
