@@ -66,9 +66,9 @@ class ActiveWorkoutsPanel extends Component {
                                     <div id={"collapse"+index} className="collapse" aria-labelledby="a" data-parent="#accordion">
                                         <div className="card-body">
                                             <div><b>Start Date:</b></div>
-                                            <div>{plan.startDate}</div>
+                                            <div>{plan.startDate.substring(0,10)}</div>
                                             <div><b>End Date:</b></div>
-                                            <div>{plan.endDate}</div>
+                                            <div>{plan.endDate.substring(0,10)}</div>
                                             <div><b>Workouts:</b></div>
                                             {this.props.workouts.data.filter( (workout) => workout.trainingPlan === plan._id ).map((workout, index) => <div key={index}>{workout.name}</div>)}
                                             <br/> 
