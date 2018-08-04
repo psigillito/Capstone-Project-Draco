@@ -70,11 +70,6 @@ const workoutSchema = new Schema({
   trainingPlan: {
     type: String,
     required: true
-  },
-
-  stravaRoute: {
-    type: String,
-    required: false
   }
 
 });

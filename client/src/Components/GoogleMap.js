@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { withGoogleMap, GoogleMap, Polyline, lineSymbol } from 'react-google-maps';
 const decodePolyline = require('decode-google-map-polyline');
-class Map extends Component {
+class Map extends PureComponent {
   
   constructor(props) {
     super(props);

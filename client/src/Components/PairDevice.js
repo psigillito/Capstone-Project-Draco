@@ -54,10 +54,7 @@ class PairDevice extends Component {
                 <div className='centered-section'>
                     <h1>Authorization Successfull!</h1>
                     <p>You can now pair routes you've made in Strava with cardio workouts!</p>
-                    <GoogleMap/>
                     <a type="btn" href="/calendar">Return Back to Calendar Page</a>
-                    <a href ="https://www.strava.com/api/v3/athlete?access_token=503b305fb6fdd3b5dcbbc7c47176fe5b2a3ecb5b">asdf</a>
-                    <button onClick={this.getUserData()}>DRAW ON MAP</button>
                 </div>
             )
 

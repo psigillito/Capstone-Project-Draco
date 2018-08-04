@@ -7,6 +7,7 @@ import {setAthleteId} from '../redux/actions';
 import {setAthleteRoutes} from '../redux/actions';
 import {setSelectedRoute} from '../redux/actions';
 import {setCurrentRoute} from '../redux/actions';
+import ReactDOM from 'react-dom';
 
 
 let allExercises = [];
@@ -28,7 +29,6 @@ class AddNewWorkout extends Component {
           stravaChecked: false,
           selectedPolyLine: "o~}nG~{ioVci@mTLw@?@}@]Js@_EgBLw@gErWt@X{F}BER[OZN}CzRXLmEeB_F}B~E|BeKno@oDuAuCvQAxFQbGvPI]zFDtZ^i@_@h@?bGxRS?m@?l@rDEh@ZRFtB?@`^pA@xJAzO??yA?xAU?N}\\MaAIEO@Pwj@?uGIaBBuHc@CiNEgBeB}CcCkDcB{Ak@lCsPdBcLnWjKpB}KjEhBjA`@kAa@?c@rEuX\\N",
           selectedDistance: 10,
-          selectedRouteId: 0,
         }
         this.handleRouteChange = this.handleRouteChange.bind(this);
         this.handleStravaChecked = this.handleStravaChecked.bind(this);
@@ -45,8 +45,11 @@ class AddNewWorkout extends Component {
         createdExercise['unit'] = this.state.unit;
         createdExercise['distanceUnit'] = this.state.distanceUnit;
         createdExercise['distance'] = this.state.distance;
+        createdExercise['stravaRoute'] = this.props.selectedRoute;
+
         allExercises.push(createdExercise);
         createdExercise = {};
+        console.log("All exercisesa are now:" )
         console.log(allExercises);
 
         this.setState({
@@ -57,7 +60,7 @@ class AddNewWorkout extends Component {
           unit:'',
           duration:'',
           distance:'',
-          distanceUnit:''
+          distanceUnit:'',
         })
     }
 
@@ -137,27 +140,49 @@ class AddNewWorkout extends Component {
     }
 
     handleStravaChecked(e){
+      
+      //if closing the strava options, set currentRoute state to -1 and selectedRoute to -1
+      if(this.state.stravaChecked){
+
+        this.props.setSelectedRoute(-1);
+        this.props.setCurrentRoute(-1);
+        this.props.setAthleteRoutes(-1);
+      }else{
+          //call query to get everything
+          this.getAthleteId()
+      }
+      
       this.setState({
         stravaChecked: !this.state.stravaChecked
       })
     }
+
     //sets new polyline based 
     handleRouteChange(e)
     {
       var id = e.nativeEvent.target.value;
+      if(id == -1){
+        //remove everything 
+        this.props.setSelectedRoute(-1);
+        this.props.setCurrentRoute(-1);
+      }else{
 
-      //set selectedId in state 
-      this.props.setSelectedRoute(e.nativeEvent.target.value)
+        if(this.state.stravaChecked){
+          
+          //set selectedId in state 
+          this.props.setSelectedRoute(e.nativeEvent.target.value)
 
-      //get route details
-      fetch('https://www.strava.com/api/v3/routes/'+id +'?access_token='+this.props.stravaToken)
-      .then((results) => results.json())
-      .then( (results) => {
-        this.props.setCurrentRoute(results);
-        this.setState({
-          distance: (this.props.currentRoute.distance * 0.00062137).toFixed(2),
-        })
-      })
+          //get route details
+          fetch('https://www.strava.com/api/v3/routes/'+id +'?access_token='+this.props.stravaToken)
+          .then((results) => results.json())
+          .then( (results) => {
+            this.props.setCurrentRoute(results);
+            this.setState({
+              distance: (this.props.currentRoute.distance * 0.00062137).toFixed(2),
+            })
+          })
+        }
+      }
     }
 
     render() {
@@ -167,16 +192,21 @@ class AddNewWorkout extends Component {
       let useStrava;
       if(hasStravaToken){
         useStrava = <div>
-                      <input type="checkbox" defaultChecked={this.state.stravaChecked} onClick={this.handleStravaChecked}/> Use Strava Route 
+                      <span>Use an Existing Strava Route <input type="checkbox" defaultChecked={this.state.stravaChecked} onClick={this.handleStravaChecked}/></span>
                       <div className={hiddenOptions}>
-                        <select id="inputState" className={hiddenOptions} class="form-control" onChange={this.handleRouteChange} >
-                          <option value={-1}>Select a Route</option>
-                          {this.props.athleteRoutes.map( (route) =>
+                        <select id="inputState" className="custom-select" onChange={this.handleRouteChange} >
+                          <option value={-1}>Select a Strava Route</option>
+                          {this.props.athleteRoutes != -1 &&
+                            this.props.athleteRoutes.map( (route) =>
                           <option value={route.id}>{route.name}</option>
                           )}
                         </select>
+                        <br/>
                         {this.props.currentRoute != -1 &&
+                          <div>
+                          <br/>
                           <GoogleMap selectedPolyLine={this.props.currentRoute.map.polyline}/>
+                          </div>
                         }
                         
                       </div>
@@ -335,6 +365,7 @@ class AddNewWorkout extends Component {
             <h5>Add Exercises</h5>
           </div>
           {useStrava}
+          <br/>
           <div className="form-group">
             <input 
               type="text" 
@@ -387,7 +418,7 @@ class AddNewWorkout extends Component {
 
 const mapStateToProps = function(state) {
     return {  trainingPlans: state.trainingPlans, stravaToken: state.stravaToken, athleteRoutes: state.athleteRoutes,
-              currentRoute: state.currentRoute}
+              currentRoute: state.currentRoute, selectedRoute: state.selectedRoute}
   }
 
 export default connect(mapStateToProps, {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute})(AddNewWorkout);
