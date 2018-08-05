@@ -59,19 +59,14 @@ class AddNewExercise extends Component {
         
         console.log('New Exercise: ' + createdExercise);
 
-        axios.get('/workouts/currentWorkouts', {
-            params: {
-                _id: this.state.workoutId
-            }
-        })
+        axios.get('/workouts/' + this.state.workoutId)
             .then(res => {
-                if(res.data[0].mode != this.state.mode) {
+                if(res.data.mode != this.state.mode) {
                     // DO NOT KEEP THIS ALERT
                     alert('Cannot add ' + this.state.mode + ' exercise to ' + res.data[0].mode + ' workout.');
                     window.location.reload();
                 } else {
-                    axios.patch('/workouts', {
-                        id: this.state.workoutId,
+                    axios.patch('/workouts/' + this.state.workoutId, {
                         exercise: createdExercise
                     })
                         .then(res => {console.log(res); window.location.reload();})

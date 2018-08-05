@@ -47,7 +47,7 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
         daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
-        date: new Date(req.body.date)
+        //date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
     if (!newWorkout.name || !newWorkout.mode || !newWorkout.trainingPlan || !newWorkout.date) {
@@ -56,12 +56,19 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     queries.createWorkout(newWorkout, req.user._id.valueOf(), res); 
 });
 
+// remove an exercise
+router.patch('/exercises', passport.authenticate('jwt', {session: false}), (req, res) => {
+    if(req.body.edit) {
+        queries.deleteExercise(req.body.id, req.body.name, res);
+    }
+})
+
 router.patch('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     var workoutExercises = [];
     if (req.body) {
         if (req.body.exercise) {
             Workout.findById(req.params.id, (error, doc) => {
-                workoutExercises = doc.exercises;
+                workoutExercises = JSON.parse(JSON.stringify(doc));
                 if (error) {
                     console.log(error);
                     return res.status(500).json({ errors: 'Could not retrieve workout' });
