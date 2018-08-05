@@ -146,7 +146,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (r
 });
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	if (req.body.user) {
+	if (req.body) {
 		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
 	} else {
 		res.status(400).json({ message: "Request malformed or invalid"});

@@ -150,25 +150,21 @@ class Goals extends React.Component {
         prevState.user.goals.primaryGoal = 1;
         prevState.user.goals.health = healthAreas;
         this.setState(prevState);
-        //console.log("Improving Health");
         break;
       case 2:
-        //console.log("Lose Weight");
         prevState.user.goals.primaryGoal = 2;
         prevState.user.goals.loseWeight = { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect };
         this.setState(prevState);
         break;
       case 3:
-        //console.log("Improve fitness");
         prevState.user.goals.primaryGoal = 3;
         prevState.user.goals.fitness = fitnessAreas;
         this.setState(prevState);
         break;
       case 4:
-        //console.log("Sports performance");
         if (typeof this.state.user.goals.sport === "undefined") {
           var newState = this.state;
-          newState.user.goals = {primaryGoal: 4, sport: 1};
+          newState.user.goals = { primaryGoal: 4, sport: 1 };
           this.setState(newState);
         }
         break;
@@ -180,35 +176,32 @@ class Goals extends React.Component {
         }
         break;
       default:
-        //console.log("This shouldn't get executed!");
     }
-    //console.log(JSON.stringify(this.state));
     //POST to the DB
-    axios.patch('/users', {
-      user: this.props.user,
+    axios.patch('/users/' + this.props.user, {
       goals: {
         primaryGoal: this.state.user.goals.primaryGoal,
-        health: (typeof(this.state.user.goals.health) !== "undefined") ? this.state.user.goals.health : null,
-        fitness: (typeof(this.state.user.goals.fitness) !== "undefined") ? this.state.user.goals.fitness : null,
+        health: (typeof (this.state.user.goals.health) !== "undefined") ? this.state.user.goals.health : null,
+        fitness: (typeof (this.state.user.goals.fitness) !== "undefined") ? this.state.user.goals.fitness : null,
         loseWeight: {
-          currentWeight: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
-          goalWeight: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
-          time: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.time : null,
-          autoSelectTime: (typeof(this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
+          currentWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
+          goalWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
+          time: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.time : null,
+          autoSelectTime: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
         },
-        sport: (typeof(this.state.user.goals.sport) !== "undefined") ? this.state.user.goals.sport : null
+        sport: (typeof (this.state.user.goals.sport) !== "undefined") ? this.state.user.goals.sport : null
       },
       logistics: {
         daysPerWeek: this.state.user.logistics.daysPerWeek,
         hoursPerDay: this.state.user.logistics.hoursPerDay
       }
     })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     //Navigate Home
     this.setState({ toHome: true });
     event.preventDefault();

@@ -32,7 +32,7 @@ var _createUser = function(newUser, callback) {
  * @parameter {object} res, the response object from the route
 **/
 var _updateUser = function(userId, updateObj, res) {
-	User.findByIdAndUpdate(userId, updateObj, (error, doc) => {
+	User.findByIdAndUpdate(userId, updateObj, {new:true}, (error, doc) => {
 		if (error) {
 			console.log(error);
 			res.status(500).json({error:"Unable to retrieve user"});
