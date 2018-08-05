@@ -5,18 +5,6 @@ const queries = require('./queries');
 
 // import model
 const TrainingPlan = require('../models/trainingPlans');
-const Workout = require('../models/workouts');
-const User = require('../models/users');
-
-function lookUpUser(req, res) {
-	var userId = req.params.id;
-	queries.getUser(userId, res);
-	next();
-}
-
-function lookUpWorkout() {
-
-}
 
 function lookUpTrainingPlan(req, res, next) {
 	var trainingPlanId = req.params.id;
