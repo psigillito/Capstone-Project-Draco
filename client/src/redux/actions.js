@@ -185,6 +185,7 @@ export function updateStravaToken(newToken){
 }
 
 export function setAthleteId(newId){
+    console.log("NEW ID IS: "+console.log(newId))
     return {
         type: 'SET_ATHLETE_ID',
         athleteId: newId

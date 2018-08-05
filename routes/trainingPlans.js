@@ -66,15 +66,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 });
 
-//get current user workouts based on query
-router.get('/currentUserPlans', (req, res) => {
-	const query = TrainingPlan.find(req.query);
-	query.exec((err, docs) => {
-		if (err) return res.status(400).json({ msg: 'failure', error: err });
-		return res.json(docs);
-	});
-});
-
 router.patch('/:id', (req, res) => {
 	if (req.body.name || req.body.startDate || req.body.endDate) {
 		var updateObj = {};

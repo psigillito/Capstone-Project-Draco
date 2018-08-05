@@ -6,9 +6,7 @@ import axios from 'axios';
 import store from '../store';
 import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
-import {getCurrentTrainingPlans} from '../redux/actions'
-import {getCurrentWorkouts} from '../redux/actions'
-import {updateStravaToken} from '../redux/actions'
+import {getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
 
 
 const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
@@ -24,7 +22,7 @@ class Calendar extends Component{
 
     componentWillMount(){
         //get all training plans 
-        axios.get('/trainingPlans/currentUserPlans/', {
+        axios.get('/trainingPlans/', {
             params: {
                 user: this.props.auth.user.id  
               }
@@ -47,8 +45,31 @@ class Calendar extends Component{
         }).then(res => {
             if(res.data.stravaToken){
                 this.props.updateStravaToken(res.data.stravaToken);
+                console.log(this.props.stravaToken)
             }
-        })
+        }).then( res =>{
+
+          fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
+          .then( (results) => {
+            
+            console.log("REsults are: "+results.id)
+            //set athleteId in store
+            this.props.setAthleteId(results.id);
+            
+            fetch('https://www.strava.com/api/v3/athletes/'+results.id+'/routes?access_token='+this.props.stravaToken)
+            .then((results) => results.json())
+            .then( (results) => {
+    
+              //save route names and ids into store
+              var athleteRoutes =[];
+              for( var i=0; i < results.length; i++){
+                var tempRoute = { name: results[i].name, id: results[i].id}
+                athleteRoutes.push(tempRoute)
+              }
+              this.props.setAthleteRoutes(athleteRoutes)
+            })
+          })
+        })         
     }
 
     render(){
@@ -68,7 +89,7 @@ class Calendar extends Component{
 }
 
 const mapStateToProps = function(state) {
-    return { auth: state.auth, workouts:state.workouts, errors: state.errors }
+    return { auth: state.auth, workouts:state.workouts, stravaToken: state.stravaToken, errors: state.errors }
   }
 
-export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken} )(Calendar);
+export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes} )(Calendar);

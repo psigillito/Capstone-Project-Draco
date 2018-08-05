@@ -94,15 +94,6 @@ class AddNewWorkout extends Component {
         if(e.target.type == 'radio'){
           this.setState({ allExercises: [] })
         }
-        
-        //if running exercise selected 
-        if(e.target.value == 'Running'){
-          //if user has a strava account associated 
-          if(this.props.stravaToken.length > 1)
-          {
-            this.getAthleteId()
-          }
-        }
     }
 
     //Updates week days for workout 
@@ -116,14 +107,8 @@ class AddNewWorkout extends Component {
     }
 
     //gets athlete id from strava then gets list of routes and saves it to redux state
-    getAthleteId(){
-      fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
-      .then( (results) => {
-        
-        //set athleteId in store
-        this.props.setAthleteId(results.id);
-        
-        fetch('https://www.strava.com/api/v3/athletes/'+results.id+'/routes?access_token='+this.props.stravaToken)
+    getAthleteId(){  
+        fetch('https://www.strava.com/api/v3/athletes/'+this.props.athleteId+'/routes?access_token='+this.props.stravaToken)
         .then((results) => results.json())
         .then( (results) => {
 
@@ -135,7 +120,6 @@ class AddNewWorkout extends Component {
           }
           this.props.setAthleteRoutes(athleteRoutes)
         })
-      })
     }
 
     //if selected to use strava
@@ -391,7 +375,7 @@ class AddNewWorkout extends Component {
 
   const mapStateToProps = function(state) {
     return {  trainingPlans: state.trainingPlans, stravaToken: state.stravaToken, athleteRoutes: state.athleteRoutes,
-              currentRoute: state.currentRoute, selectedRoute: state.selectedRoute}
+              currentRoute: state.currentRoute, selectedRoute: state.selectedRoute, athleteId: state.athleteId}
   }
 
 export default connect(mapStateToProps, {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute})(AddNewWorkout);
