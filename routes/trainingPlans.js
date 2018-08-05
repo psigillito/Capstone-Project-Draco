@@ -24,7 +24,6 @@ function lookUpTrainingPlan(req, res, next) {
 
 // gets a specified user's training plans in database
 router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-	console.log(req.user);
 	queries.getTrainingPlan(req.user._id.valueOf(), res);
 });
 
@@ -54,7 +53,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 });
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
 	if (req.body.name || req.body.startDate || req.body.endDate) {
 		var updateObj = {};
 		if (req.body.name) {

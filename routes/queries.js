@@ -29,15 +29,19 @@ var _createUser = function(newUser, callback) {
  * This function updates a user specified by userId with the information contained in updateObj
  * @parameter {string} userId, the id string specifying the user to update
  * @parameter {object} updateObj, object specifying that fields to be updated
- * @parameter {object} res OPTIONAL the response object from the route
+ * @parameter {object} res, the response object from the route
 **/
 var _updateUser = function(userId, updateObj, res) {
 	User.findByIdAndUpdate(userId, updateObj, (error, doc) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({error:"Unable to retrieve user"});
 		}
-		if (typeof res !== "undefined") {
-			res.json(doc);
+		else if (doc === null) {
+			res.status(404).json({error:"Unable to find user"});
+		}
+		else {
+			res.status(200).json(doc);
 		}
 	});
 }
@@ -45,15 +49,19 @@ var _updateUser = function(userId, updateObj, res) {
 /*
  * This function deletes a user specified by userId
  * @parameter {string} userId, the id string specifying the user to delete
- * @parameter {object} OPTIONAL res, the response object from the Express route
+ * @parameter {object} res, the response object from the Express route
 **/
 var _deleteUser = function(userId, res) {
 	User.findByIdAndRemove(userId, (error, doc) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({error:"Unable to retrieve user"});
 		}
-		if (typeof res !== "undefined") {
-			res.json({action: "deleted", entityId: userId});
+		else if (doc === null) {
+			res.status(404).json({error: "Unable to find user"});
+		}
+		else {
+			res.status(200).json(doc);
 		}
 	});
 }
@@ -221,22 +229,18 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 /*
  * This function deletes all of a user's data before the user entity itself is deleted
  * @parameter {string} userId
- * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _deleteAllUserData = function(userId, res) {
+var _deleteAllUserData = function(userId) {
 	User.findById(userId, 'workouts trainingPlans', (error, result) => {
 		if (error) {
 			console.log(error);
 		}
 		result.workouts.forEach(workout => {
-			this._deleteWorkout(workout);
+			_deleteWorkout(workout);
 		});
 		result.trainingPlans.forEach(trainingPlan => {
-			this._deleteTrainingPlan(trainingPlan);
+			_deleteTrainingPlan(trainingPlan);
 		});
-		if (typeof res !== "undefined") {
-			res.json({action: "deleted", entityId: userId});
-		}
 	});
 }
 

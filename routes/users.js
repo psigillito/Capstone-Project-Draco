@@ -12,6 +12,22 @@ const User = require('../models/users');
 // Import key
 const keys = require('../config/keys');
 
+function lookUpUser(req, res, next) {
+	var userId = req.params.id;
+	req.userInfo = User.findById(userId, (error, result) => {
+		if (error) {
+			res.statusCode = 500;
+			return res.json({errors: 'Could not retrieve user'});
+		}
+		else if (result === null) {
+			res.statusCode = 404;
+			return res.json({errors: 'User not found'});
+		}
+		req.userInfo = result;
+		next();
+	});
+}
+
 // POST to users/register
 // Register a user
 // Public access
@@ -125,15 +141,21 @@ router.get('/getUser', (req, res) =>{
 	});
 })
 
-router.patch('/', (req, res) => {
-	//console.log(JSON.stringify(req.body));
-	//console.log(JSON.stringify(req.body.logistics));
+router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (req, res) => {
+	res.status(200).json(req.userInfo);
+});
+
+router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
 	if (req.body.user) {
-		queries.updateUser(req.body.user, {goals: req.body.goals, logistics: req.body.logistics});
-	res.json({ success: true });
+		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
 	} else {
-		res.status(406).json({ message: "Request must contain a valid user ID" });
+		res.status(400).json({ message: "Request malformed or invalid"});
 	}
+});
+
+router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
+	queries.deleteAllUserData(req.params.id);
+	queries.deleteUser(req.params.id, res);
 });
 
 module.exports = router;
