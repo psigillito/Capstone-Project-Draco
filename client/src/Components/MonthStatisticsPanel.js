@@ -4,7 +4,23 @@ class MonthStatisticsPanel extends Component {
 
     constructor(props){
         super(props);
-  
+        this.state = { workouts: this.props.workouts, month: this.props.month, year: this.props.year };
+    }
+
+    calculateCalories(){
+        // TODO
+    }
+    
+    calculateMileage(){
+        //TODO
+    }
+
+    calculateVolumeLoad(){
+        //TODO
+    }
+
+    calculateDuration(){
+        //TODO
     }
 
     render(){

@@ -34,7 +34,6 @@ class UserProfile extends Component {
 		            <p className="lead text-center"><b>Name:</b> {this.props.profile.profile.name}</p>
 		            <p className="lead text-center"><b>Email:</b> {this.props.profile.profile.email}</p>
 		            <p className="lead text-center"><b>Username:</b> {this.props.profile.profile.username}</p>
-		            <p className="lead text-center"><b>Training Plans:</b> {this.props.profile.profile.plans}</p>
 		            <Link to='/edit-profile' className="btn btn-info btn-block">Edit Profile</Link>
 		            <button onClick={this.deleteClick.bind(this)} className="btn btn-danger btn-block" type="submit">Delete Account</button>
 		          </div>
@@ -55,11 +54,12 @@ UserProfile.propTypes = {
 	getProfile: PropTypes.func.isRequired,
 	profile: PropTypes.object.isRequired,
 	deleteAccount: PropTypes.func.isRequired,
-	logout: PropTypes.func.isRequired
+	logout: PropTypes.func.isRequired,
+	trainingPlans: PropTypes.object.isRequired
 }
 
 const mapStateToProps = function(state) {
-	return {profile: state.profile}
+	return {profile: state.profile, trainingPlans: state.trainingPlans}
 };
 
 export default connect(mapStateToProps, { getProfile, deleteAccount, logout })(UserProfile);

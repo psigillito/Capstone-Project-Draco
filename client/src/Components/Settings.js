@@ -10,3 +10,5 @@ class Settings extends Component{
 }
 
 export default Settings
+
+

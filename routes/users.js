@@ -4,12 +4,29 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const queries = require('./queries');
 
 // Import user model
 const User = require('../models/users');
 
 // Import key
 const keys = require('../config/keys');
+
+function lookUpUser(req, res, next) {
+	var userId = req.params.id;
+	req.userInfo = User.findById(userId, (error, result) => {
+		if (error) {
+			res.statusCode = 500;
+			return res.json({errors: 'Could not retrieve user'});
+		}
+		else if (result === null) {
+			res.statusCode = 404;
+			return res.json({errors: 'User not found'});
+		}
+		req.userInfo = result;
+		next();
+	});
+}
 
 // POST to users/register
 // Register a user
@@ -38,7 +55,10 @@ router.post('/register', (req, res) => {
 					email: req.body.email,
 					name: req.body.name,
 					username: req.body.username,
-					password: req.body.password
+					password: req.body.password,
+					trainingPlans: [],
+					numTrainingPlans: 0,
+					numWorkouts: 0
 				});
 
 				// Encrypt password
@@ -102,19 +122,40 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
 		.catch(err => console.log(err));
 });
 
-router.patch('/', (req, res) => {
-	console.log(JSON.stringify(req.body));
-	if (req.body.id) {
-		User.findOneAndUpdate({_id: req.body.id}, {goals: req.body.goals, logistics: req.body.logistics}, (error, doc) => {
-		if (error) {
+//set stravaToken on authorization
+router.patch('/setStravaToken', (req, res) =>{
+
+	User.update({_id: req.body.userId},{$set:{stravaToken: req.body.stravaToken }}, (error, doc) => {
+		if(error){
 			console.log(error);
-			console.log(doc);
 		}
+	})
+});
+
+//get User
+router.get('/getUser', (req, res) =>{
+	const query = User.find(req.query);
+	User.findOne({_id: req.query._id}, (err, docs) => {
+		if(err) return res.status(400).json({ msg: 'failure', error: err });
+		return res.json(docs);
 	});
-	res.json({ success: true });
-} else {
-	res.status(406).json({ message: "Request must contain a valid user ID" });
-}
+})
+
+router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (req, res) => {
+	res.status(200).json(req.userInfo);
+});
+
+router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
+	if (req.body) {
+		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
+	} else {
+		res.status(400).json({ message: "Request malformed or invalid"});
+	}
+});
+
+router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
+	queries.deleteAllUserData(req.params.id);
+	queries.deleteUser(req.params.id, res);
 });
 
 module.exports = router;

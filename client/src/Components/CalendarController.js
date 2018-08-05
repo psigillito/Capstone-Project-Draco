@@ -26,19 +26,17 @@ class CalendarController extends Component {
     render(){
         const months = this.state.months;
         return(
-            <div>
-                <tr>
-                    <ul className="triple-column">
-                        <li  onClick={this.handleYearChange(2016)}>2016</li>
-                        <li  onClick={this.handleYearChange(2017)}>2017</li>
-                        <li  onClick={this.handleYearChange(2018)}>2018</li>
-                        <li  onClick={this.handleYearChange(2019)}>2019</li>
-                        <li  onClick={this.handleYearChange(2020)}>2020</li>
-                        <li  onClick={this.handleYearChange(2020)}>2021</li>
-                        {months.map( (item, index) => (<li key={index} onClick={this.handleMonthChange(index)}>{item}</li>)) }
-                    </ul>
-                </tr>
-            </div>       
+                <div>
+                      <ul className="triple-column">
+                          <li  onClick={this.handleYearChange(2016)}>2016</li>
+                          <li  onClick={this.handleYearChange(2017)}>2017</li>
+                          <li  onClick={this.handleYearChange(2018)}>2018</li>
+                          <li  onClick={this.handleYearChange(2019)}>2019</li>
+                          <li  onClick={this.handleYearChange(2020)}>2020</li>
+                          <li  onClick={this.handleYearChange(2020)}>2021</li>
+                          {months.map( (item, index) => (<li key={index} onClick={this.handleMonthChange(index)}>{item}</li>)) }
+                      </ul>
+                </div>       
         )
     }
 }

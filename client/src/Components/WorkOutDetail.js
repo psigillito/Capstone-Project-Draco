@@ -16,19 +16,21 @@ class WorkOutDetail extends Component{
                         <td>{exercise.name}</td>
                         <td>{exercise.sets}</td>
                         <td>{exercise.reps}</td>
-                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
+                        <td>{exercise.weight}</td>
+                        <td>{exercise.unit}</td>
                     </tr>
                 )
             )
         }else if(this.props.type == "Running"){
             return(
-                
-                    <tr>
-                        <td>{this.props.workout.name}</td>
-                        <td>{this.props.workout.distance}</td>
-                        <td>{this.props.workout.duration}</td>
-                        <td> <button type="button" className="btn btn-secondary btn-sm">edit</button></td>
+                    this.props.workout.exercises.map( (exercise, index) => 
+                    <tr key={index}>
+                        <td className="td-fixed-width">{exercise.name}</td>
+                        <td className="td-fixed-width">{exercise.distance}</td>
+                        <td className="td-fixed-width">{exercise.distanceUnit}</td>
                     </tr>
+                    
+                )
             )
         }
     }

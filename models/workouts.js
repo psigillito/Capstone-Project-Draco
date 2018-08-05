@@ -10,8 +10,14 @@ const workoutSchema = new Schema({
     type: String,
     required: true
   },
+  /* An object that contains a value and a unit 
+  * duration: {
+  *    value: 7,
+  *    units: "mi"
+  * }
+  * */
   duration: {
-    type: Number
+    type: Object
   },
   /* exercises will be used exclusively for strength training
    * exercises : {
@@ -26,7 +32,7 @@ const workoutSchema = new Schema({
    * }
    */
   exercises: {
-    type: Array
+    type: Object
   },
   /* intverals will be used exclusively for endurance training
    * intervals : {
@@ -40,7 +46,7 @@ const workoutSchema = new Schema({
    *       unit: "min",
    *       intensity: "jog"
    *    },
-  *     setRest: {
+   *     setRest: {
    *       duration: 4,
    *       unit: "min",
    *       intensity: "jog"
@@ -48,10 +54,11 @@ const workoutSchema = new Schema({
    * }
    */
   intervals: {
-    type: Array
+    type: Object
   },
   date: [{
-  	type: Date
+    type: Date,
+    required: true
   }],
   daysOfWeek: {
     type: Array
@@ -64,6 +71,7 @@ const workoutSchema = new Schema({
     type: String,
     required: true
   }
+
 });
 
 // export our module to use in server.js

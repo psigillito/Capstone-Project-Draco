@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import store from '../store';
 import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
-import {currentDay} from '../data/weekData'
+import {currentDay} from '../data/weekData';
 
 class TodaysExercisePanel extends Component {
 
@@ -83,6 +83,7 @@ class TodaysExercisePanel extends Component {
                 <div>
                     <h2 className="display-4 mb-4"  >Today's Workouts:</h2>
                     No Exercises Today...Take a Rest.
+
                 </div>
             )
         }

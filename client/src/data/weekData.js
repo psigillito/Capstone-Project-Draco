@@ -1,9 +1,3 @@
-const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
-const Months = ['January', 'February', 'March', 'April', 'May',
-                'June', 'July', 'August', 'September',
-                'October', 'November', 'December'
-                ];
-
 function getMonthWeeks( year, month){
 
     var d = new Date();
