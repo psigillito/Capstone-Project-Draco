@@ -29,7 +29,7 @@ class Calendar extends Component{
         })
 
         //get all workouts 
-        axios.get('/workouts/currentWorkouts', {
+        axios.get('/workouts/', {
             params: {
                 user: this.props.auth.user.id
             }
@@ -43,7 +43,6 @@ class Calendar extends Component{
         }).then(res => {
             if(res.data.stravaToken){
                 this.props.updateStravaToken(res.data.stravaToken);
-                console.log(this.props.stravaToken)
             }
         }).then( res =>{
 

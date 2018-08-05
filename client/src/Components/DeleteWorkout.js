@@ -43,15 +43,15 @@ class DeleteWorkout extends Component {
 
       return(
         <div>
-          <div class="modal-body">
-            <label for="trainingPlan"><b>Training Plan to delete workout from:</b></label>
+          <div className="modal-body">
+            <label htmlFor="trainingPlan"><b>Training Plan to delete workout from:</b></label>
             <select id="inputState" 
               name="trainingPlanId" 
-              class="form-control" 
+              className="form-control" 
               value={this.state.trainingPlanId ? this.state.trainingPlanId : ''} 
               onChange={this.onChange}
             >
-            <option selected>Choose...</option>
+            <option defaultValue>Choose...</option>
              {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
                 <option key={index} value={plan._id}>{plan.name}</option>
                 )
@@ -61,10 +61,10 @@ class DeleteWorkout extends Component {
 
             {this.state.trainingPlanId !== '' &&
             <div>
-              <label for='name'><b>Select workout to delete:</b></label>
+              <label htmlFor='name'><b>Select workout to delete:</b></label>
               <select id="inputState" 
                 name="workoutId" 
-                class="form-control" 
+                className="form-control" 
                 value={this.state.workoutId ? this.state.workoutId : ''} 
                 onChange={this.onChange}
               >
@@ -78,9 +78,9 @@ class DeleteWorkout extends Component {
             }
           </div>
         
-            <div class="modal-footer">
-              <button type="button" onClick={() => this.clearState() } class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button"  onClick={() => this.deleteWorkout() } class="btn btn-danger">Delete</button>
+            <div className="modal-footer">
+              <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button"  onClick={() => this.deleteWorkout() } className="btn btn-danger">Delete</button>
             </div>
 
         </div>         

@@ -88,10 +88,10 @@ class ActiveWorkoutsPanel extends Component {
 
         {/* EDIT & CREATE TRAINING PLANS */}
 
-        <div class="modal" id="trainingPlan" tabIndex="-1" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
+        <div className="modal" id="trainingPlan" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
                 <UpdateTrainingPlan title={this.state.title} 
                 name={this.state.name} 
                 startDate={this.state.startDate} 
@@ -116,10 +116,10 @@ class ActiveWorkoutsPanel extends Component {
         </div>
 
         {/* DELETE WORKOUT */}
-        <div class="modal" id="deleteWorkout" tabIndex="-1" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
+        <div className="modal" id="deleteWorkout" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
                 <DeleteWorkout />
               </div>
             </div>
@@ -127,10 +127,10 @@ class ActiveWorkoutsPanel extends Component {
         </div>
 
         {/* DELETE TRAINING PLAN */}
-        <div class="modal" id="deleteTrainingPlan" tabIndex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
+        <div className="modal" id="deleteTrainingPlan" tabIndex="-1" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
                 <DeleteTrainingPlan name={this.state.name} id={this.state.planId} />
               </div>
             </div>

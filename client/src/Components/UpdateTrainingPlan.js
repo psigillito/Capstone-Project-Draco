@@ -43,15 +43,15 @@ class UpdateTrainingPlan extends Component {
       if(this.props.title === 'Delete') {
         return(
           <div>
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="alert alert-danger" role="alert">
+              <div className="alert alert-danger" role="alert">
                 You are about to delete {this.props.name} training plan!
               </div>
-              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} class="danger btn btn-primary">
+              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="danger btn btn-primary">
                 Continue
               </button>
             </div>
@@ -60,14 +60,14 @@ class UpdateTrainingPlan extends Component {
       return(
 
         <div>
-           <div class="modal-header">
+           <div className="modal-header">
            <h5>{this.props.title}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-            <div class="modal-body">
-              <label for="name">
+            <div className="modal-body">
+              <label htmlFor="name">
                 <b>Name:</b>
               </label>
               <div className="form-group">
@@ -81,7 +81,7 @@ class UpdateTrainingPlan extends Component {
                 />
               </div>
 
-              <label for="startDate">
+              <label htmlFor="startDate">
                 <b>Start Date:</b>
               </label>
               <div className="form-group">
@@ -95,7 +95,7 @@ class UpdateTrainingPlan extends Component {
                 />
               </div>
 
-              <label for="endDate">
+              <label htmlFor="endDate">
                 <b>End Date:</b>
               </label>
               <div className="form-group">
@@ -110,11 +110,11 @@ class UpdateTrainingPlan extends Component {
               </div>
             </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">
                 Close
               </button>
-              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} class="btn btn-primary">
+              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="btn btn-primary">
                 Save changes
               </button>
             </div>

@@ -25,9 +25,9 @@ class DeleteTrainingPlan extends Component {
 			    	<h5>Are you sure you want to delete '{this.props.name}' 
 				        training plan and all workouts associated with it?</h5>
 			    </div>
-			    <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			        <button type="button"  onClick={() => this.deleteTrainingPlan() } class="btn btn-danger">Delete</button>
+			    <div className="modal-footer">
+			        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+			        <button type="button"  onClick={() => this.deleteTrainingPlan() } className="btn btn-danger">Delete</button>
 			    </div>
 		    </div>
     	)

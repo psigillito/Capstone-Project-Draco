@@ -1,5 +1,5 @@
-import React, { Component, PureComponent } from 'react';
-import { withGoogleMap, GoogleMap, Polyline, lineSymbol } from 'react-google-maps';
+import React, { PureComponent } from 'react';
+import { withGoogleMap, GoogleMap, Polyline } from 'react-google-maps';
 const decodePolyline = require('decode-google-map-polyline');
 class Map extends PureComponent {
   
@@ -14,7 +14,8 @@ class Map extends PureComponent {
 
   render() {
    
-    if(this.props.selectedPolyLine != -1){
+     var GoogleMapRoute
+    if(this.props.selectedPolyLine !== -1){
 
       const myPolyLine= decodePolyline(this.props.selectedPolyLine);
 
@@ -30,12 +31,10 @@ class Map extends PureComponent {
       ));
 
     }
-    
-
-
    
    return(
       <div> 
+
         <GoogleMapRoute
           containerElement={ <div style={{ height: `425px`, width: '425px' }} /> }
           mapElement={ <div style={{ height: `100%` }} /> }
