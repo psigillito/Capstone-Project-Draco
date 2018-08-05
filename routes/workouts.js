@@ -5,29 +5,35 @@ const passport = require('passport');
 const Workout = require('../models/workouts');
 const User = require('../models/users');
 
-// display workout
-router.get('/', (req, res) => {
-    console.log(req.query);
-    if (req.query.date) {
-        const date = req.query.date;
-    }
+function lookupWorkout(req, res, next) {
+    var workoutId = req.params.id;
+    req.workout = Workout.findById(workoutId, (error, result) => {
+        if (error) {
+            return res.status(500).json({errors: 'Could not retrieve workout'});
+        }
+        else if (result === null) {
+            return res.status(404).json({errors: 'Workout not found'});
+        }
+        else {
+            req.workout = result;
+            next();
+        }
+    });
+}
 
-    if (Object.keys(req.query).length != 0) {
-        var query = Workout.find({
-            date: { $eq: new Date(date)}
-        });
-        query.exec((err, docs) => {
-            if (err) return res.json({ success: false, error: err });
-            return res.json({ success: true, data: docs });
-        });        
+// get all of a user's workouts
+router.get('/', passport.authenticate('jwt', {session:false}), (req, res) => {
+    if (req.query) {
+        queries.getWorkout(req.user._id.valueOf(), res, req.query);
     }
     else {
-        var query = Workout.find();
-        query.exec((err, docs) => {
-        if (err) return res.json({ success: false, error: err });
-        return res.json({ success: true, data: docs });
-        });
+        queries.getWorkout(req.user._id.valueOf(), res);
     }
+});
+
+// get a specific workout
+router.get('/:id', passport.authenticate('jwt', {session:false}), lookupWorkout, (req, res) => {
+    res.status(200).json(req.workout);
 });
 
 // add workout
@@ -35,89 +41,49 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     const newWorkout = new Workout({
         name: req.body.name,
         mode: req.body.mode,
-        user: req.user.id,
+        user: req.user._id.valueOf(),
         trainingPlan: req.body.trainingPlan,
         duration: (req.body.duration) ? req.body.duration : null,
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
         daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
-        //date: new Date(req.body.date)
+        date: new Date(req.body.date)
     });
     console.log(JSON.stringify(newWorkout));
-    if (!newWorkout.name || !newWorkout.mode || !newWorkout.user || !newWorkout.trainingPlan || !newWorkout.date) {
-        // we should throw an error. we can do this check on the front end
-        return res.json({
-            success: false,
-            error: 'You must provide a name, mode, user, training plan, and date'
-        });
+    if (!newWorkout.name || !newWorkout.mode || !newWorkout.trainingPlan || !newWorkout.date) {
+        return res.status(400).json({errors: 'Malformed or invalid request'});
     }
-    newWorkout.save()
-        .then(workout => {
-            User.findById(req.user.id, (error, doc) => {
-                var userNumWorkouts = JSON.parse(JSON.stringify(doc)).numWorkouts;
-                userNumWorkouts++;
-                User.findByIdAndUpdate(req.user.id, { numWorkouts: userNumWorkouts }, (error, doc) => {
-                    if (error) {
-                        console.log(error);
-                        console.log(doc);
-                    }
-                });
-            });
-            res.json(newWorkout);
-        });
-        /*.catch (err => {
-        if (err)
-            return res.json({ success: false, error: err });
-    });*/
+    queries.createWorkout(newWorkout, req.user._id.valueOf(), res); 
 });
 
-router.patch('/', (req, res) => {
+router.patch('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     var workoutExercises = [];
-    console.log(JSON.stringify(req.body));
-    if (req.body.id) {
-        // make a GET request to get the workouts array for a given training plan
+    if (req.body) {
         if (req.body.exercise) {
-            Workout.findById(req.body.id, (error, doc) => {
-                workoutExercises = JSON.parse(JSON.stringify(doc));
+            Workout.findById(req.params.id, (error, doc) => {
+                workoutExercises = doc.exercises;
                 if (error) {
                     console.log(error);
+                    return res.status(500).json({ errors: 'Could not retrieve workout' });
                 }
-                //console.log('Exercise adding: ' + req.body.exercise);
+                else if (doc === null) {
+                    return res.status(404).json({ errors: 'Workout not found' });
+                }
                 workoutExercises.exercises.push(req.body.exercise);
-                queries.updateWorkout(req.body.id, { exercises: workoutExercises.exercises });
-                res.json({ success: true });
+                queries.updateWorkout(req.params.id, { exercises: workoutExercises.exercises }, res);
             });
-        // } else if (req.body.name || req.body.startDate || req.body.endDate) {
-        //     var updateObj = {};
-        //     var messageStr = "";
-        //     if (req.body.name) {
-        //         updateObj.name = req.body.name;
-        //         messageStr += "Name "
-        //     }
-        //     if (req.body.startDate) {
-        //         updateObj.startDate = req.body.startDate;
-        //         messageStr += "Start Date "
-        //     }
-        //     if (req.body.endDate) {
-        //         updateObj.endDate = req.body.endDate;
-        //         messageStr += "End Date "
-        //     }
-        //     queries.updateTrainingPlan(req.body.id, updateObj);
-        //     res.json({ success: true, message: messageStr + "field(s) updated" });
-         } else {
-            res.status(406).json({ message: "Request must contain a valid training plan ID" });
         }
+        else {
+            queries.updateWorkout(req.params.id, req.body, res);
+        }
+    } else {
+        res.status(400).json({ errors: 'Malformed or invalid request' });
     }
 });
 
 // delete workout
-router.delete('/', passport.authenticate('jwt', {session: false}), (req, res) => {
-    if(req.query.wid && req.query.tpid) {
-        queries.deleteWorkoutFromTrainingPlan(req.query.tpid, req.query.wid);
-        queries.deleteWorkout(req.query.wid, res);
-    } else {
-        res.json({success: false, error: "Must specify workout and training plan"});
-    }
+router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+    queries.deleteWorkout(req.params.id, res);
 });
 
 router.get('/currentWorkouts', (req, res) => {
@@ -130,16 +96,5 @@ router.get('/currentWorkouts', (req, res) => {
 		return res.json(docs);
 	});
 });
-
-router.get('/test', (req, res) => {
-    var obj = {
-        key1: "key1",
-        key2: "key2",
-        key3: "key3"
-    }
-    queries.deleteWorkoutFromTrainingPlan("5b5cf522e9105c1622b2dcbe", "5b5d0aac4cf0331abcd282d4", res);
-    //res.json(obj);
-});
-
 
 module.exports = router;

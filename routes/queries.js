@@ -145,37 +145,60 @@ var _deleteTrainingPlan = function(trainingPlanId, res) {
  * @parameter {object} workoutId, the id string specifying the workout to fetch
  * @parameter {object} res, the response object from the route
 **/
-var _getWorkout = function(workoutId, res) {
-	Workout.findById(workoutId, (error, doc) => {
+var _getWorkout = function(userId, res, options) {
+	var queryObj = {};
+	if (typeof options !== "undefined") {
+		queryObj = options;
+	}
+	queryObj.user = userId;
+	Workout.find(queryObj, (error, doc) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({errors: 'Could not retrieve workout'});
 		}
-		res.json(doc);
+		else if (doc === null) {
+			res.status(404).json({errors: 'Workout not found'});
+		}
+		else {
+			res.status(200).json(doc);
+		}
 	});
 }
 
 /*
  * This function saves a new Workout object (newWorkout)
  * @parameter {object} newWorkout, contains the fields that define a new workout
- * @parameter {function} callback, function to execute when the save "promise" returns
+ * @parameter {string} userId, the id string specifying the user to update
+ * @parameter {object} res, the response object from Express
 **/
-var _createWorkout = function(newWorkout, callback) {
-	newWorkout.save().then(callback)
+var _createWorkout = function(newWorkout, userId, res) {
+	newWorkout.save((err, doc) => {
+        if (err) {
+            return res.status(500).json({errors:'Unable to create workout'});
+        }
+        _updateUsersNumWorkouts(userId.valueOf());
+        _addWorkoutToTrainingPlan(doc.trainingPlan, doc._id.valueOf());
+        return res.status(200).json(doc);
+    });
 }
 
 /*
  * This function updates a workout specified by workoutId
  * @parameter {string} workoutId, the id string specifying the workout to update
  * @parameter {object} updateObj, object specifying that fields to be updated
- * @parameter {object} res OPTIONAL the response object from the route
+ * @parameter {object} res, the response object from the route
 **/
 var _updateWorkout = function(workoutId, updateObj, res) {
-	Workout.findByIdAndUpdate(workoutId, updateObj, (error, doc) => {
+	Workout.findByIdAndUpdate(workoutId, updateObj, {new:true}, (error, doc) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({errors:'Unable to retrieve workout'});
 		}
-		if (typeof res !== "undefined") {
-			res.json(doc);
+		else if (doc === null) {
+			res.status(404).json({erros:'Workout not found'});
+		}
+		else {
+			res.status(200).json(doc);
 		}
 	});
 }
@@ -189,9 +212,14 @@ var _deleteWorkout = function(workoutId, res) {
 	Workout.findByIdAndRemove(workoutId, (error, doc) => {
 		if (error) {
 			console.log(error);
+			res.status(500).json({errors:'Could not retrieve workout'});
 		}
-		if (typeof res !== "undefined") {
-			res.json({action: "delete", entityId: workoutId});
+		if (doc === null) {
+			res.status(404).json({errors: 'Workout not found'});
+		}
+		else {
+			_deleteWorkoutFromTrainingPlan(doc.trainingPlan, workoutId);
+			res.status(200).json(doc);
 		}
 	});
 }
@@ -207,7 +235,7 @@ var _updateUsersNumWorkouts = function(userId, res) {
 			console.log(error);
 		}
 		var num = result.numWorkouts + 1;
-		this.updateUser(userId, {numWorkouts: num}, res);
+		updateUser(userId, {numWorkouts: num}, res);
 	});
 }
 
@@ -222,7 +250,7 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 			console.log(error);
 		}
 		var num = result.numTrainingPlans + 1;
-		this.updateUser(userId, {numTrainingPlans: num}, res);
+		updateUser(userId, {numTrainingPlans: num}, res);
 	});
 }
 
@@ -257,7 +285,7 @@ var _addWorkoutToTrainingPlan = function(trainingPlanId, workoutId, res) {
 		}
 		var newWorkouts = result.workouts;
 		newWorkouts.push(workoutId);
-		this._updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
 	});
 }
 
@@ -275,7 +303,7 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 		var indexToRemove = result.workouts.indexOf(workoutId);
 		var newWorkouts = result.workouts;
 		newWorkouts.splice(indexToRemove, 1);
-		this._updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
 	});
 }
 
@@ -293,7 +321,7 @@ var _deleteWorkoutFromUser = function(workoutId, userId, res) {
 		var indexToRemove = result.workouts.indexOf(workoutId);
 		var newWorkouts = result.workouts;
 		newWorkouts.splice(indexToRemove, 1);
-		this._updateUser(userId, {workouts: newWorkouts}, res);
+		_updateUser(userId, {workouts: newWorkouts}, res);
 	});
 }
 
@@ -310,7 +338,7 @@ var _addTrainingPlanToUser = function(trainingPlanId, userId, res) {
 		}
 		var newTPs = result.trainingPlans;
 		newTPs.push(trainingPlanId);
-		this._updateUser(userId, {trainingPlans: newTPs}, res);
+		_updateUser(userId, {trainingPlans: newTPs}, res);
 	});
 }
 
