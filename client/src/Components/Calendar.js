@@ -11,8 +11,6 @@ import {getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthle
 
 const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
 
-
-
 class Calendar extends Component{
     constructor(props){
         super(props);
@@ -52,7 +50,6 @@ class Calendar extends Component{
           fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
           .then( (results) => {
             
-            console.log("REsults are: "+results.id)
             //set athleteId in store
             this.props.setAthleteId(results.id);
             
