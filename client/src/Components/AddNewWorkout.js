@@ -72,8 +72,8 @@ class AddNewWorkout extends Component {
 
         axios.post('/workouts', newWorkout)
             .then(res => {
-                 axios.patch('/trainingPlans', {
-                    id: this.state.trainingPlan,
+                 axios.patch('/trainingPlans/'+this.state.trainingPlan, {
+                    //id: this.state.trainingPlan,
                     workoutId: res.data._id
                 },
                 this.setState({

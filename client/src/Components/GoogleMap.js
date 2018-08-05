@@ -12,17 +12,25 @@ class Map extends PureComponent {
   
   }      
 
-
-  
   render() {
    
-    const myPolyLine= decodePolyline(this.props.selectedPolyLine);
+    if(this.props.selectedPolyLine != -1){
 
-    var GoogleMapRoute = withGoogleMap(props => (
-        <GoogleMap defaultCenter = {myPolyLine[0] } defaultZoom = { 14 }>    
-            <Polyline options={{strokeColor: '#2e10ff', geodesic: true }} path={myPolyLine} />
-        </GoogleMap>
-   ));
+      const myPolyLine= decodePolyline(this.props.selectedPolyLine);
+
+      var GoogleMapRoute = withGoogleMap(props => (
+          <GoogleMap defaultCenter = {myPolyLine[0] } defaultZoom = { 14 }>    
+              <Polyline options={{strokeColor: '#2e10ff', geodesic: true }} path={myPolyLine} />
+          </GoogleMap>
+      ));
+
+    }else{
+      var GoogleMapRoute = withGoogleMap(props => (
+        <GoogleMap defaultCenter= { {lat:44.5646, lng:-123.2620}  }defaultZoom = { 14 }></GoogleMap>
+      ));
+
+    }
+    
 
 
    
