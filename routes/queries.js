@@ -380,6 +380,21 @@ var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
 	});
 }
 
+/*
+* This function deletes an exercise from a workout
+* @parameter {string} workoutId
+* @parameter {string} exerciseName
+* @parameter {object} res, the response object from the route
+**/
+var _deleteExercise = function(workoutId, exerciseName, res) {
+	Workout.update({"_id": workoutId}, {"$pull" : { "exercises" : {"name": exerciseName }}}, (err, data) => {
+        console.log(err, data);
+        if(!err) {
+        	res.json({ success: true });
+        }
+    });
+}
+
 queries = {
 	getUser: _getUser,
 	createUser: _createUser,
@@ -401,7 +416,8 @@ queries = {
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
 	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
-	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts
+	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts,
+	deleteExercise: _deleteExercise
 }
 
 module.exports = queries;
