@@ -36,7 +36,7 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), lookUpTrainin
 // create a new training plan
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const newTrainingPlan = new TrainingPlan({
-		user: req.user.id,
+		user: req.user._id.valueOf(),
 		name: req.body.name,
 		workouts: req.body.workouts,
 		active: true,
@@ -45,11 +45,11 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	});
 
 	// Update a user's numTrainingPlans
-	queries.updateUsersNumTrainingPlans(user);
+	queries.updateUsersNumTrainingPlans(req.user._id.valueOf());
 
 	queries.createTrainingPlan(newTrainingPlan, (plan) => {
-		queries.addTrainingPlanToUser(plan._id.valueOf());
-		res.json({action: "create", data: plan});
+		queries.addTrainingPlanToUser(plan._id.valueOf(), req.user._id.valueOf(), {status:null});
+		res.status(201).json(plan);
 	});
 });
 

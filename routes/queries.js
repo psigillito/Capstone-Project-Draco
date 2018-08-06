@@ -235,7 +235,7 @@ var _updateUsersNumWorkouts = function(userId, res) {
 			console.log(error);
 		}
 		var num = result.numWorkouts + 1;
-		updateUser(userId, {numWorkouts: num}, res);
+		User.findByIdAndUpdate(userId, {numWorkouts: num}, (error, doc) => {});
 	});
 }
 
@@ -250,7 +250,7 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 			console.log(error);
 		}
 		var num = result.numTrainingPlans + 1;
-		updateUser(userId, {numTrainingPlans: num}, res);
+		User.findByIdAndUpdate(userId, {numTrainingPlans: num}, (error, doc) => {});
 	});
 }
 
@@ -285,7 +285,7 @@ var _addWorkoutToTrainingPlan = function(trainingPlanId, workoutId, res) {
 		}
 		var newWorkouts = result.workouts;
 		newWorkouts.push(workoutId);
-		updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
 	});
 }
 
@@ -338,7 +338,7 @@ var _addTrainingPlanToUser = function(trainingPlanId, userId, res) {
 		}
 		var newTPs = result.trainingPlans;
 		newTPs.push(trainingPlanId);
-		_updateUser(userId, {trainingPlans: newTPs}, res);
+		User.findByIdAndUpdate(userId, {trainingPlans: newTPs}, (error, doc) => {});
 	});
 }
 
