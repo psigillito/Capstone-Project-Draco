@@ -24,7 +24,7 @@ import * as goalsJCR from '../copy/goals.json'
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utility/authToken';
 import { setCurrentUser } from '../redux/actions';
-import store from '../store';
+import {store} from '../store';
 import { connect } from 'react-redux';
 import reducer from '../redux/reducer';
 import axios from 'axios';
