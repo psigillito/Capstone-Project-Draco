@@ -109,11 +109,9 @@ class AddNewExercise extends Component {
         
 
           {/* add exercises to existing workout */}
-
-  
-                <div class="modal-body">
-                <label for='name'><b>Select workout to add to:</b></label>
-                <select id="inputState" name="workoutId" class="form-control" onChange={this.onChange}>
+                <div className="modal-body">
+                <label htmlFor='name'><b>Select workout to add to:</b></label>
+                <select id="inputState" name="workoutId" className="form-control" onChange={this.onChange}>
                   <option selected>Choose...</option>
                   { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                                                           && this.props.selectedWorkoutList.includes(exercise._id))                                          
@@ -125,7 +123,7 @@ class AddNewExercise extends Component {
                   </select>
                   <br/>
 
-               <label for='mode'><b>Mode:</b></label>
+               <label htmlFor='mode'><b>Mode:</b></label>
                 <div className="form-group">
                   <div className="form-check form-check-inline">
                       <input className="form-check-input" 
@@ -135,7 +133,7 @@ class AddNewExercise extends Component {
                       value='Weight Training'
                       onChange={this.onChange}
                       />
-                      <label className="form-check-label" for="inlineRadio1">Weight Training</label>
+                      <label className="form-check-label" htmlFor="inlineRadio1">Weight Training</label>
                   </div>
 
                   <div className="form-check form-check-inline">
@@ -146,7 +144,7 @@ class AddNewExercise extends Component {
                       value="Running"
                       onChange={this.onChange}
                       />
-                      <label className="form-check-label" for="inlineRadio2">Running</label>
+                      <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
                   </div>
                 </div>
                  
@@ -155,7 +153,7 @@ class AddNewExercise extends Component {
               {/* Exercises - Weight training */}
             {this.state.mode === 'Weight Training' && this.state.mode != '' &&
             <div>
-              <div class="modal-header">
+              <div className="modal-header">
                 <h5>Add Exercises</h5>
               </div>
               <div className="form-group">
@@ -169,18 +167,18 @@ class AddNewExercise extends Component {
                 />
               </div>
               <form>
-                <div class="form-row">
-                  <div class="col">
-                    <input type="text" class="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
+                <div className="form-row">
+                  <div className="col">
+                    <input type="text" className="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
                   </div>
-                  <div class="col">
-                    <input type="text" class="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
+                  <div className="col">
+                    <input type="text" className="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
                   </div>
-                  <div class="col">
-                    <input type="text" class="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
+                  <div className="col">
+                    <input type="text" className="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
                   </div>
-                  <div class="col">
-                   <select id="inputState" name="unit" class="form-control" onChange={this.onChange}>
+                  <div className="col">
+                   <select id="inputState" name="unit" className="form-control" onChange={this.onChange}>
                       <option selected>...</option>
                       <option name="unit" value="lbs">Lbs</option>
                       <option name="unit" value="kg">Kg</option>
@@ -198,7 +196,7 @@ class AddNewExercise extends Component {
         {/* Exercises - Running */}
           {this.state.mode === 'Running' && this.state.mode != '' && 
           <div>
-          <div class="modal-header">
+          <div className="modal-header">
             <h5>Add Exercises</h5>
           </div>
           <div className="form-group">
@@ -211,14 +209,14 @@ class AddNewExercise extends Component {
               onChange={this.onChange}
             />
             </div>
-          <label for='duration'><b>Duration:</b></label>
+          <label htmlFor='duration'><b>Duration:</b></label>
               <form>
-                <div class="form-row">
-                  <div class="col">
-                    <input type="text" class="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+                <div className="form-row">
+                  <div className="col">
+                    <input type="text" className="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
                   </div>
-                  <div class="col">
-                   <select id="inputState" name="distanceUnit" class="form-control" onChange={this.onChange}>
+                  <div className="col">
+                   <select id="inputState" name="distanceUnit" className="form-control" onChange={this.onChange}>
                       <option selected>...</option>
                       <option name="distanceUnit" value="mi">Mi</option>
                       <option name="distanceUnit" value="km">Km</option>
@@ -232,9 +230,9 @@ class AddNewExercise extends Component {
               </div>
           </div>
         }       
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" data-toggle="modal" data-target="#addExercise" onClick={() => this.submitExercise() } class="btn btn-primary">Save changes</button>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" data-toggle="modal" data-target="#addExercise" onClick={() => this.submitExercise() } className="btn btn-primary">Save changes</button>
                 </div>
               </div>
             </div>

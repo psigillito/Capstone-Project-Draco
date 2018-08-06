@@ -136,8 +136,8 @@ class DayDetail extends Component {
                             <select id="inputRoute" className="custom-select" onChange={this.handleRouteChange} >
                               <option value={-1}>Select a Strava Route to Display</option>
                               { 
-                                routesToDisplay.map( (route) =>
-                                <option value={route.stravaRoute}>{route.name}</option>
+                                routesToDisplay.map( (route, index) =>
+                                <option key={index} value={route.stravaRoute}>{route.name}</option>
                               )}
                             </select>
                             <div className="centered-section">
