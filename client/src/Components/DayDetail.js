@@ -56,9 +56,6 @@ class DayDetail extends Component {
         && this.props.selectedWorkoutList.includes(exercise._id)
         && exercise.mode =='Running')
   
-        console.log("routes to display are: ")
-        console.log(tempsToFilter)
-  
         //get routes to display 
         var routesToDisplay = [];
         for(var i = 0; i < tempsToFilter.length; i++){

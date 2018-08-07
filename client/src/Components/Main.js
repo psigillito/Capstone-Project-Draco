@@ -102,9 +102,9 @@ class Main extends Component{
                         </div>
                         <div className="container">
                             <div className="row">
-                                <TodaysExercisePanel className = "col-sm"/>
-                                <span className = "col-sm"/>
-                                <MonthStatisticsPanel className = "col-sm"/>
+                                <TodaysExercisePanel className = "col-sm-4"/>
+                                <span className = "col-sm-2"/>
+                                <MonthStatisticsPanel weekArray={this.props.days} trainingPlans={this.props.trainingPlans} className = "col-sm-6"/>
 
                             </div>
                         </div>

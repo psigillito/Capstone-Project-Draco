@@ -238,8 +238,6 @@ class AddNewExercise extends Component {
             </div>
       )
     }
-
-
 }
 
 const mapStateToProps = function(state) {
