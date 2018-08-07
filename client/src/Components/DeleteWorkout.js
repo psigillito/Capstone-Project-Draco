@@ -22,17 +22,10 @@ class DeleteWorkout extends Component {
     }
 
     deleteWorkout() {
-      axios.delete('/workouts', {
-        params: {
-          wid: this.state.workoutId,
-          tpid: this.state.trainingPlanId
-        }
-      })
+      axios.delete('/workouts/' + this.state.workoutId)
           .then(() => { window.location.reload(); })
           .catch(err => console.log(err));
     }
-
-
 
      onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
@@ -69,7 +62,8 @@ class DeleteWorkout extends Component {
                 onChange={this.onChange}
               >
                 <option selected>Choose...</option>
-                { this.props.workouts.data.map( (workout, index) =>
+                { this.props.workouts.data.filter( (workout) => workout.trainingPlan === this.state.trainingPlanId)
+                  .map( (workout, index) => 
                   <option key={index} value={workout._id}>{workout.name}</option>
                   )
                 }
@@ -78,10 +72,10 @@ class DeleteWorkout extends Component {
             }
           </div>
         
-            <div className="modal-footer">
-              <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button"  onClick={() => this.deleteWorkout() } className="btn btn-danger">Delete</button>
-            </div>
+          <div className="modal-footer">
+            <button type="button" onClick={() => this.clearState() } className="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+            <button type="button"  onClick={() => this.deleteWorkout() } className="btn btn-danger btn-sm">Delete Workout</button>
+          </div>
 
         </div>         
       )
