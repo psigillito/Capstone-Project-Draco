@@ -77,7 +77,7 @@ class AddNewWorkout extends Component {
         errorsList.push("Workout Mode Must Be Created");
       }
 
-      if(this.state.daysOfWeek.length < 1){
+      if(this.state.exerciseDays.length < 1){
         errorsList.push("Must Select At Least One Day");
       }
 
@@ -110,22 +110,11 @@ class AddNewWorkout extends Component {
             exercises: this.state.allExercises,
             daysOfWeek: this.state.exerciseDays,
             trainingPlan: this.state.trainingPlan,
+            date: Date.now()
         }
 
         axios.post('/workouts', newWorkout)
-            .then(res => {
-                 axios.patch('/trainingPlans/'+this.state.trainingPlan, {
-                    //id: this.state.trainingPlan,
-                    workoutId: res.data._id
-                },
-                this.setState({
-                  workoutId: res.data._id
-                }))
-                    .then(res => {console.log(res); 
-                      window.location.reload();
-                    })
-                    .catch(err => console.log(err));
-                })
+            .then(res => window.location.reload())
             .catch(err => console.log(err));
       }else{
         console.log("Validation Failed")
