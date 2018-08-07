@@ -75,8 +75,6 @@ class EditExercise extends Component {
         }
       }
 
-      
-
       axios.patch('/workouts/' + this.state.workoutId, {
         exercise: newExercise
       })
@@ -105,17 +103,6 @@ class EditExercise extends Component {
         .catch(err => console.log(err));
     }
 
-    getDay(day) {
-      switch(day) {
-        case 0: return 'Sunday'; break;
-        case 1: return 'Monday'; break;
-        case 2: return 'Tuesday'; break;
-        case 3: return 'Wednesday'; break;
-        case 4: return 'Thursday'; break;
-        case 5: return 'Friday'; break;
-        case 6: return 'Saturday'; break;
-      }      
-    }
 
     render() {
 
@@ -169,50 +156,8 @@ class EditExercise extends Component {
                   <div class="form-row"> 
                     <div class="alert alert-primary" role="alert">
                       Warning! This action will update the exercise for each day of this workout.
-                      Select option below to edit for specific days.
                     </div>
-                    <div class="col">
-                      <div class="form-check">
-                        <input class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="recurringDays"
-                          onChange={this.onChange} 
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Edit for recurring days
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="singleDay"
-                          onChange={this.onChange}  
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Edit for today only
-                        </label>
-                      </div>
-                    </div>
-                    {this.state.editOption !== '' && 
-                    <div class="col">
-                      <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="default"
-                          onChange={this.onChange}  
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Default
-                        </label>
-                      </div>
-                    </div> }
+                    
                   </div>
                   </form>
                   <br />

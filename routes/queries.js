@@ -219,7 +219,7 @@ var _deleteWorkout = function(workoutId, res) {
 		}
 		else {
 			_deleteWorkoutFromTrainingPlan(doc.trainingPlan, workoutId);
-			res.status(200).json(doc);
+			return res.status(200).json(doc);
 		}
 	});
 }
@@ -303,7 +303,7 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 		var indexToRemove = result.workouts.indexOf(workoutId);
 		var newWorkouts = result.workouts;
 		newWorkouts.splice(indexToRemove, 1);
-		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		TrainingPlan.findByIdAndUpdate(trainingPlanId, {workouts: newWorkouts}, (error, doc) => {});
 	});
 }
 
@@ -357,7 +357,7 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
 		var indexToRemove = result.trainingPlans.indexOf(trainingPlanId);
 		var newTPs = result.trainingPlans;
 		newTPs.splice(indexToRemove, 1);
-		_updateUser(userId, {trainingPlans: newTPs}, res);
+		User.findByIdAndUpdate(userId, {trainingPlans: newTPs}, (error, doc) => {});
 	});
 }
 
