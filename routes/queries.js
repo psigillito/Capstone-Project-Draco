@@ -178,7 +178,7 @@ var _createWorkout = function(newWorkout, userId, res) {
         }
         _updateUsersNumWorkouts(userId.valueOf());
         _addWorkoutToTrainingPlan(doc.trainingPlan, doc._id.valueOf());
-        return res.status(200).json(doc);
+        return res.status(201).json(doc);
     });
 }
 
@@ -229,7 +229,7 @@ var _deleteWorkout = function(workoutId, res) {
  * @parameter {string} userId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _updateUsersNumWorkouts = function(userId, res) {
+var _updateUsersNumWorkouts = function(userId) {
 	User.findById(userId, 'numWorkouts', (error, result) => {
 		if (error) {
 			console.log(error);
@@ -285,7 +285,7 @@ var _addWorkoutToTrainingPlan = function(trainingPlanId, workoutId, res) {
 		}
 		var newWorkouts = result.workouts;
 		newWorkouts.push(workoutId);
-		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		TrainingPlan.findByIdAndUpdate(trainingPlanId, {workouts: newWorkouts}, (error, doc) => {});
 	});
 }
 
