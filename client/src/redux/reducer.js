@@ -3,7 +3,7 @@ import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
 import {selectedDayVisible} from '../data/weekData'
 import {userName} from '../data/weekData'
-import {currentTrainingPlans} from '../data/weekData'
+import { currentTrainingPlans } from '../data/weekData'
 import { combineReducers } from 'redux'
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import isEmpty from '../utility/isEmpty';
@@ -199,8 +199,23 @@ function currentRoute(state=-1, action){
     }
 }
 
+
+function monthStatistics(state={}, action){
+    switch(action.type){
+        case 'SET_MONTH_STATISTICS':
+            state = action.monthStatistics
+        case 'UPDATE_MONTH_STATISTICS':
+            state = action.monthStatistics
+        default:
+            return state;
+    }
+}
+
 const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken,
-                                     athleteId, athleteRoutes, selectedRoute, currentRoute})
+                                     athleteId, athleteRoutes, selectedRoute, currentRoute, monthStatistics})
 
 
 export default rootReducer
+
+
+

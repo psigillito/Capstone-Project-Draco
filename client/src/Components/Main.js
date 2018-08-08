@@ -11,6 +11,7 @@ import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
 import {updateCurrentYear} from '../redux/actions'
 import {updateMonth} from '../redux/actions'
+import {updateStatistics} from '../redux/actions'
 import {dayVisible} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
@@ -96,7 +97,7 @@ class Main extends Component{
                                 </div>
                                 <div className = "col-sm"> 
                                 <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
-                                    updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                                    updateCurrentYear={this.props.updateCurrentYear} updateStatistics={this.props.updateStatistics} year={this.props.year} month={this.props.month} className="calendar-controller"/>
                                 </div>
                             </div>
                         </div>

@@ -16,11 +16,13 @@ class CalendarController extends Component {
     handleMonthChange = (month)=> (e) =>{
         this.props.updateDays( month, this.props.year);
         this.props.updateMonth(month);
+        this.props.updateStatistics(month, this.props.year)
     }
 
     handleYearChange = (year) => (e) => {
         this.props.updateCurrentYear(year);
         this.props.updateDays( this.props.month, year);
+        this.props.updateStatistics(this.props.month, year)
     }
 
     render(){

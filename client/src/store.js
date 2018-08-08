@@ -9,6 +9,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 const persistConfig = {
   key: 'root',
   storage: storage,
+  blacklist: ['stravaToken'],
   stateReconciler: autoMergeLevel2 // allows persist to grab newly added parts of state since last load
  };
 

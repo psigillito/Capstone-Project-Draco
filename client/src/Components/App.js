@@ -20,7 +20,8 @@ function mapStateToProps(state){
         athleteId: state.athleteId,
         athleteRoutes: state.athleteRoutes,
         selectedRoute: state.selectedRoute,
-        currentRoute: state.currentRoute
+        currentRoute: state.currentRoute,
+        monthStatistics: state.monthStatistics
     }
 }
 

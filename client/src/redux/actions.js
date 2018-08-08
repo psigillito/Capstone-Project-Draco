@@ -1,4 +1,4 @@
-import {getMonthWeeks} from '../data/weekData'
+import {getMonthWeeks, getWorkoutsForMonth} from '../data/weekData'
 import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import setAuthToken from '../utility/authToken';
@@ -214,5 +214,30 @@ export function setCurrentRoute(route){
         type: 'SET_CURRENT_ROUTE',
         currentRoute: route
     }
+}
 
+export function setStatistics(statistics){
+
+  return{
+      type: 'SET_MONTH_STATISTICS',
+      monthStatistics: statistics
+  }
+}
+
+export function updateStatistics(month, year){
+
+  //get data 
+
+
+  //training plans 
+  var trainingPlans = store.getState().trainingPlans;
+  var workouts = store.getState().workouts;
+
+  var temp = getWorkoutsForMonth(month, year, trainingPlans, workouts)
+
+
+  return{
+    type: 'UPDATE_MONTH_STATISTICS',
+    monthStatistics: temp
+  }
 }
