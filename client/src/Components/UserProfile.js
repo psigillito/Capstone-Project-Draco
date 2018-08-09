@@ -34,6 +34,18 @@ class UserProfile extends Component {
 		            <p className="lead text-center"><b>Name:</b> {this.props.profile.profile.name}</p>
 		            <p className="lead text-center"><b>Email:</b> {this.props.profile.profile.email}</p>
 		            <p className="lead text-center"><b>Username:</b> {this.props.profile.profile.username}</p>
+		            <p className="lead text-center"><b>Training Plans:</b></p>
+		            <table className="table">
+		            	{this.props.trainingPlans.data.map( (plan, index) =>
+							<tr className="lead text-center">{plan.name}</tr>
+		            	)}
+		            </table>
+		            <p className="lead text-center"><b>Workouts:</b></p>
+		            <table className="table">
+		            	{this.props.workouts.data.map( (workout, index) =>
+		            		<tr className="lead text-center">{workout.name} - {workout.mode}</tr>
+		            	)}
+		            </table>
 		            <Link to='/edit-profile' className="btn btn-info btn-block">Edit Profile</Link>
 		            <button onClick={this.deleteClick.bind(this)} className="btn btn-danger btn-block" type="submit">Delete Account</button>
 		          </div>
@@ -55,11 +67,12 @@ UserProfile.propTypes = {
 	profile: PropTypes.object.isRequired,
 	deleteAccount: PropTypes.func.isRequired,
 	logout: PropTypes.func.isRequired,
-	trainingPlans: PropTypes.object.isRequired
+	trainingPlans: PropTypes.object.isRequired,
+	workouts: PropTypes.object.isRequired
 }
 
 const mapStateToProps = function(state) {
-	return {profile: state.profile, trainingPlans: state.trainingPlans}
+	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts}
 };
 
 export default connect(mapStateToProps, { getProfile, deleteAccount, logout })(UserProfile);
