@@ -166,7 +166,10 @@ function stravaToken(state=0, action){
 function athleteId(state=-1, action){
     switch(action.type){
         case 'SET_ATHLETE_ID':
-            state = action.athleteId
+        return {
+            ...state,
+            state: action.athleteId
+        }
         default:
             return state;
     }
