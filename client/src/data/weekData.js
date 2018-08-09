@@ -36,13 +36,6 @@ function getMonthWeeks( month, year){
     return weekArray;
 } 
 
-function getWorkoutsForMonth(month, year){
-
-
-  return ['a'];
-
-}
-
 function getWorkoutsForMonth(month, year, trainingPlans, workouts){
 
   var workoutsByWeek = [];
@@ -80,11 +73,14 @@ function calculateTotals(allWorkoutsThisMonth){
   var totalSets = 0;
   var totalReps = 0;
   var weightTotal = 0;
-
   var runCount = 0;
   var runsList=[];
 
-
+  var totalSets = 0;
+  var totalReps = 0;
+  var totalWeight = 0;
+  var strengthDictionary = {};
+  
 
   for(var i = 0; i < allWorkoutsThisMonth.length; i++){
     for( var j = 0; j < allWorkoutsThisMonth[i].length; j++){
@@ -101,6 +97,13 @@ function calculateTotals(allWorkoutsThisMonth){
         }else if(tempWorkout.mode == 'Weight Training'){
           for(var m = 0; m < tempWorkout.exercises.length; m++){
             var tempLift =tempWorkout.exercises[m];
+            var name = tempLift.name;
+            if(strengthDictionary[name] != null){
+              strengthDictionary[name] = strengthDictionary[name]+1 
+            }else{
+              strengthDictionary[name] = 1;
+            }
+
             if(tempLift.sets){
               totalSets += parseFloat(tempLift.sets);
             }
@@ -110,7 +113,7 @@ function calculateTotals(allWorkoutsThisMonth){
 
             if(tempLift.intensity && tempLift.intensity.weight)
             {
-              weightTotal += tempLift.intensity.weight;
+              totalWeight += tempLift.intensity.weight;
             }
           }
         }
@@ -118,6 +121,7 @@ function calculateTotals(allWorkoutsThisMonth){
     }
   }
 
+  
   var shortestRun = Math.min(...runsList);
   var longestRun = Math.max(...runsList);
 
@@ -131,36 +135,13 @@ function calculateTotals(allWorkoutsThisMonth){
           'averageRun' : averageRun, 
           'shortestRun' : shortestRun, 
           'longestRun' : longestRun,
-          'runCount' : runCount 
+          'runCount' : runCount,
+          'totalSets' : totalSets,
+          'totalReps' : totalReps,
+          'totalWeight' : totalWeight, 
+          'strengthDictionary': strengthDictionary
         }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 var dt = new Date();
