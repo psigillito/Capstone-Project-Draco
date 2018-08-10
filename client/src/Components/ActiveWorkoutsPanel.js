@@ -60,8 +60,8 @@ class ActiveWorkoutsPanel extends Component {
                         <div id="accordion">
                             {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
                                 <div key={index} className="card">  
-                                    <button id="#a" className="btn btn-link card-header" data-toggle="collapse" data-target= {"#collapse"+index} aria-expanded="true" aria-controls="collapseOne">
-                                        {plan.name}
+                                    <button id="#a" className="btn btn-link card-header wrap-text" data-toggle="collapse" data-target= {"#collapse"+index} aria-expanded="true" aria-controls="collapseOne">
+                                        <span className="wrap-text">{plan.name}</span>
                                     </button>
 
                                     <div id={"collapse"+index} className="collapse" aria-labelledby="a" data-parent="#accordion">

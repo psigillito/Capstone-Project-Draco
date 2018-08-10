@@ -18,8 +18,8 @@ class CalendarController extends Component {
     }
 
     handleMonthChange = (month)=> (e) =>{
+        this.props.updateMonth(month)
         this.props.updateDays( month, this.props.year);
-        this.props.updateMonth(month);
         this.props.updateStatistics(month, this.props.year)
     }
 
@@ -36,6 +36,7 @@ class CalendarController extends Component {
       var currentYear = dt.getFullYear();
       this.props.updateCurrentYear(currentYear);
       this.props.updateMonth(currentMonth);
+      this.props.updateDays( currentMonth, currentYear);
       this.props.updateStatistics(currentMonth, currentYear)
     }
 

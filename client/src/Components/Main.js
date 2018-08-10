@@ -88,14 +88,14 @@ class Main extends Component{
                         
                         <div className="container">
                             <div className="row">
-                                <div className = "col-sm">
+                                <div className = "col-sm-3">
                                     <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans} workouts={this.props.workouts}/>
                                 </div>
-                                <div className = "col-sm"> 
+                                <div className = "col-sm-6"> 
                                     <h2>{Months[this.props.month] + ","+this.props.year}</h2>                   
                                     <Calendar trainingPlans={this.props.trainingPlans} user = {this.props.auth.user.name} weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
                                 </div>
-                                <div className = "col-sm"> 
+                                <div className = "col-sm-3"> 
                                 <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
                                     updateCurrentYear={this.props.updateCurrentYear} updateStatistics={this.props.updateStatistics} year={this.props.year} month={this.props.month} className="calendar-controller"/>
                                 </div>

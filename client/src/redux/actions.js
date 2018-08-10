@@ -24,7 +24,7 @@ export function updateMonth(newMonth){
 
 export function updateDays(month, year){
 
-    var newDays = getMonthWeeks(year, month);
+    var newDays = getMonthWeeks(month, year);
 
     return {
         type: 'UPDATE_DAYS',

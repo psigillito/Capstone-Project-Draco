@@ -48,7 +48,12 @@ class DayDetail extends Component {
 
     render(){
 
-      var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise._id)).length;
+      var workoutsCount = false;
+      if(this.props.workouts){
+        workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek !== null 
+                        && exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList !== null 
+                        && this.props.selectedWorkoutList.includes(exercise._id)).length;
+      }
 
       if(workoutsCount){
 

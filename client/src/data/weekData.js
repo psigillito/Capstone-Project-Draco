@@ -1,12 +1,10 @@
 function getMonthWeeks( month, year){
 
     var d = new Date();
-    
     var newDate = new Date(year, month, 1);
     var startWeekDay = newDate.getDay(); 
-
     var numberOfDays = new Date(year, (month+1)%13, 0).getDate();
-
+    console.log("NUMBER OF DAYS: "+numberOfDays)
     var weekArray = []
     
     //date counter 
@@ -15,10 +13,8 @@ function getMonthWeeks( month, year){
     for(let i = 0; i < 6; i++){
        
         var aWeek = [];
-    
         //for eachday
         for(let x = 0; x < 7; x++){
-          
             //if day in previous month
             if(i == 0 && x < startWeekDay){
                 aWeek[x] = 'X';
@@ -32,7 +28,6 @@ function getMonthWeeks( month, year){
         }
         weekArray.push(aWeek)
     }
-
     return weekArray;
 } 
 
@@ -45,7 +40,6 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts){
   for(var i = 0; i < monthWeeks.length; i++){
 
     var thisWeeksWorkouts = [];
-
     //iterate over each day of the week
     for(var t = 0; t < monthWeeks[i].length; t++){
       
@@ -57,14 +51,13 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts){
         var buttonWorkouts = new Array();
         for(var j = 0; j < associatedTrainingPlans.length; j++){
             buttonWorkouts = buttonWorkouts.concat(associatedTrainingPlans[j].workouts)
-            var tempsToFilter = workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(DayOfWeek));
+            var tempsToFilter = workouts.data.filter( (exercise) => exercise.daysOfWeek !== null && exercise.daysOfWeek.includes(DayOfWeek));
             thisWeeksWorkouts.push(tempsToFilter);       
         }
       }
     }
     workoutsByWeek.push(thisWeeksWorkouts); 
   }
-
   return calculateTotals(workoutsByWeek);
 }
 
@@ -75,12 +68,10 @@ function calculateTotals(allWorkoutsThisMonth){
   var weightTotal = 0;
   var runCount = 0;
   var runsList=[];
-
   var totalSets = 0;
   var totalReps = 0;
   var totalWeight = 0;
   var strengthDictionary = {};
-  
 
   for(var i = 0; i < allWorkoutsThisMonth.length; i++){
     for( var j = 0; j < allWorkoutsThisMonth[i].length; j++){
@@ -143,7 +134,6 @@ function calculateTotals(allWorkoutsThisMonth){
         }
 }
 
-
 var dt = new Date();
 const selectedYear = dt.getFullYear();
 const selectedMonth = dt.getMonth();
@@ -155,11 +145,8 @@ const getMonthDays = ( year, month) => {
     getMonthWeeks( year, month)
 }
 
-
 const currentWorkouts = { data: []};
 const currentTrainingPlans = { data: []};
-
-
 
 //export default weekData
 module.exports =    {
