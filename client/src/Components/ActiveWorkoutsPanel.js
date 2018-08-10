@@ -4,6 +4,7 @@ import UpdateTrainingPlan from './UpdateTrainingPlan';
 import AddNewWorkout from './AddNewWorkout';
 import DeleteWorkout from './DeleteWorkout';
 import DeleteTrainingPlan from './DeleteTrainingPlan';
+import EditWorkout from './EditWorkout';
 import axios from 'axios';
 
 class ActiveWorkoutsPanel extends Component {
@@ -80,14 +81,41 @@ class ActiveWorkoutsPanel extends Component {
                             )}
                         </div>
                         <br/>
-                        <button onClick={() => this.createNewTrainingPlan() } type="button" data-toggle="modal" data-target="#trainingPlan" className="btn btn-primary btn-block">Create New Training Plan</button>
-                        <button onClick={() => this.createNewWorkout() } data-toggle="modal" data-target="#addWorkout" type="button" className="btn btn-primary btn-block">Create New Workout</button>
-                        <button data-toggle="modal" data-target="#deleteWorkout" type="button" className="btn btn-primary btn-block">Delete Workout</button>
+                        <button 
+                            onClick={() => this.createNewTrainingPlan() } 
+                            type="button" 
+                            data-toggle="modal" 
+                            data-target="#trainingPlan" 
+                            className="btn btn-primary btn-block">
+                                Create New Training Plan
+                        </button>
+                        <button 
+                            onClick={() => this.createNewWorkout() } 
+                            data-toggle="modal" 
+                            data-target="#addWorkout" 
+                            type="button" 
+                            className="btn btn-primary btn-block">
+                                Create New Workout
+                        </button>
+                        <button 
+                            onClick={() => this.createNewWorkout() } 
+                            data-toggle="modal" 
+                            data-target="#editWorkout" 
+                            type="button" 
+                            className="btn btn-primary btn-block">
+                                Edit Existing Workout
+                        </button>
+                        <button 
+                            data-toggle="modal" 
+                            data-target="#deleteWorkout" 
+                            type="button" 
+                            className="btn btn-primary btn-block">
+                                Delete Workout
+                        </button>
 
                 </div>
 
         {/* EDIT & CREATE TRAINING PLANS */}
-
         <div className="modal" id="trainingPlan" tabIndex="-1" role="dialog">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -104,7 +132,17 @@ class ActiveWorkoutsPanel extends Component {
         
 
         {/* CREATE NEW WORKOUT */}
+        <div className="modal " id="editWorkout" tabIndex="-1" role="dialog">
+          <div className="modal-dialog  modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
+                <EditWorkout />
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* EDIT WORKOUT */}
         <div className="modal " id="addWorkout" tabIndex="-1" role="dialog">
           <div className="modal-dialog  modal-lg" role="document">
             <div className="modal-content">

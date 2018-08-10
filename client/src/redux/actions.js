@@ -132,9 +132,9 @@ export const editUser = (userData, history) => dispatch => {
 }
 
 // delete user account
-export const deleteAccount = () => dispatch => {
+export const deleteAccount = (userId) => dispatch => {
   if(window.confirm('Are you sure you wish to delete your account?')) {
-    axios.post('/users/delete')
+    axios.delete('/users/' + userId)
       .then(res => dispatch({
         type: SET_CURRENT_USER,
         payload: {}
