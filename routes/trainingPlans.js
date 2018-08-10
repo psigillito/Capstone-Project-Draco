@@ -54,7 +54,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 });
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	if (req.body.name || req.body.startDate || req.body.endDate) {
+	if (req.body.name || req.body.startDate || req.body.endDate || typeof req.body.active !== "undefined") {
+		console.log(typeof req.body.active);
 		var updateObj = {};
 		if (req.body.name) {
 			updateObj.name = req.body.name;
@@ -64,6 +65,9 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) =
 		}
 		if (req.body.endDate) {
 			updateObj.endDate = req.body.endDate;
+		}
+		if (typeof req.body.active !== "undefined") {
+			updateObj.active = req.body.active;
 		}
 		queries.updateTrainingPlan(req.params.id, updateObj, res);
 	} else {
