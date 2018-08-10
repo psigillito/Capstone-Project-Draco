@@ -38,7 +38,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	const newTrainingPlan = new TrainingPlan({
 		user: req.user._id.valueOf(),
 		name: req.body.name,
-		workouts: req.body.workouts,
+		workouts: (req.body.workouts) ? req.body.workouts : [],
 		active: true,
 		startDate: (req.body.startDate) ? new Date(req.body.startDate) : null,
 		endDate: (req.body.endDate) ? new Date(req.body.endDate) : null

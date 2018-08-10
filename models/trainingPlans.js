@@ -5,7 +5,6 @@ const trainingPlanSchema = new Schema({
   // A string with a descriptive name of the training plan, must be unique
   name: {
     type: String,
-    unique: true,
     required: true
   },
   // a user as identified by their mongo assigned ID

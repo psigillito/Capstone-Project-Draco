@@ -258,17 +258,15 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
  * This function deletes all of a user's data before the user entity itself is deleted
  * @parameter {string} userId
 **/
-var _deleteAllUserData = function(userId) {
+var _deleteAllUserData = function(userId, res) {
 	User.findById(userId, 'workouts trainingPlans', (error, result) => {
 		if (error) {
 			console.log(error);
 		}
-		result.workouts.forEach(workout => {
-			_deleteWorkout(workout);
-		});
 		result.trainingPlans.forEach(trainingPlan => {
-			_deleteTrainingPlan(trainingPlan);
+			_deleteAllTrainingPlanWorkouts(trainingPlan);
 		});
+		_deleteUser(userId, res);
 	});
 }
 
@@ -366,17 +364,15 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
  * @parameter {string} trainingPlanId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
+var _deleteAllTrainingPlanWorkouts = function(trainingPlanId) {
 	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
 		if (error) {
 			console.log(error);
 		}
 		result.workouts.forEach(workout => {
-			_deleteWorkout(workout);
+			Workout.findByIdAndRemove(workout);
 		});
-		if (typeof res !== "undefined") {
-			res.json({action: "deleted", entityId: userId});
-		}
+		TrainingPlan.findByIdAndRemove(trainingPlanId, (err,doc)=>{});
 	});
 }
 

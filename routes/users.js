@@ -115,13 +115,6 @@ router.post('/login', (req, res) => {
 		});
 });
 
-// delete user account
-router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-	User.findOneAndDelete({ _id: req.user.id })
-		.then(res => console.log('user deleted'))
-		.catch(err => console.log(err));
-});
-
 //set stravaToken on authorization
 router.patch('/setStravaToken', (req, res) =>{
 
@@ -167,8 +160,7 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) =
 });
 
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	queries.deleteAllUserData(req.params.id);
-	queries.deleteUser(req.params.id, res);
+	queries.deleteAllUserData(req.params.id, res);
 });
 
 module.exports = router;
