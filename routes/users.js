@@ -115,13 +115,6 @@ router.post('/login', (req, res) => {
 		});
 });
 
-// delete user account
-router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-	User.findOneAndDelete({ _id: req.user.id })
-		.then(res => console.log('user deleted'))
-		.catch(err => console.log(err));
-});
-
 //set stravaToken on authorization
 router.patch('/setStravaToken', (req, res) =>{
 
@@ -146,16 +139,28 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (r
 });
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	if (req.body) {
+	if (req.body.goals && req.body.logistics) {
 		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
-	} else {
+	} else if (req.body.email || req.body.name || req.body.username) {
+		updateObj = {};
+		if (req.body.email) {
+			updateObj.email = req.body.email;
+		}
+		if (req.body.name) {
+			updateObj.name = req.body.name;
+		}
+		if (req.body.username) {
+			updateObj.username = req.body.username
+		}
+		queries.updateUser(req.params.id, updateObj, res);
+	}
+	else {
 		res.status(400).json({ message: "Request malformed or invalid"});
 	}
 });
 
 router.delete('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	queries.deleteAllUserData(req.params.id);
-	queries.deleteUser(req.params.id, res);
+	queries.deleteAllUserData(req.params.id, res);
 });
 
 module.exports = router;

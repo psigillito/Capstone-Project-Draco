@@ -38,7 +38,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 	const newTrainingPlan = new TrainingPlan({
 		user: req.user._id.valueOf(),
 		name: req.body.name,
-		workouts: req.body.workouts,
+		workouts: (req.body.workouts) ? req.body.workouts : [],
 		active: true,
 		startDate: (req.body.startDate) ? new Date(req.body.startDate) : null,
 		endDate: (req.body.endDate) ? new Date(req.body.endDate) : null
@@ -54,7 +54,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 });
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	if (req.body.name || req.body.startDate || req.body.endDate) {
+	if (req.body.name || req.body.startDate || req.body.endDate || typeof req.body.active !== "undefined") {
 		var updateObj = {};
 		if (req.body.name) {
 			updateObj.name = req.body.name;
@@ -64,6 +64,9 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) =
 		}
 		if (req.body.endDate) {
 			updateObj.endDate = req.body.endDate;
+		}
+		if (typeof req.body.active !== "undefined") {
+			updateObj.active = req.body.active;
 		}
 		queries.updateTrainingPlan(req.params.id, updateObj, res);
 	} else {

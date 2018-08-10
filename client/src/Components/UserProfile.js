@@ -13,7 +13,7 @@ class UserProfile extends Component {
 	}
 
 	deleteClick(e) {
-		this.props.deleteAccount();
+		this.props.deleteAccount(this.props.auth.user.id);
 		this.props.logout();
 	}
 
@@ -68,11 +68,12 @@ UserProfile.propTypes = {
 	deleteAccount: PropTypes.func.isRequired,
 	logout: PropTypes.func.isRequired,
 	trainingPlans: PropTypes.object.isRequired,
-	workouts: PropTypes.object.isRequired
+	workouts: PropTypes.object.isRequired,
+	auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = function(state) {
-	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts}
+	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts, auth: state.auth}
 };
 
 export default connect(mapStateToProps, { getProfile, deleteAccount, logout })(UserProfile);
