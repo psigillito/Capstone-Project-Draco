@@ -142,7 +142,8 @@ class AddNewWorkout extends Component {
 
     //gets athlete id from strava then gets list of routes and saves it to redux state
     getAthleteId(){  
-        fetch('https://www.strava.com/api/v3/athletes/'+this.props.athleteId+'/routes?access_token='+this.props.stravaToken)
+        
+        fetch('https://www.strava.com/api/v3/athletes/'+this.props.athleteId.state+'/routes?access_token='+this.props.stravaToken)
         .then((results) => results.json())
         .then( (results) => {
 

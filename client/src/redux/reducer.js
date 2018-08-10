@@ -128,7 +128,7 @@ function profile(state = profileState, action) {
         case CLEAR_PROFILE:
             return {
                 ...state,
-                profile: null
+                profile: null,
             }
         default: return state;
     }
@@ -221,9 +221,6 @@ const appReducer = combineReducers({days, year, month, dayVisible, auth, errors,
 
 const rootReducer = (state, action) => {
 
-  if(action.type === 'CLEAR_PROFILE'){
-    state = undefined
-  }
   return appReducer(state, action)
 }
 
