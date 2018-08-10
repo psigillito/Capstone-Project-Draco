@@ -146,9 +146,22 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (r
 });
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
-	if (req.body) {
+	if (req.body.goals && req.body.logistics) {
 		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
-	} else {
+	} else if (req.body.email || req.body.name || req.body.username) {
+		updateObj = {};
+		if (req.body.email) {
+			updateObj.email = req.body.email;
+		}
+		if (req.body.name) {
+			updateObj.name = req.body.name;
+		}
+		if (req.body.username) {
+			updateObj.username = req.body.username
+		}
+		queries.updateUser(req.params.id, updateObj, res);
+	}
+	else {
 		res.status(400).json({ message: "Request malformed or invalid"});
 	}
 });
