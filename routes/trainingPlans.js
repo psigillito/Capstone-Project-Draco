@@ -55,7 +55,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
 	if (req.body.name || req.body.startDate || req.body.endDate || typeof req.body.active !== "undefined") {
-		console.log(typeof req.body.active);
 		var updateObj = {};
 		if (req.body.name) {
 			updateObj.name = req.body.name;
