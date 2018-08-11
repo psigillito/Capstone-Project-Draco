@@ -381,9 +381,10 @@ var _deleteAllUserData = function(userId, res) {
 **/
 var _deleteExercise = function(workoutId, exerciseName, res) {
 	Workout.update({"_id": workoutId}, {"$pull" : { "exercises" : {"name": exerciseName }}}, (err, data) => {
-        console.log(err, data);
         if(!err) {
         	res.json({ success: true });
+        } else {
+        	console.log(err);
         }
     });
 }

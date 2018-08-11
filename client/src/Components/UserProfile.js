@@ -36,15 +36,19 @@ class UserProfile extends Component {
 		            <p className="lead text-center"><b>Username:</b> {this.props.profile.profile.username}</p>
 		            <p className="lead text-center"><b>Training Plans:</b></p>
 		            <table className="table">
-		            	{this.props.trainingPlans.data.map( (plan, index) =>
-							<tr className="lead text-center">{plan.name}</tr>
-		            	)}
+		            	<tbody>
+			            	{this.props.trainingPlans.data.map( (plan, index) =>
+								<tr key={index} className="lead text-center">{plan.name}</tr>
+			            	)}
+		            	</tbody>
 		            </table>
 		            <p className="lead text-center"><b>Workouts:</b></p>
 		            <table className="table">
-		            	{this.props.workouts.data.map( (workout, index) =>
-		            		<tr className="lead text-center">{workout.name} - {workout.mode}</tr>
-		            	)}
+		            	<tbody>
+			            	{this.props.workouts.data.map( (workout, index) =>
+			            		<tr key={index} className="lead text-center">{workout.name} - {workout.mode}</tr>
+			            	)}
+		            	</tbody>
 		            </table>
 		            <Link to='/edit-profile' className="btn btn-info btn-block">Edit Profile</Link>
 		            <button onClick={this.deleteClick.bind(this)} className="btn btn-danger btn-block" type="submit">Delete Account</button>
