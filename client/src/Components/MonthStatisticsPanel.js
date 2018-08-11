@@ -25,7 +25,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestRun}</li>
                 <li><b>Average Distance:</b> {this.props.monthStatistics.averageRun}</li>
                 <li><b>Number of Runs:</b> {this.props.monthStatistics.runCount}</li>
-                <li><b>Calories:</b>{this.props.monthStatistics.cardioCalories}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.cardioCalories}</li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -34,7 +34,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Total Reps:</b> {this.props.monthStatistics.totalReps} </li>
                 <li><b>Total Sets:</b> {this.props.monthStatistics.totalSets} </li>
                 <li><b>Total Weight:</b> {this.props.monthStatistics.totalWeight}</li>
-                <li><b>Calories:</b>{this.props.monthStatistics.strengthCalories}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.strengthCalories}</li>
                 <br/>                        
                 <li><b>Exercise Frequency:</b></li>
                 { myArray.map( (exercise, index)=> <li><b>{exercise[0]}: </b>{exercise[1]} </li>) }
