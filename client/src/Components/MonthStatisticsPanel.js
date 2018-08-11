@@ -16,8 +16,8 @@ class MonthStatisticsPanel extends Component {
       return(
         <div>
           <h2 className="display-4 mb-4">Stats for {Months[this.props.month] + " " + this.props.year}</h2>      
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item">
               <h5>Cardio: </h5>
               <ul>
                 <li><b>Total Miles:</b> {this.props.monthStatistics.distanceTotal}</li>
@@ -27,7 +27,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Number of Runs:</b> {this.props.monthStatistics.runCount}</li>
               </ul>
             </li>
-            <li class="list-group-item">
+            <li className="list-group-item">
               <h5>Strength: </h5>
               <ul>
                 <li><b>Total Reps:</b> {this.props.monthStatistics.totalReps} </li>
@@ -35,7 +35,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Total Weight:</b> {this.props.monthStatistics.totalWeight}</li>
                 <br/>                        
                 <li><b>Exercise Frequency:</b></li>
-                { myArray.map( (exercise, index)=> <li><b>{exercise[0]}: </b>{exercise[1]} </li>) }
+                { myArray.map( (exercise, index)=> <li key={index}><b>{exercise[0]}: </b>{exercise[1]} </li>) }
               </ul>
             </li>
           </ul>
