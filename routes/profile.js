@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const queries = require('./queries');
 
 // Import user model
 const User = require('../models/users');
@@ -18,8 +19,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 });
 
 // edit user profile
-router.post('/edit-profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.patch('/edit-profile', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const errors = {};
+	let updateObj = {};
 
 	// check if email or username already exists if changed
 	if(req.body) {
@@ -27,9 +29,7 @@ router.post('/edit-profile', passport.authenticate('jwt', { session: false }), (
 		const email = req.body.email;
 		const username = req.body.username;
 
-		console.log(JSON.stringify(req.body));
-
-		if(email != req.user.email) {
+		if(email !== req.user.email) {
 			User.findOne({ email: email })
 				.then(user => {
 					if(user) {
@@ -40,7 +40,7 @@ router.post('/edit-profile', passport.authenticate('jwt', { session: false }), (
 				.catch(err => console.log(err));
 		} else {
 			// check username
-			if(username != req.user.username) {
+			if(username !== req.user.username) {
 				User.findOne({ username: username })
 					.then(user => {
 						if(user) {
@@ -50,18 +50,15 @@ router.post('/edit-profile', passport.authenticate('jwt', { session: false }), (
 					})
 			}
 		}
-	}
 
-	// check for errors
-	if(Object.keys(errors).length === 0) {
-		User.findOneAndUpdate({ "_id": req.user.id }, {
-			$set: { "name": req.body.name,
-					"username": req.body.username,
-					"email": req.body.email }
-		})
-			.then(result => { res.redirect('/profile'); })
-			.catch(err => console.log(err));
-	}
+	} 
+	
+	updateObj.name = req.body.name;
+	updateObj.email = req.body.email;
+	updateObj.username = req.body.username;
+
+	queries.updateUserToken(req.user.id, updateObj, res);
+			
 });
 
 module.exports = router;

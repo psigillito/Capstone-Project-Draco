@@ -2,6 +2,10 @@ const User = require('../models/users');
 const Workout = require('../models/workouts');
 const TrainingPlan = require('../models/trainingPlans');
 var addWeeks = require('date-fns/add_weeks');
+const jwt = require('jsonwebtoken');
+
+// Import key
+const keys = require('../config/keys');
 
 /*
  * This function gets a user object by specified userId
@@ -382,9 +386,10 @@ var _deleteAllUserData = function(userId, res) {
 **/
 var _deleteExercise = function(workoutId, exerciseName, res) {
 	Workout.update({"_id": workoutId}, {"$pull" : { "exercises" : {"name": exerciseName }}}, (err, data) => {
-        console.log(err, data);
         if(!err) {
         	res.json({ success: true });
+        } else {
+        	console.log(err);
         }
     });
 }
@@ -514,6 +519,18 @@ var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
 	});
 }
 
+var _updateUserToken = function(userId, updateObj, response) {
+	User.findByIdAndUpdate(userId, updateObj, {new:true}, (err, res) => {
+		if(!err) {
+			// sign the token
+			const payload = {id: userId, name: updateObj.name};
+			jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 }, (err, token) => {
+				response.json({ success: true, token: "Bearer " + token });
+			})
+		}
+	});
+}
+
 queries = {
 	getUser: _getUser,
 	createUser: _createUser,
@@ -536,7 +553,8 @@ queries = {
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
 	deleteExercise: _deleteExercise,
 	createRecommendedTrainingPlan: _createRecommendedTrainingPlan,
-	createRecommendedWorkouts: _createRecommendedWorkouts
+	createRecommendedWorkouts: _createRecommendedWorkouts,
+	updateUserToken: _updateUserToken
 }
 
 module.exports = queries;

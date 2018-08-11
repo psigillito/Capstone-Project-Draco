@@ -24,7 +24,6 @@ class AddNewWorkout extends Component {
           selectedDistance: 10,
           allExercises: [],
           distanceUnit: 'mi',
-          exerciseDays: [],
           createExercise: {},
           unit: 'lbs'
         }
@@ -39,32 +38,31 @@ class AddNewWorkout extends Component {
 
     //Adds exercise to the allExercises array and clears component state elements for next exercise 
     saveExercise(e) {
-
       e.preventDefault();
 
-        createdExercise['name'] = this.state.exerciseName;
-        createdExercise['sets'] = this.state.sets;
-        createdExercise['reps'] = this.state.reps;
-        createdExercise['weight'] = this.state.weight;
-        createdExercise['unit'] = this.state.unit;
-        createdExercise['distanceUnit'] = this.state.distanceUnit;
-        createdExercise['distance'] = this.state.distance;
-        createdExercise['stravaRoute'] = this.props.selectedRoute;
+      createdExercise['name'] = this.state.exerciseName;
+      createdExercise['sets'] = this.state.sets;
+      createdExercise['reps'] = this.state.reps;
+      createdExercise['weight'] = this.state.weight;
+      createdExercise['unit'] = this.state.unit;
+      createdExercise['distanceUnit'] = this.state.distanceUnit;
+      createdExercise['distance'] = this.state.distance;
+      createdExercise['stravaRoute'] = this.props.selectedRoute;
 
-        this.state.allExercises.push(createdExercise);
-        createdExercise = {};
+      this.state.allExercises.push(createdExercise);
+      createdExercise = {};
 
-        this.setState({
-          exerciseName:'',
-          sets:'',
-          reps:'',
-          weight:'',
-          duration:'',
-          distance:'',
-        })
-
+      this.setState({
+        exerciseName:'',
+        sets:'',
+        reps:'',
+        weight:'',
+        duration:'',
+        distance:'',
+      })
     }
 
+    //validation for inputs not inside a form
     validateInput(){
 
       let errorsList = []
@@ -77,7 +75,7 @@ class AddNewWorkout extends Component {
         errorsList.push("Workout Mode Must Be Created");
       }
 
-      if(this.state.exerciseDays.length < 1){
+      if(this.state.daysOfWeek.length < 1){
         errorsList.push("Must Select At Least One Day");
       }
 
@@ -103,12 +101,11 @@ class AddNewWorkout extends Component {
     submitWorkout() {
 
       if(this.validateInput()){
-
         const newWorkout = {
             name: this.state.name,
             mode: this.state.mode,
             exercises: this.state.allExercises,
-            daysOfWeek: this.state.exerciseDays,
+            daysOfWeek: this.state.daysOfWeek,
             trainingPlan: this.state.trainingPlan,
             date: Date.now()
         }
@@ -116,27 +113,28 @@ class AddNewWorkout extends Component {
         axios.post('/workouts', newWorkout)
             .then(res => window.location.reload())
             .catch(err => console.log(err));
-      }else{
+      }else
+      {
         console.log("Validation Failed")
       }
     }
 
     //sets available fields for running or weight training
     onChange(e) {
-        this.setState({ [e.target.name]: e.target.value })
+      this.setState({ [e.target.name]: e.target.value })
 
-        if(e.target.type == 'radio'){
-          this.setState({ allExercises: [] })
-        }
+      if(e.target.type == 'radio'){
+        this.setState({ allExercises: [] })
+      }
     }
 
     //Updates week days for workout 
     handleDayChange(e) {
-        if(this.state.exerciseDays.includes(e.target.value)) {
-            const index = this.state.exerciseDays.indexOf(e.target.value);
-            this.state.exerciseDays.splice(index, 1);
+        if(this.state.daysOfWeek.includes(parseInt(e.target.value))) {
+            const index = this.state.daysOfWeek.indexOf(e.target.value);
+            this.state.daysOfWeek.splice(index, 1);
         } else {
-            this.state.exerciseDays.push(parseInt(e.target.value));
+            this.state.daysOfWeek.push(parseInt(e.target.value));
         }
     }
 
@@ -146,7 +144,6 @@ class AddNewWorkout extends Component {
         fetch('https://www.strava.com/api/v3/athletes/'+this.props.athleteId.state+'/routes?access_token='+this.props.stravaToken)
         .then((results) => results.json())
         .then( (results) => {
-
           //save route names and ids into store
           var athleteRoutes =[];
           for( var i=0; i < results.length; i++){
@@ -162,7 +159,6 @@ class AddNewWorkout extends Component {
       
       //if closing the strava options, set currentRoute state to -1 and selectedRoute to -1
       if(this.state.stravaChecked){
-
         this.props.setSelectedRoute(-1);
         this.props.setCurrentRoute(-1);
         this.props.setAthleteRoutes(-1);
@@ -235,14 +231,12 @@ class AddNewWorkout extends Component {
                               <GoogleMap selectedPolyLine={this.props.currentRoute.map.polyline}/>
                             </div>
                           </div>
-                        }
-                        
+                        }          
                       </div>
                     </div>      
       }
 
       return(
-        //MODAL
         <div>
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">Create New Workout</h5>
@@ -251,55 +245,49 @@ class AddNewWorkout extends Component {
             </button>
           </div>
 
-          {/*MODAL BODY*/}
           <div className="modal-body ">
-          <div ref="validationSummary"></div>
+            <div ref="validationSummary"></div>
 
-            {/*FORM 1 WORKOUT NAME, TYPE, DAYS, TRAINING PLAN*/}
-              <label htmlFor='name'><b>Workout Name:</b></label>
-              <div className="form-group">
-                <input type="text" ref="workoutName" className="form-control form-control-lg" placeholder="Workout Name" name="name"value={this.state.name} 
-                      onChange={this.onChange} required/>
+            <label htmlFor='name'><b>Workout Name:</b></label>
+            <div className="form-group">
+              <input type="text" ref="workoutName" className="form-control form-control-lg" placeholder="Workout Name" name="name"value={this.state.name} 
+                    onChange={this.onChange} required/>
+            </div>
+
+            <label htmlFor='mode'><b>Workout Type:</b></label>
+            <div className="form-group">
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" type="radio" name="mode" id="weightTraining" value='Weight Training'
+                       onChange={this.onChange}/>
+                <label className="form-check-label" htmlFor="inlineRadio1">Weight Training</label>
               </div>
 
-              <label htmlFor='mode'><b>Workout Type:</b></label>
-              <div className="form-group">
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="mode" id="weightTraining" value='Weight Training'
-                          onChange={this.onChange}/>
-                    <label className="form-check-label" htmlFor="inlineRadio1">Weight Training</label>
-                </div>
-
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="mode" id="running" value="Running"
-                          onChange={this.onChange}/>
-                    <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
-                </div>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" type="radio" name="mode" id="running" value="Running"
+                      onChange={this.onChange}/>
+                <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
               </div>
+            </div>
 
-              <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
-              <div className="form-group">
-                {weekDays.map( (weekDay, index) => 
-                  <div key={index} className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value={index}/>
-                    <label className="form-check-label" htmlFor="inlineCheckbox1">{weekDay}</label>
-                  </div>
+            <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
+            <div className="form-group">
+              {weekDays.map( (weekDay, index) => 
+                <div key={index} className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" name="daysOfWeek" onChange={this.handleDayChange} value={index}/>
+                  <label className="form-check-label" htmlFor="inlineCheckbox1">{weekDay}</label>
+                </div>
+              )}
+            </div>
+
+            <label htmlFor='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
+            <div className="form-group">
+              <select id="inputState" name="trainingPlan" className="form-control" onChange={this.onChange}>
+                <option>...</option>
+                {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
+                  <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
                 )}
-              </div>
-
-              <label htmlFor='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
-              <div className="form-group">
-                
-                <select id="inputState" name="trainingPlan" className="form-control" onChange={this.onChange}>
-                    <option>...</option>
-                    {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
-                        <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
-                    )}
-                </select>
-              
-              </div>
-            {/*END FORM 1 WORKOUT NAME, TYPE, DAYS, TRAINING PLAN*/}
-           
+              </select>  
+            </div>
 
             {/* Exercises - Weight training */}
             {this.state.mode === 'Weight Training' && this.state.mode !== '' &&
@@ -307,12 +295,11 @@ class AddNewWorkout extends Component {
                 <div className="modal-header">
                   <h5>Add Exercise</h5>
                 </div>
-                <div className="form-group">
-                </div>
+                <div className="form-group"></div>
                 <form onSubmit={(e) => this.saveExercise(e) } className="form-group">
                   <div className="form-group">
                     <input type="text" className="form-control form-control-lg" placeholder="Exercise Name" name="exerciseName"
-                          value={this.state.exerciseName} onChange={this.onChange} required/>
+                           value={this.state.exerciseName} onChange={this.onChange} required/>
                     <br/>
                     <div className="form-row">
                       <div className="col">

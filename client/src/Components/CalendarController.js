@@ -52,9 +52,9 @@ class CalendarController extends Component {
                             placeHolderYears.map( (item, index) => 
                               {
                                 if(item == this.props.year){
-                                  return <li  className="selected-calendar-controller" onClick= {this.handleYearChange(item)}>{item}</li>                   
+                                  return <li key={index}  className="selected-calendar-controller" onClick= {this.handleYearChange(item)}>{item}</li>                   
                                 }else{
-                                  return <li  onClick= {this.handleYearChange(item)}>{item}</li>   
+                                  return <li key={index} onClick= {this.handleYearChange(item)}>{item}</li>   
                                 }
                               
                               })

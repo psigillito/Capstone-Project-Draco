@@ -112,11 +112,11 @@ export const logout = () => dispatch => {
 }
 
 // get the current user profile
-export const getProfile = () => dispatch => {
-  axios.get('/profile')
+export const getProfile = (userId) => dispatch => {
+  axios.get('/users/' + userId)
     .then(res => dispatch({
       type: GET_PROFILE,
-      payload: res.data,
+      payload: res.data
     }))
     .catch(err => dispatch({
       type: GET_PROFILE,
@@ -125,10 +125,23 @@ export const getProfile = () => dispatch => {
 }
 
 // edit user account
-export const editUser = (userData, history) => dispatch => {
-    axios.post('/profile/edit-profile', userData)
-        .then(res => history.push('/profile'))
-        .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data}));
+export const editUser = (userData) => dispatch => {
+    axios.patch('/profile/edit-profile', userData)
+        .then(res => {
+          const {token} = res.data;
+          localStorage.setItem('jwtToken', token);
+          // set token to authorization header
+          setAuthToken(token);
+          // decode the token for user data
+          const data = jwt_decode(token);
+          // set the current user
+          dispatch(setCurrentUser(data));
+           
+          window.confirm('Settings saved!');
+          window.location.reload();
+          
+        })
+        .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 }
 
 // delete user account
@@ -188,7 +201,6 @@ export function updateStravaToken(newToken){
 }
 
 export function setAthleteId(newId){
-    console.log("NEW ID IS: "+ newId)
     return {
         type: 'SET_ATHLETE_ID',
         athleteId: newId

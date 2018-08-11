@@ -82,7 +82,7 @@ function auth(state = initialState, action) {
 function errors(state = {}, action) {
     switch(action.type) {
       case GET_ERRORS: return action.payload;
-      default: return state;
+      default: return {};
     }
 }
 

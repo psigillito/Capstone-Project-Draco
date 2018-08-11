@@ -63,14 +63,14 @@ class EditWorkout extends Component {
 		        </div>
 		        <br />
 		    	{/* select workout */}
-		        <label for="workout"><b>Select Workout:</b></label>
+		        <label htmlFor="workout"><b>Select Workout:</b></label>
 				<select id="inputState" name="workoutId" 
 		        	className="form-control" 
 		            value={this.state.workoutId ? this.state.workoutId : ''} 
 		            onChange={this.onChange}>
 		            	<option selected>Choose...</option>
 	            		{this.props.workouts.data.map( (workout, index) =>
-							<option value={workout._id}>{workout.name} - {workout.mode}</option>
+							<option key={index} value={workout._id}>{workout.name} - {workout.mode}</option>
 	            		)}
 		        </select>
 		        <br />
