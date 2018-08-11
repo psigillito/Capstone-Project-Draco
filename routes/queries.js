@@ -255,22 +255,6 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 }
 
 /*
- * This function deletes all of a user's data before the user entity itself is deleted
- * @parameter {string} userId
-**/
-var _deleteAllUserData = function(userId, res) {
-	User.findById(userId, 'workouts trainingPlans', (error, result) => {
-		if (error) {
-			console.log(error);
-		}
-		result.trainingPlans.forEach(trainingPlan => {
-			_deleteAllTrainingPlanWorkouts(trainingPlan);
-		});
-		_deleteUser(userId, res);
-	});
-}
-
-/*
  * This function adds a reference to a workout to a specified training plan
  * @parameter {string} trainingPlanId
  * @parameter {string} workoutId
@@ -364,15 +348,28 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
  * @parameter {string} trainingPlanId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _deleteAllTrainingPlanWorkouts = function(trainingPlanId) {
-	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
+var _deleteAllUserData = function(userId, res) {
+	Workout.find({user: userId}, (error, result) => {
 		if (error) {
 			console.log(error);
 		}
-		result.workouts.forEach(workout => {
-			Workout.findByIdAndRemove(workout);
+		result.forEach(workout => {
+			Workout.findByIdAndRemove(workout._id.valueOf(), (err, doc) => {});
 		});
-		TrainingPlan.findByIdAndRemove(trainingPlanId, (err,doc)=>{});
+	});
+	TrainingPlan.find({user: userId}, (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		result.forEach(trainingPlan => {
+			TrainingPlan.findByIdAndRemove(trainingPlan._id.valueOf(), (err, doc) => {});
+		});
+	});
+	User.findById(userId, (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		_deleteUser(userId, res);
 	});
 }
 
@@ -408,11 +405,9 @@ queries = {
 	updateUsersNumWorkouts: _updateUsersNumWorkouts,
 	updateUsersNumTrainingPlans: _updateUsersNumTrainingPlans,
 	addWorkoutToTrainingPlan: _addWorkoutToTrainingPlan,
-	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan,
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
 	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
-	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts,
 	deleteExercise: _deleteExercise
 }
 
