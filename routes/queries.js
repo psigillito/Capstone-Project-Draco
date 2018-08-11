@@ -1,6 +1,10 @@
 const User = require('../models/users');
 const Workout = require('../models/workouts');
 const TrainingPlan = require('../models/trainingPlans');
+const jwt = require('jsonwebtoken');
+
+// Import key
+const keys = require('../config/keys');
 
 /*
  * This function gets a user object by specified userId
@@ -389,6 +393,18 @@ var _deleteExercise = function(workoutId, exerciseName, res) {
     });
 }
 
+var _updateUserToken = function(userId, updateObj, response) {
+	User.findByIdAndUpdate(userId, updateObj, {new:true}, (err, res) => {
+		if(!err) {
+			// sign the token
+			const payload = {id: userId, name: updateObj.name};
+			jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 }, (err, token) => {
+				response.json({ success: true, token: "Bearer " + token });
+			})
+		}
+	});
+}
+
 queries = {
 	getUser: _getUser,
 	createUser: _createUser,
@@ -409,7 +425,8 @@ queries = {
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
 	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
-	deleteExercise: _deleteExercise
+	deleteExercise: _deleteExercise,
+	updateUserToken: _updateUserToken
 }
 
 module.exports = queries;
