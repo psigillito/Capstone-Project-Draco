@@ -200,16 +200,16 @@ class Goals extends React.Component {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        console.error(error);
       });
-    //Navigate Home
+    // Navigate Home
     this.setState({ toHome: true });
     event.preventDefault();
   }
 
   render() {
     if (this.state.toHome === true) {
-      return (<Redirect to='/' />);
+      return (<Redirect to='/calendar' />);
     }
     const daysPerWeek = [1, 2, 3, 4, 5, 6, 7].map((day) => <option value={day}>{day}</option>);
     const jsxResponses = goalsJCR.goals.responses.map((response) => <option value={response.value}>{response.text}</option>);

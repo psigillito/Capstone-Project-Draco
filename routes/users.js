@@ -140,6 +140,7 @@ router.get('/:id', passport.authenticate('jwt', {session:false}), lookUpUser, (r
 
 router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) => {
 	if (req.body.goals && req.body.logistics) {
+		queries.createRecommendedTrainingPlan(req.body.goals, req.body.logistics, req.user._id.valueOf());
 		queries.updateUser(req.params.id, {goals: req.body.goals, logistics: req.body.logistics}, res);
 	} else if (req.body.email || req.body.name || req.body.username) {
 		updateObj = {};

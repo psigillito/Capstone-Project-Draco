@@ -27,6 +27,9 @@ const trainingPlanSchema = new Schema({
   // boolean representing whether plan is active or not
   active: {
     type: Boolean
+  },
+  logistics: {
+    type: Object
   }
 });
 
