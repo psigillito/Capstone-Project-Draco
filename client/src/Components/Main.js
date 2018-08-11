@@ -1,18 +1,12 @@
 import React, {Component} from 'react'
-import Day from './Day'
 import Calendar from './Calendar'
 import NavBar from './NavBar'
-import BootStrap from 'bootstrap'
 import {Route, Switch} from 'react-router-dom'
-
 import About from './About'
 import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
-import {updateCurrentYear} from '../redux/actions'
-import {updateMonth} from '../redux/actions'
-import {updateStatistics} from '../redux/actions'
-import {dayVisible} from '../redux/actions'
+import {updateCurrentYear, updateMonth, updateStatistics, dayVisible, logout, setCurrentUser} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
 import DayDetail from './DayDetail'
@@ -24,7 +18,6 @@ import EditProfile from './EditProfile';
 import * as goalsJCR from '../copy/goals.json'
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utility/authToken';
-import { setCurrentUser } from '../redux/actions';
 import {store} from '../store';
 import { connect } from 'react-redux';
 import reducer from '../redux/reducer';
@@ -33,8 +26,6 @@ import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
 import TodaysExercisePanel from './TodaysExercisePanel';
 import MonthStatisticsPanel from './MonthStatisticsPanel';
-import { logout } from '../redux/actions';
-
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -58,9 +49,7 @@ if(localStorage.jwtToken) {
         //redirect to login page
         window.location.href = '/login';
     }
-
 }
-
 
 class Main extends Component{
     constructor(props) {

@@ -51,7 +51,6 @@ class ActiveWorkoutsPanel extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    
     render(){
         return(
             <div>
@@ -174,13 +173,9 @@ class ActiveWorkoutsPanel extends Component {
             </div>
           </div>
         </div>
-
-
-
-        </div>
-
-        )
-    }
+      </div>
+    )
+  }
 }
 
 export default ActiveWorkoutsPanel

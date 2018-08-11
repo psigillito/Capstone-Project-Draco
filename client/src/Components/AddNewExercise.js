@@ -70,7 +70,6 @@ class AddNewExercise extends Component {
             }
         })
         .catch(err => console.log(err)); 
-
     }
 
     render() {
@@ -111,89 +110,88 @@ class AddNewExercise extends Component {
 
               <div className="form-check form-check-inline">
                 <input className="form-check-input" 
-                type="radio" 
-                name="mode" 
-                id="running" 
-                value="Running"
-                onChange={this.onChange}
-              />
-              <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
+                  type="radio" 
+                  name="mode" 
+                  id="running" 
+                  value="Running"
+                  onChange={this.onChange}
+                />
+                <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
+              </div>
             </div>
-          </div>
                  
-          {/* Exercises - Weight training */}
-          {this.state.mode === 'Weight Training' && this.state.mode != '' &&
-            <div>
-              <div className="modal-header">
-                <h5>Add New Exercise</h5>
-              </div>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  className="form-control form-control-lg"
-                  placeholder="Exercise Name" 
-                  name="exerciseName" 
-                  value={this.state.exerciseName}
-                  onChange={this.onChange}
-                />
-              </div>
-              <form>
-                <div className="form-row">
-                  <div className="col">
-                    <input type="number" className="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
-                  </div>
-                  <div className="col">
-                    <input type="number" className="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
-                  </div>
-                  <div className="col">
-                    <input type="number" className="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
-                  </div>
-                  <div className="col">
-                   <select id="inputState" name="unit" className="form-control" onChange={this.onChange}>
-                      <option name="unit" value="lbs">Lbs</option>
-                      <option name="unit" value="kg">Kg</option>
-                   </select>
-                  </div>
+            {/* Exercises - Weight training */}
+            {this.state.mode === 'Weight Training' && this.state.mode != '' &&
+              <div>
+                <div className="modal-header">
+                  <h5>Add New Exercise</h5>
                 </div>
-              </form>
-              <br />
-            </div>
-          }
-
-          {/* Exercises - Running */}
-          {this.state.mode === 'Running' && this.state.mode != '' && 
-            <div>
-              <div className="modal-header">
-                <h5>Add New Exercise</h5>
-              </div>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  className="form-control form-control-lg"
-                  placeholder="Exercise Name" 
-                  name="exerciseName" 
-                  value={this.state.exerciseName}
-                  onChange={this.onChange}
-                />
+                <div className="form-group">
+                  <input 
+                    type="text" 
+                    className="form-control form-control-lg"
+                    placeholder="Exercise Name" 
+                    name="exerciseName" 
+                    value={this.state.exerciseName}
+                    onChange={this.onChange}
+                  />
                 </div>
-                <label htmlFor='duration'><b>Duration:</b></label>
-                  <form>
-                    <div className="form-row">
-                      <div className="col">
-                        <input type="text" className="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
-                      </div>
-                      <div className="col">
-                       <select id="inputState" name="distanceUnit" className="form-control" onChange={this.onChange}>
-                          <option name="distanceUnit" value="mi">Mi</option>
-                          <option name="distanceUnit" value="km">Km</option>
-                       </select>
-                      </div>
+                <form>
+                  <div className="form-row">
+                    <div className="col">
+                      <input type="number" className="form-control" name="sets" value={this.state.sets} onChange={this.onChange} placeholder="Sets"/>
                     </div>
-                  </form>
-                  <br />     
-            </div>
-          }
+                    <div className="col">
+                      <input type="number" className="form-control" name="reps" value={this.state.reps} onChange={this.onChange} placeholder="Reps"/>
+                    </div>
+                    <div className="col">
+                      <input type="number" className="form-control" name="weight" value={this.state.weight} onChange={this.onChange} placeholder="Weight"/>
+                    </div>
+                    <div className="col">
+                    <select id="inputState" name="unit" className="form-control" onChange={this.onChange}>
+                        <option name="unit" value="lbs">Lbs</option>
+                        <option name="unit" value="kg">Kg</option>
+                    </select>
+                    </div>
+                  </div>
+                </form>
+                <br/>
+              </div>
+            }
 
+            {/* Exercises - Running */}
+            {this.state.mode === 'Running' && this.state.mode != '' && 
+              <div>
+                <div className="modal-header">
+                  <h5>Add New Exercise</h5>
+                </div>
+                <div className="form-group">
+                  <input 
+                    type="text" 
+                    className="form-control form-control-lg"
+                    placeholder="Exercise Name" 
+                    name="exerciseName" 
+                    value={this.state.exerciseName}
+                    onChange={this.onChange}
+                  />
+                  </div>
+                  <label htmlFor='duration'><b>Duration:</b></label>
+                    <form>
+                      <div className="form-row">
+                        <div className="col">
+                          <input type="text" className="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance"/>
+                        </div>
+                        <div className="col">
+                        <select id="inputState" name="distanceUnit" className="form-control" onChange={this.onChange}>
+                            <option name="distanceUnit" value="mi">Mi</option>
+                            <option name="distanceUnit" value="km">Km</option>
+                        </select>
+                        </div>
+                      </div>
+                    </form>
+                    <br />     
+              </div>
+            }
           <div className="modal-footer">
             <button type="button" onClick={ () => this.clearState() }className="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
             <button type="button" onClick={ () => this.submitExercise() } className="btn btn-success btn-sm">Save exercise</button>
@@ -213,6 +211,6 @@ const mapStateToProps = function(state) {
              trainingPlans:state.trainingPlans,
              selectedWorkoutList:state.selectedWorkoutList
             }
-  }
+}
 
 export default connect(mapStateToProps)(AddNewExercise);

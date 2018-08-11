@@ -41,7 +41,7 @@ class Calendar extends Component{
                 _id: this.props.auth.user.id
             }
         }).then(res => {
-            if(res.data.stravaToken){
+            if(res.data && res.data.stravaToken){
                 this.props.updateStravaToken(res.data.stravaToken);
             }
         }).then( res =>{

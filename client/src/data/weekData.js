@@ -4,7 +4,6 @@ function getMonthWeeks( month, year){
     var newDate = new Date(year, month, 1);
     var startWeekDay = newDate.getDay(); 
     var numberOfDays = new Date(year, (month+1)%13, 0).getDate();
-    console.log("NUMBER OF DAYS: "+numberOfDays)
     var weekArray = []
     
     //date counter 
@@ -142,23 +141,23 @@ const weekData = getMonthWeeks(selectedYear, selectedMonth);
 const selectedDayVisible = true;
 const userName = '';
 const getMonthDays = ( year, month) => {
-    getMonthWeeks( year, month)
+  getMonthWeeks( year, month)
 }
 
 const currentWorkouts = { data: []};
 const currentTrainingPlans = { data: []};
 
 //export default weekData
-module.exports =    {
-    weekData,
-    selectedYear,
-    selectedMonth,
-    getMonthWeeks,
-    selectedDayVisible,
-    userName,
-    currentTrainingPlans,
-    currentDay,
-    currentWorkouts,
-    getWorkoutsForMonth,
-    getMonthWeeks
+module.exports =  {
+  weekData,
+  selectedYear,
+  selectedMonth,
+  getMonthWeeks,
+  selectedDayVisible,
+  userName,
+  currentTrainingPlans,
+  currentDay,
+  currentWorkouts,
+  getWorkoutsForMonth,
+  getMonthWeeks
 }
