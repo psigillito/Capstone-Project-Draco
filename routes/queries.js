@@ -396,9 +396,9 @@ var _deleteExercise = function(workoutId, exerciseName, res) {
 
 /*
 * This function creates a recommended trainingPlan
-* @parameter {string} workoutId
-* @parameter {string} exerciseName
-* @parameter {object} res, the response object from the route
+* @parameter {object} goals, the goals object that the user creates in the goals quiz UI
+* @parameter {object} logistics, the logistics object that the user creates in the goals quiz UI
+* @parameter {string} userId, the string indentifier for the user to create a recommended training plan for
 **/
 var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
 	const today = new Date();
@@ -432,9 +432,8 @@ var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
 
 /*
 * This function parses the hoursPerDay object in logistics to determine which places to place workouts on
-* @parameter {string} workoutId
-* @parameter {string} exerciseName
-* @parameter {object} res, the response object from the route
+* @parameter {object} logistics, the object containing the logistic data for the user
+* @parameter {number} duration, the duration of the exercise session in hours
 **/
 var _suggestedDuration = function(logistics, duration) {
     var viableDays = [];
@@ -448,9 +447,9 @@ var _suggestedDuration = function(logistics, duration) {
 
 /*
 * This function creates recommended Workouts
-* @parameter {string} workoutId
-* @parameter {string} exerciseName
-* @parameter {object} res, the response object from the route
+* @parameter {object} config, includes the user's primary goal and the logistic data
+* @parameter {string} userId, the user to attach the recommended workouts to
+* @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
 **/
 var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
 	switch (config.primaryGoal) {
