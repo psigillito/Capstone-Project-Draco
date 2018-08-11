@@ -128,17 +128,17 @@ function calculateTotals(allWorkoutsThisMonth, weight){
   var averageRun = distanceTotal / runCount;
 
 
-  return {'distanceTotal' : distanceTotal,
+  return {'distanceTotal' : distanceTotal.toFixed(2),
           'totalSets' : totalSets, 
           'totalReps' : totalReps, 
           'weightTotal' : weightTotal, 
-          'averageRun' : averageRun, 
-          'shortestRun' : shortestRun, 
-          'longestRun' : longestRun,
+          'averageRun' : averageRun.toFixed(2), 
+          'shortestRun' : shortestRun.toFixed(2), 
+          'longestRun' : longestRun.toFixed(2),
           'runCount' : runCount,
-          'totalSets' : totalSets,
-          'totalReps' : totalReps,
-          'totalWeight' : totalWeight, 
+          'totalSets' : totalSets.toLocaleString(),
+          'totalReps' : totalReps.toLocaleString(),
+          'totalWeight' : totalWeight.toLocaleString(), 
           'strengthDictionary': strengthDictionary,
           'strengthCalories': strengthCalories.toLocaleString(),
           'cardioCalories': cardioCalories.toLocaleString()
