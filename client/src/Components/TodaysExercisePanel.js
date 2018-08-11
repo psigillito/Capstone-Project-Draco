@@ -25,7 +25,7 @@ class TodaysExercisePanel extends Component {
 
 
 
-        if(this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(n)  
+        if(this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek !== null && exercise.daysOfWeek.includes(n)  
                                             && newWorkoutList.includes(exercise.name) ).length){
             return(
                 

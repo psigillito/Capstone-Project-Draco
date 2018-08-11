@@ -128,7 +128,7 @@ function profile(state = profileState, action) {
         case CLEAR_PROFILE:
             return {
                 ...state,
-                profile: null
+                profile: null,
             }
         default: return state;
     }
@@ -214,9 +214,15 @@ function monthStatistics(state={}, action){
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken,
-                                     athleteId, athleteRoutes, selectedRoute, currentRoute, monthStatistics})
 
+const appReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts,
+                                    day, weekDay, selectedWorkoutList, stravaToken, athleteId, athleteRoutes, 
+                                    selectedRoute, currentRoute, monthStatistics})
+
+const rootReducer = (state, action) => {
+
+  return appReducer(state, action)
+}
 
 export default rootReducer
 

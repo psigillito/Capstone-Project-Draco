@@ -150,7 +150,11 @@ input[type="button"]{
 .selected-calendar-controller{
   color: #ec8917;
   font-weight:700;
+}
 
-
+.wrap-text{
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 

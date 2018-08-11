@@ -24,7 +24,7 @@ export function updateMonth(newMonth){
 
 export function updateDays(month, year){
 
-    var newDays = getMonthWeeks(year, month);
+    var newDays = getMonthWeeks(month, year);
 
     return {
         type: 'UPDATE_DAYS',
@@ -188,6 +188,7 @@ export function updateStravaToken(newToken){
 }
 
 export function setAthleteId(newId){
+    console.log("NEW ID IS: "+ newId)
     return {
         type: 'SET_ATHLETE_ID',
         athleteId: newId
