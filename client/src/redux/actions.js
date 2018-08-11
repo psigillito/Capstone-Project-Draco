@@ -127,7 +127,10 @@ export const getProfile = () => dispatch => {
 // edit user account
 export const editUser = (userData, history) => dispatch => {
     axios.post('/profile/edit-profile', userData)
-        .then(res => history.push('/profile'))
+        .then(res => {
+          dispatch(setCurrentUser(userData));
+          history.push('/profile');
+        })
         .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data}));
 }
 
