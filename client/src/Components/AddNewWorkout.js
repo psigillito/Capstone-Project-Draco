@@ -24,7 +24,6 @@ class AddNewWorkout extends Component {
           selectedDistance: 10,
           allExercises: [],
           distanceUnit: 'mi',
-          exerciseDays: [],
           createExercise: {},
           unit: 'lbs'
         }
@@ -77,7 +76,7 @@ class AddNewWorkout extends Component {
         errorsList.push("Workout Mode Must Be Created");
       }
 
-      if(this.state.exerciseDays.length < 1){
+      if(this.state.daysOfWeek.length < 1){
         errorsList.push("Must Select At Least One Day");
       }
 
@@ -108,7 +107,7 @@ class AddNewWorkout extends Component {
             name: this.state.name,
             mode: this.state.mode,
             exercises: this.state.allExercises,
-            daysOfWeek: this.state.exerciseDays,
+            daysOfWeek: this.state.daysOfWeek,
             trainingPlan: this.state.trainingPlan,
             date: Date.now()
         }
@@ -132,12 +131,13 @@ class AddNewWorkout extends Component {
 
     //Updates week days for workout 
     handleDayChange(e) {
-        if(this.state.exerciseDays.includes(e.target.value)) {
-            const index = this.state.exerciseDays.indexOf(e.target.value);
-            this.state.exerciseDays.splice(index, 1);
+        if(this.state.daysOfWeek.includes(parseInt(e.target.value))) {
+            const index = this.state.daysOfWeek.indexOf(e.target.value);
+            this.state.daysOfWeek.splice(index, 1);
         } else {
-            this.state.exerciseDays.push(parseInt(e.target.value));
+            this.state.daysOfWeek.push(parseInt(e.target.value));
         }
+        console.log(this.state.daysOfWeek);
     }
 
     //gets athlete id from strava then gets list of routes and saves it to redux state
