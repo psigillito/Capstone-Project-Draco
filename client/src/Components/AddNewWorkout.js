@@ -137,7 +137,6 @@ class AddNewWorkout extends Component {
         } else {
             this.state.daysOfWeek.push(parseInt(e.target.value));
         }
-        console.log(this.state.daysOfWeek);
     }
 
     //gets athlete id from strava then gets list of routes and saves it to redux state
