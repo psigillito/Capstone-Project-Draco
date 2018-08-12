@@ -518,6 +518,11 @@ var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
 	});
 }
 
+/* This function updates a user and signs a new jwt token
+* @parameter {string} userId, id of user to update
+* @parameter {object} updateObj, user update object
+* @parameter {object} response, response object
+**/
 var _updateUserToken = function(userId, updateObj, response) {
 	User.findByIdAndUpdate(userId, updateObj, {new:true}, (err, res) => {
 		if(!err) {
