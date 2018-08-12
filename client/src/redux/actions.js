@@ -232,15 +232,11 @@ export function setStatistics(statistics){
 
 export function updateStatistics(month, year){
 
-  //get data 
-
-
   //training plans 
   var trainingPlans = store.getState().trainingPlans;
   var workouts = store.getState().workouts;
 
   var temp = getWorkoutsForMonth(month, year, trainingPlans, workouts)
-
 
   return{
     type: 'UPDATE_MONTH_STATISTICS',
