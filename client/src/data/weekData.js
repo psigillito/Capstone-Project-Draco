@@ -71,6 +71,8 @@ function calculateTotals(allWorkoutsThisMonth, weight){
   var totalReps = 0;
   var weightTotal = 0;
   var runCount = 0;
+  var swimCount = 0;
+  var cycleCount = 0;
   var runsList=[];
   var totalSets = 0;
   var totalReps = 0;
@@ -92,6 +94,10 @@ function calculateTotals(allWorkoutsThisMonth, weight){
             distanceTotal += parseFloat(tempRun.distance);
             cardioCalories += parseInt((parseFloat(tempRun.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
           }
+        }else if (tempWorkout.mode == 'Swimming') {
+          swimCount++;
+        }else if (tempWorkout.mode == 'Cycling') {
+          cycleCount++;
         }else if(tempWorkout.mode == 'Weight Training'){
           for(var m = 0; m < tempWorkout.exercises.length; m++){
             var tempLift =tempWorkout.exercises[m];
@@ -135,6 +141,8 @@ function calculateTotals(allWorkoutsThisMonth, weight){
           'shortestRun' : shortestRun.toFixed(2), 
           'longestRun' : longestRun.toFixed(2),
           'runCount' : runCount,
+          'swimCount': swimCount,
+          'cycleCount': cycleCount,
           'totalSets' : totalSets.toLocaleString(),
           'totalReps' : totalReps.toLocaleString(),
           'totalWeight' : totalWeight.toLocaleString(), 

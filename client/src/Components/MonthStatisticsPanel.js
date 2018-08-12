@@ -25,6 +25,8 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestRun}</li>
                 <li><b>Average Distance:</b> {this.props.monthStatistics.averageRun}</li>
                 <li><b>Number of Runs:</b> {this.props.monthStatistics.runCount}</li>
+                <li><b>Number of Swims:</b> {this.props.monthStatistics.swimCount}</li>
+                <li><b>Number of Rides:</b> {this.props.monthStatistics.cycleCount}</li>
                 <li><b>Calories:</b> {this.props.monthStatistics.cardioCalories}</li>
               </ul>
             </li>
