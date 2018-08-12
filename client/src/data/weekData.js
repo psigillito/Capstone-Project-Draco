@@ -156,7 +156,7 @@ var dt = new Date();
 const selectedYear = dt.getFullYear();
 const selectedMonth = dt.getMonth();
 const currentDay = dt.getDate();
-const weekData = getMonthWeeks(selectedYear, selectedMonth);
+const weekData = getMonthWeeks(selectedMonth, selectedYear);
 const selectedDayVisible = true;
 const userName = '';
 const getMonthDays = ( year, month) => {
