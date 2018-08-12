@@ -113,7 +113,7 @@ class DayDetail extends Component {
                         {
                         this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                           && this.props.selectedWorkoutList.includes(exercise._id)
-                          && exercise.mode =='Running').map( (workout, index) =>
+                          && (exercise.mode =='Running' || exercise.mode == 'Swimming' || exercise.mode == 'Cycling')).map( (workout, index) =>
                             <div key={index}>
                               <h5 className="font-header-weight">{workout.name}</h5>
                                 <table className="table">
