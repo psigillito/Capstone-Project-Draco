@@ -26,6 +26,7 @@ import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
 import TodaysExercisePanel from './TodaysExercisePanel';
 import MonthStatisticsPanel from './MonthStatisticsPanel';
+import Welcome from './Welcome';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -76,6 +77,7 @@ class Main extends Component{
                         
                         
                         <div className="container">
+                            <Welcome goals={this.props.auth.user.goals}/>
                             <div className="row">
                                 <div className = "col-sm-3">
                                     <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans} workouts={this.props.workouts}/>
