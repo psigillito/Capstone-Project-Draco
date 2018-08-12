@@ -341,7 +341,7 @@ class AddNewWorkout extends Component {
             }
 
             {/* Exercises - Running */}
-            {this.state.mode === 'Running' || this.state.mode === 'Swimming' || this.state.mode === 'Cycling' && this.state.mode !== '' && 
+            {(this.state.mode === 'Running' || this.state.mode === 'Swimming' || this.state.mode === 'Cycling') && this.state.mode !== '' && 
               <div>
                 <div className="modal-header">
                   <h5>Add Exercises</h5>
