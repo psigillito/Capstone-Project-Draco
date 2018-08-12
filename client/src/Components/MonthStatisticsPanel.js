@@ -25,6 +25,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestRun}</li>
                 <li><b>Average Distance:</b> {this.props.monthStatistics.averageRun}</li>
                 <li><b>Number of Runs:</b> {this.props.monthStatistics.runCount}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.cardioCalories}</li>
               </ul>
             </li>
             <li className="list-group-item">
@@ -33,6 +34,7 @@ class MonthStatisticsPanel extends Component {
                 <li><b>Total Reps:</b> {this.props.monthStatistics.totalReps} </li>
                 <li><b>Total Sets:</b> {this.props.monthStatistics.totalSets} </li>
                 <li><b>Total Weight:</b> {this.props.monthStatistics.totalWeight}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.strengthCalories}</li>
                 <br/>                        
                 <li><b>Exercise Frequency:</b></li>
                 { myArray.map( (exercise, index)=> <li key={index}><b>{exercise[0]}: </b>{exercise[1]} </li>) }
@@ -49,7 +51,7 @@ class MonthStatisticsPanel extends Component {
 const mapStateToProps = function(state) {
   return { month:state.month, 
            year:state.year, 
-           monthStatistics: state.monthStatistics,
+           monthStatistics: state.monthStatistics
           }
 }
 

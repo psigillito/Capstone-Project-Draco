@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import store from '../store';
-import axios from 'axios';
-import { getProfile, deleteAccount, logout } from '../redux/actions';
+import { getProfile } from '../redux/actions';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import logo from '../images/profile.png';
-import { Link } from 'react-router-dom';
 
 class UserProfile extends Component {
 	componentDidMount() {
-		this.props.getProfile();
-	}
-
-	deleteClick(e) {
-		this.props.deleteAccount(this.props.auth.user.id);
-		this.props.logout();
+		this.props.getProfile(this.props.auth.user.id);
 	}
 
 	render() {
@@ -50,8 +42,6 @@ class UserProfile extends Component {
 			            	)}
 		            	</tbody>
 		            </table>
-		            <Link to='/edit-profile' className="btn btn-info btn-block">Edit Profile</Link>
-		            <button onClick={this.deleteClick.bind(this)} className="btn btn-danger btn-block" type="submit">Delete Account</button>
 		          </div>
 		        </div>
 		      </div>
@@ -69,15 +59,13 @@ class UserProfile extends Component {
 UserProfile.propTypes = {
 	getProfile: PropTypes.func.isRequired,
 	profile: PropTypes.object.isRequired,
-	deleteAccount: PropTypes.func.isRequired,
-	logout: PropTypes.func.isRequired,
 	trainingPlans: PropTypes.object.isRequired,
 	workouts: PropTypes.object.isRequired,
 	auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = function(state) {
-	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts, auth: state.auth}
+	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts, auth: state.auth }
 };
 
-export default connect(mapStateToProps, { getProfile, deleteAccount, logout })(UserProfile);
+export default connect(mapStateToProps, { getProfile })(UserProfile);

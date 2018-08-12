@@ -60,7 +60,12 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts){
   return calculateTotals(workoutsByWeek);
 }
 
-function calculateTotals(allWorkoutsThisMonth){
+function calculateTotals(allWorkoutsThisMonth, weight){
+  const CARDIO_CALORIES = 11.0;
+  const STRENGTH_CALORIES = 3.0;
+  const AVG_MALE_WEIGHT = 86.6;
+  const AVG_FEMALE_WEIGHT = 72.1;
+  var userWeight = (weight) ? weight : AVG_MALE_WEIGHT;
   var distanceTotal = 0;
   var totalSets = 0;
   var totalReps = 0;
@@ -71,6 +76,8 @@ function calculateTotals(allWorkoutsThisMonth){
   var totalReps = 0;
   var totalWeight = 0;
   var strengthDictionary = {};
+  var cardioCalories = 0;
+  var strengthCalories = 0;
 
   for(var i = 0; i < allWorkoutsThisMonth.length; i++){
     for( var j = 0; j < allWorkoutsThisMonth[i].length; j++){
@@ -83,6 +90,7 @@ function calculateTotals(allWorkoutsThisMonth){
             runCount++;
             runsList.push(parseFloat(tempRun.distance));
             distanceTotal += parseFloat(tempRun.distance);
+            cardioCalories += parseInt((parseFloat(tempRun.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
           }
         }else if(tempWorkout.mode == 'Weight Training'){
           for(var m = 0; m < tempWorkout.exercises.length; m++){
@@ -106,6 +114,7 @@ function calculateTotals(allWorkoutsThisMonth){
               totalWeight += tempLift.intensity.weight;
             }
           }
+          strengthCalories += parseInt((parseFloat(totalSets) * 0.5 * STRENGTH_CALORIES * 3.5 * userWeight / 200), 10);
         }
       }
     }
@@ -118,18 +127,20 @@ function calculateTotals(allWorkoutsThisMonth){
   var averageRun = distanceTotal / runCount;
 
 
-  return {'distanceTotal' : distanceTotal,
+  return {'distanceTotal' : distanceTotal.toFixed(2),
           'totalSets' : totalSets, 
           'totalReps' : totalReps, 
           'weightTotal' : weightTotal, 
-          'averageRun' : averageRun, 
-          'shortestRun' : shortestRun, 
-          'longestRun' : longestRun,
+          'averageRun' : averageRun.toFixed(2), 
+          'shortestRun' : shortestRun.toFixed(2), 
+          'longestRun' : longestRun.toFixed(2),
           'runCount' : runCount,
-          'totalSets' : totalSets,
-          'totalReps' : totalReps,
-          'totalWeight' : totalWeight, 
-          'strengthDictionary': strengthDictionary
+          'totalSets' : totalSets.toLocaleString(),
+          'totalReps' : totalReps.toLocaleString(),
+          'totalWeight' : totalWeight.toLocaleString(), 
+          'strengthDictionary': strengthDictionary,
+          'strengthCalories': strengthCalories.toLocaleString(),
+          'cardioCalories': cardioCalories.toLocaleString()
         }
 }
 

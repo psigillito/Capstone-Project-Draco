@@ -1,6 +1,11 @@
 const User = require('../models/users');
 const Workout = require('../models/workouts');
 const TrainingPlan = require('../models/trainingPlans');
+var addWeeks = require('date-fns/add_weeks');
+const jwt = require('jsonwebtoken');
+
+// Import key
+const keys = require('../config/keys');
 
 /*
  * This function gets a user object by specified userId
@@ -389,6 +394,147 @@ var _deleteExercise = function(workoutId, exerciseName, res) {
     });
 }
 
+/*
+* This function creates a recommended trainingPlan
+* @parameter {object} goals, the goals object that the user creates in the goals quiz UI
+* @parameter {object} logistics, the logistics object that the user creates in the goals quiz UI
+* @parameter {string} userId, the string indentifier for the user to create a recommended training plan for
+**/
+var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
+	const today = new Date();
+	var addlInfo = logistics;
+	addlInfo.primaryGoal = goals.primaryGoal;
+	var recommendedTP = new TrainingPlan({
+		user: userId,
+		name: "Recommended",
+		startDate: today,
+		endDate: null,
+		active: true,
+		logistics: addlInfo
+	});
+	switch (goals.primaryGoal) {
+		case 1:
+		  recommendedTP.endDate = addWeeks(today, 52);
+		  break;
+		case 2:
+		  var numWeeks = (goals.loseWeight.autoSelectTime) ? ((goals.loseWeight.currentWeight - goals.loseWeight.goalWeight) / 2) : goals.loseWeight.time
+		  recommendedTP.endDate = addWeeks(today, numWeeks);
+		  break;
+		case 3:
+		recommendedTP.endDate = addWeeks(today, 52);
+		default:
+		  break;
+	}
+	recommendedTP.save((err, response) => {
+		_createRecommendedWorkouts(response.logistics, response.user, response._id.valueOf())
+	});
+}
+
+/*
+* This function parses the hoursPerDay object in logistics to determine which places to place workouts on
+* @parameter {object} logistics, the object containing the logistic data for the user
+* @parameter {number} duration, the duration of the exercise session in hours
+**/
+var _suggestedDuration = function(logistics, duration) {
+    var viableDays = [];
+    for (var i = 0; i < 7; i++) {
+      if ((duration / parseInt(logistics.hoursPerDay[i], 10)) < 1) {
+        viableDays.push(i);
+      }
+    };
+    return viableDays;
+  }
+
+/*
+* This function creates recommended Workouts
+* @parameter {object} config, includes the user's primary goal and the logistic data
+* @parameter {string} userId, the user to attach the recommended workouts to
+* @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
+**/
+var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
+	switch (config.primaryGoal) {
+		case 1:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Improving Health Cardio",
+				mode: "Running",
+				daysOfWeek: _suggestedDuration(config, 0.5),
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 2,
+					stravaRoute: -1
+				}],
+				trainingPlan: trainingPlanId,
+				duration: {
+					value: 30,
+					units: "min"
+				}
+			});
+			break;
+		case 2:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Weight Loss Cardio",
+				mode: "Running",
+				daysOfWeek: _suggestedDuration(config, 0.75),
+				trainingPlan: trainingPlanId,
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 5,
+					stravaRoute: -1
+				}],
+				duration: {
+					value: 45,
+					units: "min"
+				}
+			});
+			break;
+		case 3:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Improving Fitness Cardio",
+				mode: "Running",
+				daysOfWeek: _suggestedDuration(config, 1),
+				trainingPlan: trainingPlanId,
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 8,
+					stravaRoute: -1
+				}],
+				duration: {
+					value: 60,
+					units: "min"
+				}
+			});
+			break;
+		default:
+			return;
+	}
+	recommendedWorkout.save((err, response) => {
+		_addWorkoutToTrainingPlan(response.trainingPlan, response._id.valueOf());
+	});
+}
+
+/* This function updates a user and signs a new jwt token
+* @parameter {string} userId, id of user to update
+* @parameter {object} updateObj, user update object
+* @parameter {object} response, response object
+**/
+var _updateUserToken = function(userId, updateObj, response) {
+	User.findByIdAndUpdate(userId, updateObj, {new:true}, (err, res) => {
+		if(!err) {
+			// sign the token
+			const payload = {id: userId, name: updateObj.name};
+			jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 }, (err, token) => {
+				response.json({ success: true, token: "Bearer " + token });
+			})
+		}
+	});
+}
+
 queries = {
 	getUser: _getUser,
 	createUser: _createUser,
@@ -409,7 +555,10 @@ queries = {
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
 	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
-	deleteExercise: _deleteExercise
+	deleteExercise: _deleteExercise,
+	createRecommendedTrainingPlan: _createRecommendedTrainingPlan,
+	createRecommendedWorkouts: _createRecommendedWorkouts,
+	updateUserToken: _updateUserToken
 }
 
 module.exports = queries;

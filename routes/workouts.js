@@ -41,11 +41,11 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         name: req.body.name,
         mode: req.body.mode,
         user: req.user._id.valueOf(),
+        daysOfWeek: req.body.daysOfWeek,
         trainingPlan: req.body.trainingPlan,
         duration: (req.body.duration) ? req.body.duration : null,
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
-        daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
         date: new Date(req.body.date)
     });
     //console.log(JSON.stringify(newWorkout));
