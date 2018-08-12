@@ -267,6 +267,18 @@ class AddNewWorkout extends Component {
                       onChange={this.onChange}/>
                 <label className="form-check-label" htmlFor="inlineRadio2">Running</label>
               </div>
+
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" type="radio" name="mode" id="cycling" value="Cycling"
+                      onChange={this.onChange}/>
+                <label className="form-check-label" htmlFor="inlineRadio3">Cycling</label>
+              </div>
+
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" type="radio" name="mode" id="swimming" value="Swimming"
+                      onChange={this.onChange}/>
+                <label className="form-check-label" htmlFor="inlineRadio4">Swimming</label>
+              </div>
             </div>
 
             <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
@@ -329,7 +341,7 @@ class AddNewWorkout extends Component {
             }
 
             {/* Exercises - Running */}
-            {this.state.mode === 'Running' && this.state.mode !== '' && 
+            {this.state.mode === 'Running' || this.state.mode === 'Swimming' || this.state.mode === 'Cycling' && this.state.mode !== '' && 
               <div>
                 <div className="modal-header">
                   <h5>Add Exercises</h5>
