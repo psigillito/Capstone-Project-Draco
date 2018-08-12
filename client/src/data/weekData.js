@@ -66,7 +66,9 @@ function calculateTotals(allWorkoutsThisMonth, weight){
   const AVG_MALE_WEIGHT = 86.6;
   const AVG_FEMALE_WEIGHT = 72.1;
   var userWeight = (weight) ? weight : AVG_MALE_WEIGHT;
-  var distanceTotal = 0;
+  var runDistanceTotal = 0;
+  var swimDistanceTotal = 0;
+  var cycleDistanceTotal = 0;
   var totalSets = 0;
   var totalReps = 0;
   var weightTotal = 0;
@@ -74,11 +76,15 @@ function calculateTotals(allWorkoutsThisMonth, weight){
   var swimCount = 0;
   var cycleCount = 0;
   var runsList=[];
+  var swimsList=[];
+  var cycleList=[];
   var totalSets = 0;
   var totalReps = 0;
   var totalWeight = 0;
   var strengthDictionary = {};
-  var cardioCalories = 0;
+  var runCalories = 0;
+  var swimCalories = 0;
+  var cycleCalories = 0;
   var strengthCalories = 0;
 
   for(var i = 0; i < allWorkoutsThisMonth.length; i++){
@@ -91,13 +97,25 @@ function calculateTotals(allWorkoutsThisMonth, weight){
             var tempRun =tempWorkout.exercises[l];
             runCount++;
             runsList.push(parseFloat(tempRun.distance));
-            distanceTotal += parseFloat(tempRun.distance);
-            cardioCalories += parseInt((parseFloat(tempRun.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+            runDistanceTotal += parseFloat(tempRun.distance);
+            runCalories += parseInt((parseFloat(tempRun.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
           }
         }else if (tempWorkout.mode == 'Swimming') {
-          swimCount++;
+          for(var j = 0; j < tempWorkout.exercises.length; j++){
+            var tempSwim =tempWorkout.exercises[j];
+            swimCount++;
+            swimsList.push(parseFloat(tempSwim.distance));
+            swimDistanceTotal += parseFloat(tempSwim.distance);
+            swimCalories += parseInt((parseFloat(tempSwim.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+          }
         }else if (tempWorkout.mode == 'Cycling') {
-          cycleCount++;
+          for(var k = 0; k < tempWorkout.exercises.length; k++){
+            var tempRide =tempWorkout.exercises[k];
+            cycleCount++;
+            cycleList.push(parseFloat(tempRide.distance));
+            cycleDistanceTotal += parseFloat(tempRide.distance);
+            cycleCalories += parseInt((parseFloat(tempRide.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+          }
         }else if(tempWorkout.mode == 'Weight Training'){
           for(var m = 0; m < tempWorkout.exercises.length; m++){
             var tempLift =tempWorkout.exercises[m];
@@ -129,27 +147,44 @@ function calculateTotals(allWorkoutsThisMonth, weight){
   
   var shortestRun = Math.min(...runsList);
   var longestRun = Math.max(...runsList);
+  var shortestSwim = Math.min(...swimsList);
+  var longestSwim = Math.max(...swimsList);
+  var shortestRide = Math.min(...cycleList);
+  var longestRide = Math.max(...cycleList);
 
-  var averageRun = distanceTotal / runCount;
+  var averageRun = runDistanceTotal / runCount;
+  var averageSwim = swimDistanceTotal / swimCount;
+  var averageRide = cycleDistanceTotal / cycleCount;
 
 
-  return {'distanceTotal' : distanceTotal.toFixed(2),
-          'totalSets' : totalSets, 
-          'totalReps' : totalReps, 
-          'weightTotal' : weightTotal, 
-          'averageRun' : averageRun.toFixed(2), 
-          'shortestRun' : shortestRun.toFixed(2), 
-          'longestRun' : longestRun.toFixed(2),
-          'runCount' : runCount,
-          'swimCount': swimCount,
-          'cycleCount': cycleCount,
-          'totalSets' : totalSets.toLocaleString(),
-          'totalReps' : totalReps.toLocaleString(),
-          'totalWeight' : totalWeight.toLocaleString(), 
-          'strengthDictionary': strengthDictionary,
-          'strengthCalories': strengthCalories.toLocaleString(),
-          'cardioCalories': cardioCalories.toLocaleString()
-        }
+  return {
+    'runDistanceTotal': runDistanceTotal.toFixed(2),
+    'swimDistanceTotal': swimDistanceTotal.toFixed(2),
+    'rideDistanceTotal': cycleDistanceTotal.toFixed(2),
+    'totalSets': totalSets,
+    'totalReps': totalReps,
+    'weightTotal': weightTotal,
+    'averageRun': averageRun.toFixed(2),
+    'shortestRun': shortestRun.toFixed(2),
+    'longestRun': longestRun.toFixed(2),
+    'runCount': runCount,
+    'averageSwim': averageSwim.toFixed(2),
+    'shortestSwim': shortestSwim.toFixed(2),
+    'longestSwim': longestSwim.toFixed(2),
+    'swimCount': swimCount,
+    'averageRide': averageRide.toFixed(2),
+    'shortestRide': shortestRide.toFixed(2),
+    'longestRide': longestRide.toFixed(2),
+    'cycleCount': cycleCount,
+    'totalSets': totalSets.toLocaleString(),
+    'totalReps': totalReps.toLocaleString(),
+    'totalWeight': totalWeight.toLocaleString(),
+    'strengthDictionary': strengthDictionary,
+    'strengthCalories': strengthCalories.toLocaleString(),
+    'runCalories': runCalories.toLocaleString(),
+    'swimCalories': swimCalories.toLocaleString(),
+    'rideCalories': cycleCalories.toLocaleString()
+  }
 }
 
 var dt = new Date();

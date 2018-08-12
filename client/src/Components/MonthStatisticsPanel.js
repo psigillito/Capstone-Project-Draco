@@ -19,15 +19,32 @@ class MonthStatisticsPanel extends Component {
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <h5>Cardio: </h5>
+              <h6>Running: </h6>
               <ul>
-                <li><b>Total Miles:</b> {this.props.monthStatistics.distanceTotal}</li>
+                <li><b>Total Miles:</b> {this.props.monthStatistics.runDistanceTotal}</li>
                 <li><b>Longest Distance:</b> {this.props.monthStatistics.longestRun}</li>
                 <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestRun}</li>
                 <li><b>Average Distance:</b> {this.props.monthStatistics.averageRun}</li>
                 <li><b>Number of Runs:</b> {this.props.monthStatistics.runCount}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.runCalories}</li>
+              </ul>
+              <h6>Swimming: </h6>
+              <ul>
+                <li><b>Total Miles:</b> {this.props.monthStatistics.swimDistanceTotal}</li>
+                <li><b>Longest Distance:</b> {this.props.monthStatistics.longestSwim}</li>
+                <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestSwim}</li>
+                <li><b>Average Distance:</b> {this.props.monthStatistics.averageSwim}</li>
                 <li><b>Number of Swims:</b> {this.props.monthStatistics.swimCount}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.swimCalories}</li>
+              </ul>
+              <h6>Cycling: </h6>
+              <ul>
+                <li><b>Total Miles:</b> {this.props.monthStatistics.rideDistanceTotal}</li>
+                <li><b>Longest Distance:</b> {this.props.monthStatistics.longestRide}</li>
+                <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestRide}</li>
+                <li><b>Average Distance:</b> {this.props.monthStatistics.averageRide}</li>
                 <li><b>Number of Rides:</b> {this.props.monthStatistics.cycleCount}</li>
-                <li><b>Calories:</b> {this.props.monthStatistics.cardioCalories}</li>
+                <li><b>Calories:</b> {this.props.monthStatistics.rideCalories}</li>
               </ul>
             </li>
             <li className="list-group-item">
