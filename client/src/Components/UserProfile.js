@@ -27,6 +27,9 @@ class UserProfile extends Component {
 		            <p className="lead text-center"><b>Email:</b> {this.props.profile.profile.email}</p>
 		            <p className="lead text-center"><b>Username:</b> {this.props.profile.profile.username}</p>
 		            <p className="lead text-center"><b>Training Plans:</b></p>
+		            {this.props.trainingPlans.data.length === 0 &&
+						<p className="lead text-center">No current plans</p>
+		            }
 		            <table className="table">
 		            	<tbody>
 			            	{this.props.trainingPlans.data.map( (plan, index) =>
@@ -35,6 +38,9 @@ class UserProfile extends Component {
 		            	</tbody>
 		            </table>
 		            <p className="lead text-center"><b>Workouts:</b></p>
+		            {this.props.workouts.data.length === 0 &&
+						<p className="lead text-center">No current workouts</p>
+		            }
 		            <table className="table">
 		            	<tbody>
 			            	{this.props.workouts.data.map( (workout, index) =>

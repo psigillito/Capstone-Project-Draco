@@ -14,7 +14,6 @@ import Landing from './Landing'
 import Register from './auth/Register'
 import Login from './auth/Login'
 import UserProfile from './UserProfile';
-import EditProfile from './EditProfile';
 import * as goalsJCR from '../copy/goals.json'
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utility/authToken';
@@ -55,7 +54,13 @@ if(localStorage.jwtToken) {
 class Main extends Component{
     constructor(props) {
         super(props);
-    }    
+    }
+
+    componentDidMount() {
+        if(!this.props.auth.isAuthenticated) {
+          this.props.history.push('/login');
+        }
+      }    
     
     render(){
 
@@ -67,7 +72,6 @@ class Main extends Component{
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/profile" component={UserProfile} />
-                <Route exact path="/edit-profile" component={EditProfile} />
                 <Route exact path = "/calendar" render={()=>(
                     
                     <section className="main-container">
