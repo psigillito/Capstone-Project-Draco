@@ -12,7 +12,8 @@ class EditWorkout extends Component {
 			workoutId:'',
 			daysOfWeek:[],
 			name:'',
-			trainingPlan:''
+			trainingPlan:'',
+			errors: []
 		}
 
 		this.onChange = this.onChange.bind(this);
@@ -34,7 +35,8 @@ class EditWorkout extends Component {
 
     submitWorkout() {
     	let workout = {};
-    	
+    	let errorList = [];
+
     	if(this.state.name !== '') {
     		workout.name = this.state.name;
     	}
@@ -43,18 +45,35 @@ class EditWorkout extends Component {
     	}
     	if(this.state.daysOfWeek !== []) {
     		workout.daysOfWeek = this.state.daysOfWeek;
+    	} 
+    	if(this.state.daysOfWeek.length < 1) {
+    		errorList.push('You must select at least 1 day to perform workout');
+    	}
+    	if(this.state.workoutId === '') {
+    		errorList.push('Please select a workout to edit');
     	}
 
-    	if(workout !== {}) {
-    		axios.patch('/workouts/' + this.state.workoutId, workout)
-    			.then( res => window.location.reload())
-    			.catch(err => console.log(err));
-    	} 	
+    	if(errorList.length) {
+    		this.setState({errors: errorList});
+    	}
+    	
+    	if(errorList.length === 0) {
+	    	if(workout !== {}) {
+	    		axios.patch('/workouts/' + this.state.workoutId, workout)
+	    			.then( res => window.location.reload())
+	    			.catch(err => console.log(err));
+	    	} 
+    	}	
     }
 
 	render() {
 		return (
 			<div>
+				{this.state.errors.map( (error, index) => 
+					<div key={index} className="alert alert-danger" role="alert">
+						{error}
+					</div>
+				)}
 				<div className="modal-header">
 		            <h5 className="modal-title">Edit Workout</h5>
 		            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
@@ -68,7 +87,7 @@ class EditWorkout extends Component {
 		        	className="form-control" 
 		            value={this.state.workoutId ? this.state.workoutId : ''} 
 		            onChange={this.onChange}>
-		            	<option selected>Choose...</option>
+		            	<option value={''} selected>...</option>
 	            		{this.props.workouts.data.map( (workout, index) =>
 							<option key={index} value={workout._id}>{workout.name} - {workout.mode}</option>
 	            		)}
@@ -79,55 +98,55 @@ class EditWorkout extends Component {
 		        	.map( (workout, index) => 
 		        	<div key={index}>
 
-		        		<div class="alert alert-primary" role="alert">
-						  Note! Leave any fields you do not want changed, blank, or make no selections.
+			        	<div className="alert alert-primary" role="alert">
+							Note! Leave any fields you do not want changed, blank, or make no selections.
 						</div>
-		            
-		              <label htmlFor='name'><b>Workout Name:</b></label>
-		              <div className="form-group">
-		                <input type="text" 
-			                className="form-control form-control-lg" 
-			                placeholder={workout.name} 
-			                name="name" 
-			                value={this.state.name} 
-		                    onChange={this.onChange}
-		                />
-		              </div>
-		              <br/>
-		              <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
-		              <div className="form-group">
-		                {weekDays.map( (weekDay, index) => 
-		                  <div key={index} className="form-check form-check-inline">
-		                    <input className="form-check-input" 
-			                    type="checkbox" 
-			                    name="daysOfWeek" 
-			                    onChange={this.handleDayChange} 
-			                    value={index}
-		                    /> 
-							<label className="form-check-label" htmlFor="inlineCheckbox1">{weekDay}</label>  
-		                  </div>
-		                )}
-		              </div>
-		              <br/>
-		              <label htmlFor='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
-		              <div className="form-group"> 
-		                <select id="inputState" 
-			                name="trainingPlan" 
-			                className="form-control" 
-			                onChange={this.onChange}>
-			                    <option>...</option>
-			                    {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
-			                        <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
-			                    )}
-		                </select>
-		              </div>
+			            
+			            <label htmlFor='name'><b>Workout Name:</b></label>
+			            <div className="form-group">
+			                <input type="text" 
+				                className="form-control form-control-lg" 
+				                placeholder={workout.name} 
+				                name="name" 
+				                value={this.state.name} 
+			                    onChange={this.onChange}
+			                />
+			            </div>
+			            <br/>
+			            <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
+			            <div className="form-group">
+			                {weekDays.map( (weekDay, index) => 
+			                  	<div key={index} className="form-check form-check-inline">
+				                    <input className="form-check-input" 
+					                    type="checkbox" 
+					                    name="daysOfWeek" 
+					                    onChange={this.handleDayChange} 
+					                    value={index}
+				                    /> 
+									<label className="form-check-label" htmlFor="inlineCheckbox1">{weekDay}</label>  
+			                  	</div>
+			                )}
+			            </div>
+			            <br/>
+			            <label htmlFor='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
+			            <div className="form-group"> 
+			                <select id="inputState" 
+				                name="trainingPlan" 
+				                className="form-control" 
+				                onChange={this.onChange}>
+				                    <option>...</option>
+				                    {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
+				                        <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
+				                    )}
+			                </select>
+			            </div>
 		        	</div>
 		    	)}
 
 		        <br />
 		        <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="submit" onClick={ () => this.submitWorkout() } className="btn btn-success">Save changes</button>
+                	<button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  	<button type="submit" onClick={ () => this.submitWorkout() } className="btn btn-success">Save changes</button>
                 </div>
 	        </div>
 		)
