@@ -50,6 +50,12 @@ router.post('/register', (req, res) => {
 							return res.status(400).json(errors)
 						}
 					})
+
+				if(req.body.password.length < 5) {
+					errors.password = 'Password must be at least 5 characters';
+					return res.status(400).json(errors)
+				}
+				
 				// Create new user
 				const newUser = new User({
 					email: req.body.email,
