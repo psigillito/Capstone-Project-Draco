@@ -3,7 +3,7 @@ import {selectedYear} from '../data/weekData'
 import {selectedMonth} from '../data/weekData'
 import {selectedDayVisible} from '../data/weekData'
 import {userName} from '../data/weekData'
-import {currentTrainingPlans} from '../data/weekData'
+import { currentTrainingPlans } from '../data/weekData'
 import { combineReducers } from 'redux'
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import isEmpty from '../utility/isEmpty';
@@ -82,7 +82,7 @@ function auth(state = initialState, action) {
 function errors(state = {}, action) {
     switch(action.type) {
       case GET_ERRORS: return action.payload;
-      default: return state;
+      default: return {};
     }
 }
 
@@ -128,7 +128,7 @@ function profile(state = profileState, action) {
         case CLEAR_PROFILE:
             return {
                 ...state,
-                profile: null
+                profile: null,
             }
         default: return state;
     }
@@ -166,7 +166,10 @@ function stravaToken(state=0, action){
 function athleteId(state=-1, action){
     switch(action.type){
         case 'SET_ATHLETE_ID':
-            state = action.athleteId
+        return {
+            ...state,
+            state: action.athleteId
+        }
         default:
             return state;
     }
@@ -199,8 +202,29 @@ function currentRoute(state=-1, action){
     }
 }
 
-const rootReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts, day, weekDay, selectedWorkoutList, stravaToken,
-                                     athleteId, athleteRoutes, selectedRoute, currentRoute})
 
+function monthStatistics(state={}, action){
+    switch(action.type){
+        case 'SET_MONTH_STATISTICS':
+            state = action.monthStatistics
+        case 'UPDATE_MONTH_STATISTICS':
+            state = action.monthStatistics
+        default:
+            return state;
+    }
+}
+
+
+const appReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts,
+                                    day, weekDay, selectedWorkoutList, stravaToken, athleteId, athleteRoutes, 
+                                    selectedRoute, currentRoute, monthStatistics})
+
+const rootReducer = (state, action) => {
+
+  return appReducer(state, action)
+}
 
 export default rootReducer
+
+
+

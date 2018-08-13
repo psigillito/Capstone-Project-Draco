@@ -48,16 +48,18 @@ class DayDetail extends Component {
 
     render(){
 
-      var workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList.includes(exercise._id)).length;
+      var workoutsCount = false;
+      if(this.props.workouts){
+        workoutsCount = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek !== null 
+                        && exercise.daysOfWeek.includes(this.props.weekDay) && this.props.selectedWorkoutList !== null 
+                        && this.props.selectedWorkoutList.includes(exercise._id)).length;
+      }
 
       if(workoutsCount){
 
         var tempsToFilter = this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
         && this.props.selectedWorkoutList.includes(exercise._id)
         && exercise.mode =='Running')
-  
-        console.log("routes to display are: ")
-        console.log(tempsToFilter)
   
         //get routes to display 
         var routesToDisplay = [];
@@ -111,7 +113,7 @@ class DayDetail extends Component {
                         {
                         this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                           && this.props.selectedWorkoutList.includes(exercise._id)
-                          && exercise.mode =='Running').map( (workout, index) =>
+                          && (exercise.mode =='Running' || exercise.mode == 'Swimming' || exercise.mode == 'Cycling')).map( (workout, index) =>
                             <div key={index}>
                               <h5 className="font-header-weight">{workout.name}</h5>
                                 <table className="table">
@@ -136,8 +138,8 @@ class DayDetail extends Component {
                             <select id="inputRoute" className="custom-select" onChange={this.handleRouteChange} >
                               <option value={-1}>Select a Strava Route to Display</option>
                               { 
-                                routesToDisplay.map( (route) =>
-                                <option value={route.stravaRoute}>{route.name}</option>
+                                routesToDisplay.map( (route, index) =>
+                                <option key={index} value={route.stravaRoute}>{route.name}</option>
                               )}
                             </select>
                             <div className="centered-section">

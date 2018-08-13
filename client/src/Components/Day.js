@@ -1,10 +1,7 @@
 import React, {Component} from 'react'
-import DayDetail from './DayDetail'
 import {currentDay} from '../data/weekData'
 import { connect } from 'react-redux';
-import {updateSelectedDay} from '../redux/actions'
-import {updateCurrentWeekDay} from '../redux/actions'
-import {updateSelectedWorkoutList} from '../redux/actions'
+import {updateSelectedDay, updateCurrentWeekDay, updateSelectedWorkoutList} from '../redux/actions'
 
 class Day extends Component {
 
@@ -25,10 +22,9 @@ class Day extends Component {
         this.props.updateSelectedWorkoutList(buttonDate);
     }
 
-
     render(){
 
-        if(this.props.date != 'X'){
+        if(this.props.date !== 'X'){
             var buttonDay =  new Date(this.props.year,this.props.month,this.props.date);
             var buttonWeekDay = buttonDay.getDay();
 
@@ -41,14 +37,14 @@ class Day extends Component {
             }
             //get weekdays that should be highlighted. Based on workouts that are part of activites that are active during this day.  
             var highlightDays = new Array();
-            for(var i = 0; i < this.props.workouts.data.length; i++){
+            for(i = 0; i < this.props.workouts.data.length; i++){
                 if(buttonWorkouts.includes(this.props.workouts.data[i]._id)){
                     highlightDays = highlightDays.concat(this.props.workouts.data[i].daysOfWeek)
                 }   
             }
         }
 
-        if(this.props.date != 'X'){            
+        if(this.props.date !== 'X'){            
             
                 if(this.props.date == currentDay && this.state.presentYear == this.props.year && this.state.presentMonth == this.props.month){
                     return(        

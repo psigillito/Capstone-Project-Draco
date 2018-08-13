@@ -1,17 +1,12 @@
 import React, {Component} from 'react'
-import Day from './Day'
 import Calendar from './Calendar'
 import NavBar from './NavBar'
-import BootStrap from 'bootstrap'
 import {Route, Switch} from 'react-router-dom'
-
 import About from './About'
 import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
-import {updateCurrentYear} from '../redux/actions'
-import {updateMonth} from '../redux/actions'
-import {dayVisible} from '../redux/actions'
+import {updateCurrentYear, updateMonth, updateStatistics, dayVisible, logout, setCurrentUser} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
 import DayDetail from './DayDetail'
@@ -19,12 +14,10 @@ import Landing from './Landing'
 import Register from './auth/Register'
 import Login from './auth/Login'
 import UserProfile from './UserProfile';
-import EditProfile from './EditProfile';
 import * as goalsJCR from '../copy/goals.json'
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utility/authToken';
-import { setCurrentUser } from '../redux/actions';
-import store from '../store';
+import {store} from '../store';
 import { connect } from 'react-redux';
 import reducer from '../redux/reducer';
 import axios from 'axios';
@@ -32,8 +25,7 @@ import ActiveWorkoutsPanel from './ActiveWorkoutsPanel';
 import Recommendation from './Recommendation';
 import TodaysExercisePanel from './TodaysExercisePanel';
 import MonthStatisticsPanel from './MonthStatisticsPanel';
-import { logout } from '../redux/actions';
-
+import Welcome from './Welcome';
 
 const Months = ['January', ' February', ' March', ' April', ' May',
                 ' June', ' July', ' August', ' September',
@@ -57,14 +49,18 @@ if(localStorage.jwtToken) {
         //redirect to login page
         window.location.href = '/login';
     }
-
 }
-
 
 class Main extends Component{
     constructor(props) {
         super(props);
-    }    
+    }
+
+    componentDidMount() {
+        if(!this.props.auth.isAuthenticated) {
+          this.props.history.push('/login');
+        }
+      }    
     
     render(){
 
@@ -76,7 +72,6 @@ class Main extends Component{
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/profile" component={UserProfile} />
-                <Route exact path="/edit-profile" component={EditProfile} />
                 <Route exact path = "/calendar" render={()=>(
                     
                     <section className="main-container">
@@ -86,25 +81,26 @@ class Main extends Component{
                         
                         
                         <div className="container">
+                            <Welcome goals={this.props.auth.user.goals}/>
                             <div className="row">
-                                <div className = "col-sm">
+                                <div className = "col-sm-3">
                                     <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans} workouts={this.props.workouts}/>
                                 </div>
-                                <div className = "col-sm"> 
+                                <div className = "col-sm-6"> 
                                     <h2>{Months[this.props.month] + ","+this.props.year}</h2>                   
                                     <Calendar trainingPlans={this.props.trainingPlans} user = {this.props.auth.user.name} weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
                                 </div>
-                                <div className = "col-sm"> 
+                                <div className = "col-sm-3"> 
                                 <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
-                                    updateCurrentYear={this.props.updateCurrentYear}  year={this.props.year} month={this.props.month} className="calendar-controller"/>
+                                    updateCurrentYear={this.props.updateCurrentYear} updateStatistics={this.props.updateStatistics} year={this.props.year} month={this.props.month} className="calendar-controller"/>
                                 </div>
                             </div>
                         </div>
                         <div className="container">
                             <div className="row">
-                                <TodaysExercisePanel className = "col-sm"/>
-                                <span className = "col-sm"/>
-                                <MonthStatisticsPanel className = "col-sm"/>
+                                <TodaysExercisePanel className = "col-sm-4"/>
+                                <span className = "col-sm-2"/>
+                                <MonthStatisticsPanel weekArray={this.props.days} trainingPlans={this.props.trainingPlans} className = "col-sm-6"/>
 
                             </div>
                         </div>

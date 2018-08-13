@@ -7,27 +7,21 @@ class DeleteTrainingPlan extends Component {
 	}
 
 	deleteTrainingPlan() {
-        axios.delete('/trainingPlans', {
-            params: {
-                id: this.props.id
-            }
-        })
-            .then(res => console.log(res))
+        axios.delete('/trainingPlans/' + this.props.id)
+            .then( () => window.location.reload())
             .catch(err => console.log(err));
-
-        window.location.reload();
     }
 
     render() {
     	return(
     		<div>
-	    		<div>
-			    	<h5>Are you sure you want to delete '{this.props.name}' 
-				        training plan and all workouts associated with it?</h5>
+	    		<div className="alert alert-warning">
+    			    Are you sure you want to delete '{this.props.name}' 
+    				training plan? This will also delete all workouts associated with it.
 			    </div>
 			    <div className="modal-footer">
-			        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-			        <button type="button"  onClick={() => this.deleteTrainingPlan() } className="btn btn-danger">Delete</button>
+			        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			        <button type="button"  onClick={() => this.deleteTrainingPlan() } className="btn btn-danger">Delete Plan</button>
 			    </div>
 		    </div>
     	)

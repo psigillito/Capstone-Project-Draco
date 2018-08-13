@@ -1,9 +1,9 @@
-import {getMonthWeeks} from '../data/weekData'
+import {getMonthWeeks, getWorkoutsForMonth} from '../data/weekData'
 import axios from 'axios';
 import { GET_ERRORS, SET_CURRENT_USER, GET_PROFILE, CLEAR_PROFILE } from './types';
 import setAuthToken from '../utility/authToken';
 import jwt_decode from 'jwt-decode';
-import store from '../store';
+import {store} from '../store';
 
 export function updateCurrentYear(newYear){
 
@@ -24,7 +24,7 @@ export function updateMonth(newMonth){
 
 export function updateDays(month, year){
 
-    var newDays = getMonthWeeks(year, month);
+    var newDays = getMonthWeeks(month, year);
 
     return {
         type: 'UPDATE_DAYS',
@@ -51,10 +51,13 @@ export function updateUser(newUser){
 export const registerUser = (userData, history) => dispatch => {
     axios.post('/users/register', userData)
       // redirect on success
-      .then(result => history.push('/login'))
+      .then(result => {
+        dispatch(loginUser(userData));
+        history.push('/goals');
+      })
       // use dispatch for async calls
       .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
-}
+  }
 
 // Login and get token for user
 export const loginUser = (userData) => dispatch => {
@@ -109,11 +112,11 @@ export const logout = () => dispatch => {
 }
 
 // get the current user profile
-export const getProfile = () => dispatch => {
-  axios.get('/profile')
+export const getProfile = (userId) => dispatch => {
+  axios.get('/users/' + userId)
     .then(res => dispatch({
       type: GET_PROFILE,
-      payload: res.data,
+      payload: res.data
     }))
     .catch(err => dispatch({
       type: GET_PROFILE,
@@ -122,16 +125,29 @@ export const getProfile = () => dispatch => {
 }
 
 // edit user account
-export const editUser = (userData, history) => dispatch => {
-    axios.post('/profile/edit-profile', userData)
-        .then(res => history.push('/profile'))
-        .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data}));
+export const editUser = (userData) => dispatch => {
+    axios.patch('/profile/edit-profile', userData)
+        .then(res => {
+          const {token} = res.data;
+          localStorage.setItem('jwtToken', token);
+          // set token to authorization header
+          setAuthToken(token);
+          // decode the token for user data
+          const data = jwt_decode(token);
+          // set the current user
+          dispatch(setCurrentUser(data));
+           
+          window.confirm('Settings saved!');
+          window.location.reload();
+          
+        })
+        .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 }
 
 // delete user account
-export const deleteAccount = () => dispatch => {
+export const deleteAccount = (userId) => dispatch => {
   if(window.confirm('Are you sure you wish to delete your account?')) {
-    axios.post('/users/delete')
+    axios.delete('/users/' + userId)
       .then(res => dispatch({
         type: SET_CURRENT_USER,
         payload: {}
@@ -214,5 +230,26 @@ export function setCurrentRoute(route){
         type: 'SET_CURRENT_ROUTE',
         currentRoute: route
     }
+}
 
+export function setStatistics(statistics){
+
+  return{
+      type: 'SET_MONTH_STATISTICS',
+      monthStatistics: statistics
+  }
+}
+
+export function updateStatistics(month, year){
+
+  //training plans 
+  var trainingPlans = store.getState().trainingPlans;
+  var workouts = store.getState().workouts;
+
+  var temp = getWorkoutsForMonth(month, year, trainingPlans, workouts)
+
+  return{
+    type: 'UPDATE_MONTH_STATISTICS',
+    monthStatistics: temp
+  }
 }

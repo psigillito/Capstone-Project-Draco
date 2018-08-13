@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 
 const Workout = require('../models/workouts');
-const User = require('../models/users');
 
 function lookupWorkout(req, res, next) {
     var workoutId = req.params.id;
@@ -42,14 +41,14 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         name: req.body.name,
         mode: req.body.mode,
         user: req.user._id.valueOf(),
+        daysOfWeek: req.body.daysOfWeek,
         trainingPlan: req.body.trainingPlan,
         duration: (req.body.duration) ? req.body.duration : null,
         exercises: (req.body.exercises) ? req.body.exercises : null,
         intervals: (req.body.intervals) ? req.body.intervals : null,
-        daysOfWeek: (req.body.daysOfWeek) ? req.body.daysOfWeek : null,
-        //date: new Date(req.body.date)
+        date: new Date(req.body.date)
     });
-    console.log(JSON.stringify(newWorkout));
+    //console.log(JSON.stringify(newWorkout));
     if (!newWorkout.name || !newWorkout.mode || !newWorkout.trainingPlan || !newWorkout.date) {
         return res.status(400).json({errors: 'Malformed or invalid request'});
     }

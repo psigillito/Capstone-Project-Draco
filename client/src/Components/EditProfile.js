@@ -73,6 +73,7 @@ class EditProfile extends Component {
             <h1 className="display-4 text-center">Edit Profile</h1>
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
+                <label for="name"><b>Name</b></label>
                 <input
                  type="text" 
                  className="form-control form-control-lg" 
@@ -84,6 +85,7 @@ class EditProfile extends Component {
                 />
               </div>
               <div className="form-group">
+                <label for="email"><b>Email</b></label>
                 <input 
                   type="email" 
                   className={classnames("form-control form-control-lg", {
@@ -98,6 +100,7 @@ class EditProfile extends Component {
                 { errors.email && (<div className="invalid-feedback">{alert('Email already exists')}</div>) }
               </div>
               <div className="form-group">
+                <label for="username"><b>Username</b></label>
                 <input 
                   type="text" 
                   className={classnames("form-control form-control-lg", {

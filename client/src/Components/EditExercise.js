@@ -8,48 +8,30 @@ class EditExercise extends Component {
         super(props);
 
         this.state = {
-          name:'',
           sets:'',
           reps:'',
           weight:'',
           unit:'lbs',
-          duration:'',
           distance:'',
           distanceUnit:'mi',
           workoutId:'',
-          exerciseName:'',
-          editOption:'',
-          currentWorkoutDays:[]
+          exerciseName:''
         }
 
         this.onChange = this.onChange.bind(this);
-        this.handleDayChange = this.handleDayChange.bind(this);
     }
 
     clearState() {
     	this.setState({
-    	  name:'',
         sets:'',
         reps:'',
         weight:'',
         unit:'',
-        duration:'',
         distance:'',
         distanceUnit:'',
         workoutId:'',
-        exerciseName:'',
-        editOption:'',
-        currentWorkoutDays:[]
+        exerciseName:''
     	})
-    }
-
-     handleDayChange(e) {
-        if(this.state.exerciseDays.includes(e.target.value)) {
-            const index = this.state.exerciseDays.indexOf(e.target.value);
-            this.state.exerciseDays.splice(index, 1);
-        } else {
-            this.state.exerciseDays.push(parseInt(e.target.value));
-        }
     }
 
     onChange(e) {
@@ -75,24 +57,24 @@ class EditExercise extends Component {
         }
       }
 
-      
-
       axios.patch('/workouts/' + this.state.workoutId, {
         exercise: newExercise
       })
         .then(res => {window.location.reload();})
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
 
     }
 
-    submitExercise() {
+    submitExercise(e) {
+      e.preventDefault();
+
       axios.patch('/workouts/exercises', {
         id: this.state.workoutId,
         name: this.state.exerciseName,
         edit: true
       })
         .then(res => this.saveExercise())
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)); 
     }
 
     deleteExercise() {
@@ -105,40 +87,28 @@ class EditExercise extends Component {
         .catch(err => console.log(err));
     }
 
-    getDay(day) {
-      switch(day) {
-        case 0: return 'Sunday'; break;
-        case 1: return 'Monday'; break;
-        case 2: return 'Tuesday'; break;
-        case 3: return 'Wednesday'; break;
-        case 4: return 'Thursday'; break;
-        case 5: return 'Friday'; break;
-        case 6: return 'Saturday'; break;
-      }      
-    }
-
     render() {
-
-      if(this.state.editOption !== 'recurringDays')
-        this.state.currentWorkoutDays = [];
 
       return(
         <div>
           <div className="modal-header">
             <h5 className="modal-title">Edit Exercise</h5>
+            <button type="button" onClick={() => this.clearState() } className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="modal-body">
+          <div className="modal-body">
           <label for='name'><b>Select workout to edit exercises:</b></label>
           <select id="inputState" 
             name="workoutId" 
-            class="form-control" 
+            className="form-control" 
             value={this.state.workoutId ? this.state.workoutId : ''} 
             onChange={this.onChange}>
             <option value='' selected>...</option>
             { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                 && this.props.selectedWorkoutList.includes(exercise._id))                                          
                 .map( (workout, index) =>
-                  <option key={index} value={workout._id}>{workout.name}</option>
+                  <option key={index} value={workout._id}>{workout.name} - {workout.mode}</option>
                 )
             }
           </select>
@@ -150,7 +120,7 @@ class EditExercise extends Component {
             <label for='name'><b>Select exercise to edit:</b></label>
               <select id="inputState" 
               name="exerciseName" 
-              class="form-control"
+              className="form-control"
               value={this.state.exerciseName ? this.state.exerciseName : ''} 
               onChange={this.onChange}>
               <option selected>...</option>
@@ -162,142 +132,87 @@ class EditExercise extends Component {
               </select>
               <br />
 
-            {/* day edit options */}
               {this.state.exerciseName !== '' && this.state.workoutId !== '' &&
                 <div>
-                  <form>
                   <div class="form-row"> 
                     <div class="alert alert-primary" role="alert">
-                      Warning! This action will update the exercise for each day of this workout.
-                      Select option below to edit for specific days.
-                    </div>
-                    <div class="col">
-                      <div class="form-check">
-                        <input class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="recurringDays"
-                          onChange={this.onChange} 
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Edit for recurring days
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="singleDay"
-                          onChange={this.onChange}  
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Edit for today only
-                        </label>
-                      </div>
-                    </div>
-                    {this.state.editOption !== '' && 
-                    <div class="col">
-                      <div class="form-check">
-                        <input 
-                          class="form-check-input" 
-                          type="radio" 
-                          name="editOption" 
-                          value="default"
-                          onChange={this.onChange}  
-                        />
-                        <label class="form-check-label" for="exampleRadios1">
-                          Default
-                        </label>
-                      </div>
-                    </div> }
+                      Note! This action will update the exercise for each day of this workout.
+                    </div>  
                   </div>
-                  </form>
-                  <br />
                 </div>
-              }
-
-            {/* Select recurring days to edit exercise 
-              {this.state.editOption === 'recurringDays' && this.state.editOption !== '...' &&
-                <div align="center">
-                  {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId)
-                    .map( (workout, key) => {for(let i = 0; i < workout.daysOfWeek.length; i++) 
-                      { this.state.currentWorkoutDays.push(workout.daysOfWeek[i]); }})
-                    }
-                    <div>
-                    <label for="daySelection"><b>Select Days:</b></label>
-                    </div> 
-                    {this.state.currentWorkoutDays.map( (day, index) =>
-                      <div class="form-check form-check-inline"> 
-                        <input class="form-check-input" 
-                          type="checkbox" 
-                          value={day} 
-                        />
-                        <label class="form-check-label" for="inlineCheckbox">{this.getDay(day)}</label>
-                      </div>
-                    )}      
-                </div>
-              } */}
-
-            {/* Update exercise for current day 
-              {this.state.editOption === 'singleDay' && this.state.editOption !== '...' &&
-                <div align="center">
-                  <p>Editing <b>{this.state.exerciseName}</b> exercise for current date:  
-                  <b> {this.props.day} / {this.props.month + 1} / {this.props.year}</b></p>
-                </div>
-              } */}
-                 
+              }      
                   
             {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode === 'Weight Training')
                 .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
                 .map((exercise, index) =>  
                 <div key={index}>
               		<label for="newExercise"><b>Update Exercise:</b></label>
-		              <form>
-		                <div class="form-row">
-		                  <div class="col">
+		              <form onSubmit={this.submitExercise.bind(this)}>
+		                <div className="form-row">
+		                  <div className="col">
 		                    <input type="number" 
-                          class="form-control" 
+                          className="form-control" 
                           name="sets" 
                           value={this.state.sets ? this.state.sets : ''} 
                           onChange={this.onChange} 
-                          placeholder={exercise.sets}  
+                          placeholder={exercise.sets}
+                          required  
                         />
+                        <small id="setsHelpBlock" className="form-text text-muted">
+                          Sets
+                        </small>
 		                  </div>
-		                  <div class="col">
+		                  <div className="col">
 		                    <input type="number" 
-                          class="form-control" 
+                          className="form-control" 
                           name="reps" 
                           value={this.state.reps ? this.state.reps : ''} 
                           onChange={this.onChange} 
-                          placeholder={exercise.reps}  
+                          placeholder={exercise.reps}
+                          required  
                         />
+                        <small id="repsHelpBlock" className="form-text text-muted">
+                          Reps
+                        </small>
 		                  </div>
-		                  <div class="col">
+		                  <div className="col">
 		                    <input type="number" 
-                          class="form-control" 
+                          className="form-control" 
                           name="weight" 
                           value={this.state.weight ? this.state.weight : ''} 
                           onChange={this.onChange} 
                           placeholder={exercise.weight}
+                          required
                         />
+                        <small id="weightHelpBlock" className="form-text text-muted">
+                          Weight
+                        </small>
 		                  </div>
-		                  <div class="col">
+		                  <div className="col">
 		                   <select 
                          name="unit" 
-                         class="form-control"
+                         className="form-control"
                          value={this.state.unit ? this.state.unit : ''} 
                          onChange={this.onChange}>
 		                      <option name="unit" value="lbs">Lbs</option>
 		                      <option name="unit" value="kg">Kg</option>
 		                   </select>
+                       <small id="unitHelpBlock" className="form-text text-muted">
+                          Unit
+                       </small>
 		                  </div>
 		                </div>
-		              </form>
-                  <br />
-                   <button type="button" onClick={() => this.deleteExercise() } class="btn btn-secondary">Delete Exercise</button>
+                    <br />
+                    <button type="button" 
+                     onClick={() => this.deleteExercise() } 
+                     className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
+                    </button>
+                    <br /><br />
+                    <div className="modal-footer">
+                      <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" className="btn btn-success">Save changes</button>
+                    </div>
+		              </form>    
 		            </div>
                 ))}
               </div>
@@ -308,8 +223,7 @@ class EditExercise extends Component {
                 .map((exercise, index) =>  
                   <div key={index}>
                   	<label for="newExercise"><b>Update Exercise:</b></label>
-  				            <form>
-                        <label for='duration'><b>Duration:</b></label>
+  				            <form onSubmit={this.submitExercise.bind(this)}>
   				              <div class="form-row">
   				                <div class="col">
   				                  <input type="number" 
@@ -318,7 +232,11 @@ class EditExercise extends Component {
                               value={this.state.distance ? this.state.distance : ''} 
                               onChange={this.onChange} 
                               placeholder={exercise.distance}
+                              required
                             />
+                            <small id="distanceHelpBlock" className="form-text text-muted">
+                              Distance
+                            </small>
   				                </div>
   				                <div class="col">
   				                  <select name="distanceUnit" 
@@ -328,22 +246,30 @@ class EditExercise extends Component {
   				                    <option name="distanceUnit" value="mi">Mi</option>
   				                    <option name="distanceUnit" value="km">Km</option>
   				                  </select>
+                            <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                              Unit
+                            </small>
   				                </div>
   				              </div>
+                        <br />
+                        <button type="button" 
+                         onClick={() => this.deleteExercise() } 
+                         className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
+                        </button>
+                        <br /><br />
+                        <div className="modal-footer">
+                          <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <button type="submit" className="btn btn-success">Save changes</button>
+                        </div>
   				            </form>
-  				            <br />
-  				          <div>
-  				                  
+  				          <div>          
   				        </div>
   				      </div>
                 )
               )}
           </div>
 
-          <div class="modal-footer">
-            <button type="button" onClick={() => this.clearState() } class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button"  onClick={() => this.submitExercise() } class="btn  btn-success">Save changes</button>
-          </div>
+         
       </div>
       )
     }

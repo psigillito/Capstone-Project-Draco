@@ -131,8 +131,13 @@ input[type="button"]{
     margin: auto;
     width: 50%;
     text-align: center;
-
 }
+
+.about-section{
+    margin:auto;
+    width: 60%;
+}
+
 
 .hidden{
     display: none;
@@ -144,4 +149,28 @@ input[type="button"]{
 
 .td-fixed-width{
   width:33%;
+}
+
+.selected-calendar-controller{
+  color: #ec8917;
+  font-weight:700;
+}
+
+.wrap-text{
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.med-size-image{
+  height: 400px;
+}
+
+.team-member-image{
+  width: 350px;
+  padding: 10px;
+}
+
+.fig-caption{
+  padding: 10px;
 }

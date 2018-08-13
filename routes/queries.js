@@ -1,6 +1,11 @@
 const User = require('../models/users');
 const Workout = require('../models/workouts');
 const TrainingPlan = require('../models/trainingPlans');
+var addWeeks = require('date-fns/add_weeks');
+const jwt = require('jsonwebtoken');
+
+// Import key
+const keys = require('../config/keys');
 
 /*
  * This function gets a user object by specified userId
@@ -178,7 +183,7 @@ var _createWorkout = function(newWorkout, userId, res) {
         }
         _updateUsersNumWorkouts(userId.valueOf());
         _addWorkoutToTrainingPlan(doc.trainingPlan, doc._id.valueOf());
-        return res.status(200).json(doc);
+        return res.status(201).json(doc);
     });
 }
 
@@ -219,7 +224,7 @@ var _deleteWorkout = function(workoutId, res) {
 		}
 		else {
 			_deleteWorkoutFromTrainingPlan(doc.trainingPlan, workoutId);
-			res.status(200).json(doc);
+			return res.status(200).json(doc);
 		}
 	});
 }
@@ -229,7 +234,7 @@ var _deleteWorkout = function(workoutId, res) {
  * @parameter {string} userId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _updateUsersNumWorkouts = function(userId, res) {
+var _updateUsersNumWorkouts = function(userId) {
 	User.findById(userId, 'numWorkouts', (error, result) => {
 		if (error) {
 			console.log(error);
@@ -255,24 +260,6 @@ var _updateUsersNumTrainingPlans = function(userId, res) {
 }
 
 /*
- * This function deletes all of a user's data before the user entity itself is deleted
- * @parameter {string} userId
-**/
-var _deleteAllUserData = function(userId) {
-	User.findById(userId, 'workouts trainingPlans', (error, result) => {
-		if (error) {
-			console.log(error);
-		}
-		result.workouts.forEach(workout => {
-			_deleteWorkout(workout);
-		});
-		result.trainingPlans.forEach(trainingPlan => {
-			_deleteTrainingPlan(trainingPlan);
-		});
-	});
-}
-
-/*
  * This function adds a reference to a workout to a specified training plan
  * @parameter {string} trainingPlanId
  * @parameter {string} workoutId
@@ -285,7 +272,7 @@ var _addWorkoutToTrainingPlan = function(trainingPlanId, workoutId, res) {
 		}
 		var newWorkouts = result.workouts;
 		newWorkouts.push(workoutId);
-		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		TrainingPlan.findByIdAndUpdate(trainingPlanId, {workouts: newWorkouts}, (error, doc) => {});
 	});
 }
 
@@ -303,7 +290,7 @@ var _deleteWorkoutFromTrainingPlan = function(trainingPlanId, workoutId, res) {
 		var indexToRemove = result.workouts.indexOf(workoutId);
 		var newWorkouts = result.workouts;
 		newWorkouts.splice(indexToRemove, 1);
-		_updateTrainingPlan(trainingPlanId, {workouts: newWorkouts}, res);
+		TrainingPlan.findByIdAndUpdate(trainingPlanId, {workouts: newWorkouts}, (error, doc) => {});
 	});
 }
 
@@ -357,7 +344,7 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
 		var indexToRemove = result.trainingPlans.indexOf(trainingPlanId);
 		var newTPs = result.trainingPlans;
 		newTPs.splice(indexToRemove, 1);
-		_updateUser(userId, {trainingPlans: newTPs}, res);
+		User.findByIdAndUpdate(userId, {trainingPlans: newTPs}, (error, doc) => {});
 	});
 }
 
@@ -366,17 +353,44 @@ var _deleteTrainingPlanFromUser = function(trainingPlanId, userId, res) {
  * @parameter {string} trainingPlanId
  * @parameter {object} res, the response object from the route OPTIONAL
 **/
-var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
-	TrainingPlan.findById(trainingPlanId, 'workouts', (error, result) => {
+var _deleteAllUserData = function(userId, res) {
+	Workout.find({user: userId}, (error, result) => {
 		if (error) {
 			console.log(error);
 		}
-		result.workouts.forEach(workout => {
-			_deleteWorkout(workout);
+		result.forEach(workout => {
+			Workout.findByIdAndRemove(workout._id.valueOf(), (err, doc) => {});
 		});
-		if (typeof res !== "undefined") {
-			res.json({action: "deleted", entityId: userId});
+	});
+	TrainingPlan.find({user: userId}, (error, result) => {
+		if (error) {
+			console.log(error);
 		}
+		result.forEach(trainingPlan => {
+			TrainingPlan.findByIdAndRemove(trainingPlan._id.valueOf(), (err, doc) => {});
+		});
+	});
+	User.findById(userId, (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		_deleteUser(userId, res);
+	});
+}
+
+/*
+* This function deletes all the exercises from a training plan
+* @parameter {string} userId, the id of the user the training plan belongs to
+* @parameter {string} trainingPlanId, the id of the training plan to delete workouts from
+**/
+var _deleteWorkoutsFromTrainingPlan = function (userId, trainingPlanId) {
+	Workout.find({ user: userId, trainingPlan: trainingPlanId }, (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		result.forEach(workout => {
+			Workout.findByIdAndRemove(workout._id.valueOf(), (err, doc) => {});
+		});
 	});
 }
 
@@ -388,11 +402,173 @@ var _deleteAllTrainingPlanWorkouts = function(trainingPlanId, res) {
 **/
 var _deleteExercise = function(workoutId, exerciseName, res) {
 	Workout.update({"_id": workoutId}, {"$pull" : { "exercises" : {"name": exerciseName }}}, (err, data) => {
-        console.log(err, data);
         if(!err) {
         	res.json({ success: true });
+        } else {
+        	console.log(err);
         }
     });
+}
+
+/*
+* This function creates a recommended trainingPlan
+* @parameter {object} goals, the goals object that the user creates in the goals quiz UI
+* @parameter {object} logistics, the logistics object that the user creates in the goals quiz UI
+* @parameter {string} userId, the string indentifier for the user to create a recommended training plan for
+**/
+var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
+	const today = new Date();
+	var addlInfo = logistics;
+	addlInfo.goals = goals;
+	var recommendedTP = new TrainingPlan({
+		user: userId,
+		name: "Recommended",
+		startDate: today,
+		endDate: null,
+		active: true,
+		logistics: addlInfo
+	});
+	switch (goals.primaryGoal) {
+		case 1:
+		  recommendedTP.endDate = addWeeks(today, 52);
+		  break;
+		case 2:
+		  var numWeeks = (goals.loseWeight.autoSelectTime) ? ((goals.loseWeight.currentWeight - goals.loseWeight.goalWeight) / 2) : goals.loseWeight.time
+		  recommendedTP.endDate = addWeeks(today, numWeeks);
+		  break;
+		case 3:
+		recommendedTP.endDate = addWeeks(today, 52);
+		default:
+		  break;
+	}
+	recommendedTP.save((err, response) => {
+		_createRecommendedWorkouts(response.logistics, response.user, response._id.valueOf())
+	});
+}
+
+/*
+* This function parses the hoursPerDay object in logistics to determine which places to place workouts on
+* @parameter {object} logistics, the object containing the logistic data for the user
+* @parameter {number} duration, the duration of the exercise session in hours
+**/
+var _suggestedDuration = function(logistics, duration) {
+    var viableDays = [];
+    for (var i = 0; i < 7; i++) {
+      if ((duration / parseInt(logistics.hoursPerDay[i], 10)) < 1) {
+        viableDays.push(i);
+      }
+    };
+    return viableDays;
+  }
+
+/*
+* This function creates recommended Workouts
+* @parameter {object} config, includes the user's primary goal and the logistic data
+* @parameter {string} userId, the user to attach the recommended workouts to
+* @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
+**/
+var _selectDays = function(array, numberToSelect) {
+	var chosenNums = [];
+	var chosenDays = [];
+	if (array.length < numberToSelect) { return array }
+	while (chosenNums.length < numberToSelect) {
+		var tempNum = Math.floor(Math.random() * Math.floor(array.length - 1));
+		if (chosenNums.indexOf(tempNum) === -1 ) {
+			chosenNums.push(tempNum);
+			chosenDays.push(array[tempNum]);
+		}
+	}
+	return chosenDays;
+}
+
+/*
+* This function creates recommended Workouts
+* @parameter {object} config, includes the user's primary goal and the logistic data
+* @parameter {string} userId, the user to attach the recommended workouts to
+* @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
+**/
+var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
+	switch (config.goals.primaryGoal) {
+		case 1:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Improving Cardiovascular Health",
+				mode: "Running",
+				daysOfWeek: _selectDays(_suggestedDuration(config, 0.5), 3),
+				trainingPlan: trainingPlanId,
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 3,
+					stravaRoute: -1
+				}],
+				duration: {
+					value: 30,
+					units: "min"
+				}
+			});
+			break;
+		case 2:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Weight Loss Cardio",
+				mode: "Running",
+				daysOfWeek: _selectDays(_suggestedDuration(config, 0.75), 5),
+				trainingPlan: trainingPlanId,
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 5,
+					stravaRoute: -1
+				}],
+				duration: {
+					value: 45,
+					units: "min"
+				}
+			});
+			break;
+		case 3:
+			recommendedWorkout = new Workout({
+				user: userId,
+				name: "Improving Cardiovascular Fitness",
+				mode: "Running",
+				daysOfWeek: _selectDays(_suggestedDuration(config, 1), 6),
+				trainingPlan: trainingPlanId,
+				exercises: [{
+					name: "Moderate Run",
+					distanceUnit: "mi",
+					distance: 7,
+					stravaRoute: -1
+				}],
+				duration: {
+					value: 60,
+					units: "min"
+				}
+			});
+			break;
+		default:
+			return;
+	}
+	recommendedWorkout.save((err, response) => {
+		_addWorkoutToTrainingPlan(response.trainingPlan, response._id.valueOf());
+	});
+}
+
+/* This function updates a user and signs a new jwt token
+* @parameter {string} userId, id of user to update
+* @parameter {object} updateObj, user update object
+* @parameter {object} response, response object
+**/
+var _updateUserToken = function(userId, updateObj, response) {
+	User.findByIdAndUpdate(userId, updateObj, {new:true}, (err, res) => {
+		if(!err) {
+			// sign the token
+			const payload = {id: userId, name: updateObj.name};
+			jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 }, (err, token) => {
+				response.json({ success: true, token: "Bearer " + token });
+			})
+		}
+	});
 }
 
 queries = {
@@ -412,12 +588,14 @@ queries = {
 	updateUsersNumWorkouts: _updateUsersNumWorkouts,
 	updateUsersNumTrainingPlans: _updateUsersNumTrainingPlans,
 	addWorkoutToTrainingPlan: _addWorkoutToTrainingPlan,
-	deleteWorkoutFromTrainingPlan: _deleteWorkoutFromTrainingPlan,
 	deleteWorkoutFromUser: _deleteWorkoutFromUser,
 	addTrainingPlanToUser: _addTrainingPlanToUser,
 	deleteTrainingPlanFromUser: _deleteTrainingPlanFromUser,
-	deleteAllTrainingPlanWorkouts: _deleteAllTrainingPlanWorkouts,
-	deleteExercise: _deleteExercise
+	deleteExercise: _deleteExercise,
+	createRecommendedTrainingPlan: _createRecommendedTrainingPlan,
+	createRecommendedWorkouts: _createRecommendedWorkouts,
+	deleteWorkoutsFromTrainingPlan: _deleteWorkoutsFromTrainingPlan,
+	updateUserToken: _updateUserToken
 }
 
 module.exports = queries;

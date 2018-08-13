@@ -6,9 +6,9 @@ class UpdateTrainingPlan extends Component {
         super(props);
 
         this.state = {
-          name: '',
-          startDate: '',
-          endDate: ''
+          name: this.props.name,
+          startDate: this.props.startDate,
+          endDate: this.props.endDate
         }
 
         this.onChange = this.onChange.bind(this);
@@ -19,7 +19,6 @@ class UpdateTrainingPlan extends Component {
             name: this.state.name,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
-            id: this.props.id
         }
 
         if(this.props.title === 'Create New Training Plan') {
@@ -27,7 +26,7 @@ class UpdateTrainingPlan extends Component {
             .then(res => console.log(res))
             .catch(err => console.log(err));
           } else if(this.props.title === 'Edit Training Plan') {
-            axios.patch('/trainingPlans', newPlan)
+            axios.patch('/trainingPlans/' + this.props.id, newPlan)
               .then(res => console.log(res))
               .catch(err => console.log(err));
           } 
@@ -58,7 +57,6 @@ class UpdateTrainingPlan extends Component {
         )
       } else {
       return(
-
         <div>
            <div className="modal-header">
            <h5>{this.props.title}</h5>
@@ -111,10 +109,10 @@ class UpdateTrainingPlan extends Component {
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">
-                Close
+              <button type="button" className="btn btn-secondary btn-sm" data-dismiss="modal">
+                Cancel
               </button>
-              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="btn btn-primary">
+              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="btn btn-success btn-sm">
                 Save changes
               </button>
             </div>

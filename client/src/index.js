@@ -8,7 +8,7 @@ import rootReducer from './redux/reducer'
 import {Provider} from 'react-redux'
 import App from './Components/App'
 import thunk from 'redux-thunk';
-import store from './store';
+import {store} from './store';
 
 // const initialState = {};
 
