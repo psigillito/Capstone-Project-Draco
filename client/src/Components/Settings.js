@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { editUser, getProfile, deleteAccount, logout } from '../redux/actions';
 import { withRouter } from 'react-router-dom';
+import loading from '../images/loading.gif';
 
 class Settings extends Component {
   constructor() {
@@ -64,9 +65,13 @@ class Settings extends Component {
     const { errors } = this.state;
 
     if(!this.props.profile.profile) {
-      console.log('loading...');
+    	return (
+    		<div>
+    			<img src={loading} className="d-block mx-auto" />
+    		</div>
+    	)   
     } else {
-		    return (
+		return (
 		    <div className="settings">
 		      <div className="container">
 		        <div className="row">
@@ -122,13 +127,8 @@ class Settings extends Component {
 		        </div>
 		      </div>
 		    </div>
-		    )
-  }
-  return(
-      <div>
-        <h1 className="display-4 text-center">Settings</h1>
-      </div>
-    )
+		)
+  	}
 }
 
 }
