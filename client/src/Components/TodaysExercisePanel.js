@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import WorkOutDetail from './WorkOutDetail';
-
+import { connect } from 'react-redux';
 
 class TodaysExercisePanel extends Component {
 
   render(){
+
     if(this.props.todaysWorkouts && this.props.todaysWorkouts.length > 0){
 
       return(
@@ -60,4 +61,10 @@ class TodaysExercisePanel extends Component {
     }
 }
 
-export default TodaysExercisePanel;
+const mapStateToProps = function(state) {
+  return { 
+           todaysWorkouts: state.todaysWorkouts 
+         }
+}
+
+export default connect(mapStateToProps)(TodaysExercisePanel);

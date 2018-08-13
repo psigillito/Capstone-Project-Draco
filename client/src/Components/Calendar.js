@@ -19,16 +19,14 @@ class Calendar extends Component{
     }
 
     componentWillMount(){
-        //get all training plans 
-        axios.get('/trainingPlans/', {
-            params: {
-                user: this.props.auth.user.id  
-              }
-        }).then(res => {    
-            this.props.getCurrentTrainingPlans(res);
-        })
-
-        //get all workouts 
+      //get all training plans 
+      axios.get('/trainingPlans/', {
+        params: {
+            user: this.props.auth.user.id  
+          }
+      }).then(res => {    
+        this.props.getCurrentTrainingPlans(res);
+      }).then( res => { 
         axios.get('/workouts/', {
             params: {
                 user: this.props.auth.user.id
@@ -36,14 +34,15 @@ class Calendar extends Component{
         }).then(res => {
             this.props.getCurrentWorkouts(res);
         })
+      }).then( ()=> {
         axios.get('/users/getUser', {
-            params:{
-                _id: this.props.auth.user.id
-            }
+          params:{
+            _id: this.props.auth.user.id
+          }
         }).then(res => {
-            if(res.data && res.data.stravaToken){
-                this.props.updateStravaToken(res.data.stravaToken);
-            }
+          if(res.data && res.data.stravaToken){
+            this.props.updateStravaToken(res.data.stravaToken);
+          }
         }).then( res =>{
 
           fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
@@ -65,26 +64,28 @@ class Calendar extends Component{
               this.props.setAthleteRoutes(athleteRoutes)
             })
           })
+      
         }).then( res => {
           this.props.setTodaysWorkouts();
         }).then(res => {
-          this.props.updateStatistics(8, 2018 )
-        })      
+          this.props.updateStatistics(7, 2018 )
+        })     
+      })
     }
 
     render(){
-        return (
-            <div className="calendar-component">
-                <table>
-                  <thead>
-                      <tr>{Days.map( (day, index) => <th key={index} className ="calendar-header">{day}</th> )}</tr>
-                  </thead>
-                  <tbody>
-                      {this.props.weekArray.map( (daysOfWeek, index) => <Week key={index} updateDayVisible ={this.props.updateDayVisible} days={daysOfWeek}/>)}
-                  </tbody>
-                </table>
-            </div>
-        )
+      return (
+        <div className="calendar-component">
+          <table>
+            <thead>
+              <tr>{Days.map( (day, index) => <th key={index} className ="calendar-header">{day}</th> )}</tr>
+            </thead>
+            <tbody>
+              {this.props.weekArray.map( (daysOfWeek, index) => <Week key={index} updateDayVisible ={this.props.updateDayVisible} days={daysOfWeek}/>)}
+            </tbody>
+          </table>
+        </div>
+      )
     }
 }
 
