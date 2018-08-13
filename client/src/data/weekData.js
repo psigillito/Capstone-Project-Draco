@@ -73,8 +73,20 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts) {
   return calculateTotals(workoutsByWeek, 200);
 }
 
+function calculateDistanceInMiles(exercise) {
+  if (exercise.distanceUnit == 'mi') {
+    return parseFloat(exercise.distance);
+  }
+  else if (exercise.distanceUnit == 'km') {
+    return parseFloat(exercise.distance / 1.609);
+  }
+}
+
 function calculateTotals(allWorkoutsThisMonth, weight) {
-  const CARDIO_CALORIES = 11.0;
+  // These MET values are from the compendium of physical activity found at: http://prevention.sph.sc.edu/tools/docs/documents_compendium.pdf
+  const RUN_CALORIES = 11.0;
+  const BIKE_CALORIES = 9.0;
+  const SWIM_CALORIES = 8.0;
   const STRENGTH_CALORIES = 3.0;
   const AVG_MALE_WEIGHT = 86.6;
   const AVG_FEMALE_WEIGHT = 72.1;
@@ -109,25 +121,25 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
           for (var l = 0; l < tempWorkout.exercises.length; l++) {
             var tempRun = tempWorkout.exercises[l];
             runCount++;
-            runsList.push(parseFloat(tempRun.distance));
-            runDistanceTotal += parseFloat(tempRun.distance);
-            runCalories += parseInt((parseFloat(tempRun.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+            runsList.push(calculateDistanceInMiles(tempRun));
+            runDistanceTotal += calculateDistanceInMiles(tempRun);
+            runCalories += parseInt((parseFloat(tempRun.distance) * 8 * RUN_CALORIES * 3.5 * userWeight / 200), 10);
           }
         } else if (tempWorkout.mode == 'Swimming') {
           for (var n = 0; n < tempWorkout.exercises.length; n++) {
             var tempSwim = tempWorkout.exercises[n];
             swimCount++;
-            swimsList.push(parseFloat(tempSwim.distance));
-            swimDistanceTotal += parseFloat(tempSwim.distance);
-            swimCalories += parseInt((parseFloat(tempSwim.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+            swimsList.push(calculateDistanceInMiles(tempSwim));
+            swimDistanceTotal += calculateDistanceInMiles(tempSwim);
+            swimCalories += parseInt((parseFloat(tempSwim.distance) * 35 * SWIM_CALORIES * 3.5 * userWeight / 200), 10);
           }
         } else if (tempWorkout.mode == 'Cycling') {
           for (var p = 0; p < tempWorkout.exercises.length; p++) {
             var tempRide = tempWorkout.exercises[k];
             cycleCount++;
-            cycleList.push(parseFloat(tempRide.distance));
-            cycleDistanceTotal += parseFloat(tempRide.distance);
-            cycleCalories += parseInt((parseFloat(tempRide.distance) * 8 * CARDIO_CALORIES * 3.5 * userWeight / 200), 10);
+            cycleList.push(calculateDistanceInMiles(tempRide));
+            cycleDistanceTotal += calculateDistanceInMiles(tempRide);
+            cycleCalories += parseInt((parseFloat(tempRide.distance) * 4 * BIKE_CALORIES * 3.5 * userWeight / 200), 10);
           }
         } else if (tempWorkout.mode == 'Weight Training') {
           for (var m = 0; m < tempWorkout.exercises.length; m++) {

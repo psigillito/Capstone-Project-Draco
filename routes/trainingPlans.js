@@ -76,6 +76,7 @@ router.patch('/:id', passport.authenticate('jwt', {session:false}), (req, res) =
 
 router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
 	queries.deleteTrainingPlanFromUser(req.params.id, req.user._id.valueOf());
+	queries.deleteWorkoutsFromTrainingPlan(req.user._id.valueOf(), req.params.id);
 	queries.deleteTrainingPlan(req.params.id, res);
 });
 

@@ -379,6 +379,22 @@ var _deleteAllUserData = function(userId, res) {
 }
 
 /*
+* This function deletes all the exercises from a training plan
+* @parameter {string} userId, the id of the user the training plan belongs to
+* @parameter {string} trainingPlanId, the id of the training plan to delete workouts from
+**/
+var _deleteWorkoutsFromTrainingPlan = function (userId, trainingPlanId) {
+	Workout.find({ user: userId, trainingPlan: trainingPlanId }, (error, result) => {
+		if (error) {
+			console.log(error);
+		}
+		result.forEach(workout => {
+			Workout.findByIdAndRemove(workout._id.valueOf(), (err, doc) => {});
+		});
+	});
+}
+
+/*
 * This function deletes an exercise from a workout
 * @parameter {string} workoutId
 * @parameter {string} exerciseName
@@ -403,7 +419,7 @@ var _deleteExercise = function(workoutId, exerciseName, res) {
 var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
 	const today = new Date();
 	var addlInfo = logistics;
-	addlInfo.primaryGoal = goals.primaryGoal;
+	addlInfo.goals = goals;
 	var recommendedTP = new TrainingPlan({
 		user: userId,
 		name: "Recommended",
@@ -451,21 +467,41 @@ var _suggestedDuration = function(logistics, duration) {
 * @parameter {string} userId, the user to attach the recommended workouts to
 * @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
 **/
+var _selectDays = function(array, numberToSelect) {
+	var chosenNums = [];
+	var chosenDays = [];
+	if (array.length < numberToSelect) { return array }
+	while (chosenNums.length < numberToSelect) {
+		var tempNum = Math.floor(Math.random() * Math.floor(array.length - 1));
+		if (chosenNums.indexOf(tempNum) === -1 ) {
+			chosenNums.push(tempNum);
+			chosenDays.push(array[tempNum]);
+		}
+	}
+	return chosenDays;
+}
+
+/*
+* This function creates recommended Workouts
+* @parameter {object} config, includes the user's primary goal and the logistic data
+* @parameter {string} userId, the user to attach the recommended workouts to
+* @parameter {object} trainingPlanId, the "Recommended" training plan to assign the workouts to
+**/
 var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
-	switch (config.primaryGoal) {
+	switch (config.goals.primaryGoal) {
 		case 1:
 			recommendedWorkout = new Workout({
 				user: userId,
-				name: "Improving Health Cardio",
+				name: "Improving Cardiovascular Health",
 				mode: "Running",
-				daysOfWeek: _suggestedDuration(config, 0.5),
+				daysOfWeek: _selectDays(_suggestedDuration(config, 0.5), 3),
+				trainingPlan: trainingPlanId,
 				exercises: [{
 					name: "Moderate Run",
 					distanceUnit: "mi",
-					distance: 2,
+					distance: 3,
 					stravaRoute: -1
 				}],
-				trainingPlan: trainingPlanId,
 				duration: {
 					value: 30,
 					units: "min"
@@ -477,7 +513,7 @@ var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
 				user: userId,
 				name: "Weight Loss Cardio",
 				mode: "Running",
-				daysOfWeek: _suggestedDuration(config, 0.75),
+				daysOfWeek: _selectDays(_suggestedDuration(config, 0.75), 5),
 				trainingPlan: trainingPlanId,
 				exercises: [{
 					name: "Moderate Run",
@@ -494,14 +530,14 @@ var _createRecommendedWorkouts = function (config, userId, trainingPlanId) {
 		case 3:
 			recommendedWorkout = new Workout({
 				user: userId,
-				name: "Improving Fitness Cardio",
+				name: "Improving Cardiovascular Fitness",
 				mode: "Running",
-				daysOfWeek: _suggestedDuration(config, 1),
+				daysOfWeek: _selectDays(_suggestedDuration(config, 1), 6),
 				trainingPlan: trainingPlanId,
 				exercises: [{
 					name: "Moderate Run",
 					distanceUnit: "mi",
-					distance: 8,
+					distance: 7,
 					stravaRoute: -1
 				}],
 				duration: {
@@ -558,6 +594,7 @@ queries = {
 	deleteExercise: _deleteExercise,
 	createRecommendedTrainingPlan: _createRecommendedTrainingPlan,
 	createRecommendedWorkouts: _createRecommendedWorkouts,
+	deleteWorkoutsFromTrainingPlan: _deleteWorkoutsFromTrainingPlan,
 	updateUserToken: _updateUserToken
 }
 
