@@ -245,7 +245,6 @@ export function setStatistics(statistics){
 
 export function updateStatistics(month, year){
 
-  console.log("BUT I FIRE THOUGH")
   //training plans 
   var trainingPlans = store.getState().trainingPlans;
   var workouts = store.getState().workouts;
