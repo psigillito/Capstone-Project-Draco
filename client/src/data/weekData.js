@@ -33,31 +33,44 @@ function getMonthWeeks(month, year) {
 function getWorkoutsForMonth(month, year, trainingPlans, workouts) {
 
   var workoutsByWeek = [];
-  var monthWeeks = getMonthWeeks(month, year)
+  var monthArray = getMonthWeeks(month-1, year)
 
   //for each week of month
-  for (var i = 0; i < monthWeeks.length; i++) {
+  for (var i = 0; i < monthArray.length; i++) {
 
     var thisWeeksWorkouts = [];
-    //iterate over each day of the week
-    for (var t = 0; t < monthWeeks[i].length; t++) {
 
-      if (monthWeeks[i][t] !== 'X') {
-        var currentDay = monthWeeks[i][t];
-        var WorkoutDay = new Date(year, month, currentDay);
-        var associatedTrainingPlans = trainingPlans.data.filter((plan) => (Date.parse(plan.startDate) <= WorkoutDay && Date.parse(plan.endDate) >= WorkoutDay));
-        var DayOfWeek = parseInt(WorkoutDay.getDay());
-        var buttonWorkouts = new Array();
+    //iterate over each day of the week
+    for (var t = 0; t < 7; t++) {
+
+      //if day is valid 
+      if (monthArray[i][t] !== 'X') {
+
+        //full date i.e. august 21st 2018 
+        var currentDate = new Date(year, month-1, monthArray[i][t]);
+
+        //i.e. int of weekday: tuesday
+        var DayOfWeek = parseInt(currentDate.getDay());
+
+        //training plans effective on this day 
+        var associatedTrainingPlans = trainingPlans.data.filter((plan) => (Date.parse(plan.startDate) <= currentDate && Date.parse(plan.endDate) >= currentDate));
+        
+        //will store the workouts for the day 
+        var workoutsByDay = new Array();
+
+        //for each training plan that is effective for the current day  
         for (var j = 0; j < associatedTrainingPlans.length; j++) {
-          buttonWorkouts = buttonWorkouts.concat(associatedTrainingPlans[j].workouts)
-          var tempsToFilter = workouts.data.filter((exercise) => exercise.daysOfWeek !== null && exercise.daysOfWeek.includes(DayOfWeek));
-          thisWeeksWorkouts.push(tempsToFilter);
+          //get the workouts 
+          workoutsByDay = workoutsByDay.concat(associatedTrainingPlans[j].workouts)
         }
+
+        var exercisesApplicableForDay = workouts.data.filter((tempy) => tempy.daysOfWeek !== null && tempy.daysOfWeek.includes(DayOfWeek) && workoutsByDay.includes(tempy._id));
+        thisWeeksWorkouts.push(exercisesApplicableForDay);
       }
     }
     workoutsByWeek.push(thisWeeksWorkouts);
   }
-  return calculateTotals(workoutsByWeek);
+  return calculateTotals(workoutsByWeek, 200);
 }
 
 function calculateTotals(allWorkoutsThisMonth, weight) {
@@ -143,18 +156,16 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
     }
   }
 
-
-  var shortestRun = Math.min(...runsList);
-  var longestRun = Math.max(...runsList);
-  var shortestSwim = Math.min(...swimsList);
-  var longestSwim = Math.max(...swimsList);
-  var shortestRide = Math.min(...cycleList);
-  var longestRide = Math.max(...cycleList);
-
-  var averageRun = runDistanceTotal / runCount;
-  var averageSwim = swimDistanceTotal / swimCount;
-  var averageRide = cycleDistanceTotal / cycleCount;
-
+  var shortestRun   = runsList.length  ? Math.min(...runsList)  : 0;
+  var longestRun    = runsList.length  ? Math.max(...runsList)  : 0;
+  var shortestSwim  = swimsList.length ? Math.min(...swimsList) : 0;
+  var longestSwim   = swimsList.length ? Math.max(...swimsList) : 0;
+  var shortestRide  = cycleList.length ? Math.min(...cycleList) : 0;
+  var longestRide   = cycleList.length ? Math.max(...cycleList) : 0;
+  
+  var averageRun = (runDistanceTotal && runCount) ?  (runDistanceTotal / runCount) : 0;
+  var averageSwim = (swimDistanceTotal && swimCount) ? (swimDistanceTotal / swimCount) : 0;
+  var averageRide = (cycleDistanceTotal && cycleCount) ? (cycleDistanceTotal / cycleCount) : 0;
 
   return {
     'runDistanceTotal': runDistanceTotal.toFixed(2),

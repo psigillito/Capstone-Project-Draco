@@ -214,10 +214,18 @@ function monthStatistics(state={}, action){
     }
 }
 
+function todaysWorkouts(state={}, action){
+    switch(action.type){
+      case 'SET_TODAYS_WORKOUTS':
+          state = action.data
+      default:
+          return state;
+    }
+}
 
 const appReducer = combineReducers({days, year, month, dayVisible, auth, errors, profile, trainingPlans, workouts,
                                     day, weekDay, selectedWorkoutList, stravaToken, athleteId, athleteRoutes, 
-                                    selectedRoute, currentRoute, monthStatistics})
+                                    selectedRoute, currentRoute, monthStatistics, todaysWorkouts})
 
 const rootReducer = (state, action) => {
 
