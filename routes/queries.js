@@ -469,14 +469,16 @@ var _suggestedDuration = function(logistics, duration) {
 **/
 var _selectDays = function(array, numberToSelect) {
 	var chosenNums = [];
+	var chosenDays = [];
 	if (array.length < numberToSelect) { return array }
 	while (chosenNums.length < numberToSelect) {
 		var tempNum = Math.floor(Math.random() * Math.floor(array.length - 1));
 		if (chosenNums.indexOf(tempNum) === -1 ) {
 			chosenNums.push(tempNum);
+			chosenDays.push(array[tempNum]);
 		}
 	}
-	return chosenNums;
+	return chosenDays;
 }
 
 /*
