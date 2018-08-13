@@ -65,8 +65,7 @@ class DayDetail extends Component {
         var routesToDisplay = [];
         for(var i = 0; i < tempsToFilter.length; i++){
           for(var x =0; x < tempsToFilter[i].exercises.length; x++){
-            console.log(tempsToFilter[i].exercises[x])
-            if(tempsToFilter[i].exercises[x].stravaRoute){
+            if(tempsToFilter[i].exercises[x].stravaRoute && tempsToFilter[i].exercises[x].stravaRoute > 0){
               var tempRoute = {name: tempsToFilter[i].exercises[x].name, stravaRoute: tempsToFilter[i].exercises[x].stravaRoute}
               routesToDisplay.push(tempRoute)
             }

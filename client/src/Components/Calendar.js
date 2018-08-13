@@ -68,7 +68,10 @@ class Calendar extends Component{
         }).then( res => {
           this.props.setTodaysWorkouts();
         }).then(res => {
-          this.props.updateStatistics(7, 2018 )
+
+          console.log("MONTH IS: ")
+          console.log(this.props.year)
+          this.props.updateStatistics(this.props.month+1, this.props.year)
         })     
       })
     }
@@ -93,6 +96,8 @@ const mapStateToProps = function(state) {
     return { auth: state.auth, workouts:state.workouts, 
              stravaToken: state.stravaToken, 
              errors: state.errors,
+             month: state.month,
+             year: state.year
            }
   }
 

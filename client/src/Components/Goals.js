@@ -23,6 +23,7 @@ class Goals extends React.Component {
     this.showAlert = this.showAlert.bind(this);
     this.handleHoursPerDayChange = this.handleHoursPerDayChange.bind(this);
     this.handleDaysPerWeekChange = this.handleDaysPerWeekChange.bind(this);
+    this.validateInput = this.validateInput.bind(this);
     //console.log(this.props.user);
   }
 
@@ -143,68 +144,135 @@ class Goals extends React.Component {
     this.setState(returnObj);
   }
 
-  handleSubmit(event) {
-    var prevState = this.state;
-    switch (this.state.user.goals.primaryGoal) {
-      case 1:
-        prevState.user.goals.primaryGoal = 1;
-        prevState.user.goals.health = healthAreas;
-        this.setState(prevState);
-        break;
-      case 2:
-        prevState.user.goals.primaryGoal = 2;
-        prevState.user.goals.loseWeight = { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect };
-        this.setState(prevState);
-        break;
-      case 3:
-        prevState.user.goals.primaryGoal = 3;
-        prevState.user.goals.fitness = fitnessAreas;
-        this.setState(prevState);
-        break;
-      case 4:
-        if (typeof this.state.user.goals.sport === "undefined") {
-          var newState = this.state;
-          newState.user.goals = { primaryGoal: 4, sport: 1 };
-          this.setState(newState);
-        }
-        break;
-      case 5:
-        if (!warningShown) {
-          //console.log("The value of warningShow is: " + warningShown);
-          this.showAlert();
-          return;
-        }
-        break;
-      default:
-    }
-    //POST to the DB
-    axios.patch('/users/' + this.props.user, {
-      goals: {
-        primaryGoal: this.state.user.goals.primaryGoal,
-        health: (typeof (this.state.user.goals.health) !== "undefined") ? this.state.user.goals.health : null,
-        fitness: (typeof (this.state.user.goals.fitness) !== "undefined") ? this.state.user.goals.fitness : null,
-        loseWeight: {
-          currentWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
-          goalWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
-          time: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.time : null,
-          autoSelectTime: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
-        },
-        sport: (typeof (this.state.user.goals.sport) !== "undefined") ? this.state.user.goals.sport : null
-      },
-      logistics: {
-        daysPerWeek: this.state.user.logistics.daysPerWeek,
-        hoursPerDay: this.state.user.logistics.hoursPerDay
+
+  //validation for inputs not inside a form
+  validateInput(){
+
+    let errorsList = []
+
+    //lose weight 
+    if(this.state.user.goals.primaryGoal == 2){
+
+      if(!document.getElementById("formControlsCurrentWeight").value){
+        errorsList.push("Input for Current Weight Invalid");
       }
-    })
-      .then(function (response) {
-        console.log(response);
+
+      if(!document.getElementById("formControlsGoalWeight").value){
+        errorsList.push("Input for Goal Weight Invalid");
+      }      
+    }    
+
+    if(!document.getElementById("daysPerWeek").value || document.getElementById("daysPerWeek").value < 0 ){
+      errorsList.push("Input for daysPerWeek Invalid");
+    }
+
+    if(!document.getElementById("frmCntrlSunday").value || document.getElementById("frmCntrlSunday").value < 0 ){
+      errorsList.push("Input for Sunday Invalid");
+    }
+    if(!document.getElementById("frmCntrlMonday").value || document.getElementById("frmCntrlMonday").value < 0 ){
+      errorsList.push("Input for Monday Invalid");
+    }
+    if(!document.getElementById("frmCntrlTuesday").value || document.getElementById("frmCntrlTuesday").value < 0){
+      errorsList.push("Input for Tuesday Invalid");
+    }
+    if(!document.getElementById("frmCntrlWednesday").value || document.getElementById("frmCntrlWednesday").value < 0){
+      errorsList.push("Input for Thursday Invalid");
+    }
+    if(!document.getElementById("frmCntrlThursday").value || document.getElementById("frmCntrlThursday").value < 0){
+      errorsList.push("Input for Friday Invalid");
+    }
+    if(!document.getElementById("frmCntrlFriday").value || document.getElementById("frmCntrlFriday").value < 0){
+      errorsList.push("Input for Saturday Invalid");
+    }
+    if(!document.getElementById("frmCntrlSaturday").value || document.getElementById("frmCntrlSaturday").value < 0){
+      errorsList.push("Input for Saturday Invalid");
+    }
+
+    var validationSummary = this.refs.validationSummary; 
+    validationSummary.innerHTML = '';
+
+    for(var i = 0; i < errorsList.length; i++){
+      var message = document.createElement("div");
+      message.className = "alert alert-danger";        
+      var node = document.createTextNode(errorsList[i]);
+      message.appendChild(node);
+      validationSummary.appendChild(message);    
+    }
+
+    return (errorsList.length < 1);
+  }
+
+
+  handleSubmit(event) {
+
+    if(this.validateInput()){
+
+      var prevState = this.state;
+      switch (this.state.user.goals.primaryGoal) {
+        case 1:
+          prevState.user.goals.primaryGoal = 1;
+          prevState.user.goals.health = healthAreas;
+          this.setState(prevState);
+          break;
+        case 2:
+          prevState.user.goals.primaryGoal = 2;
+          prevState.user.goals.loseWeight = { "currentWeight": loseWeight.currentWeight, "goalWeight": loseWeight.goalWeight, "time": loseWeight.timeframe, "autoSelectTime": loseWeight.autoSelect };
+          this.setState(prevState);
+          break;
+        case 3:
+          prevState.user.goals.primaryGoal = 3;
+          prevState.user.goals.fitness = fitnessAreas;
+          this.setState(prevState);
+          break;
+        case 4:
+          if (typeof this.state.user.goals.sport === "undefined") {
+            var newState = this.state;
+            newState.user.goals = { primaryGoal: 4, sport: 1 };
+            this.setState(newState);
+          }
+          break;
+        case 5:
+          if (!warningShown) {
+            //console.log("The value of warningShow is: " + warningShown);
+            this.showAlert();
+            return;
+          }
+          break;
+        default:
+      }
+      //POST to the DB
+      axios.patch('/users/' + this.props.user, {
+        goals: {
+          primaryGoal: this.state.user.goals.primaryGoal,
+          health: (typeof (this.state.user.goals.health) !== "undefined") ? this.state.user.goals.health : null,
+          fitness: (typeof (this.state.user.goals.fitness) !== "undefined") ? this.state.user.goals.fitness : null,
+          loseWeight: {
+            currentWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.currentWeight : null,
+            goalWeight: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.goalWeight : null,
+            time: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.time : null,
+            autoSelectTime: (typeof (this.state.user.goals.loseWeight) !== "undefined") ? this.state.user.goals.loseWeight.autoSelectTime : null
+          },
+          sport: (typeof (this.state.user.goals.sport) !== "undefined") ? this.state.user.goals.sport : null
+        },
+        logistics: {
+          daysPerWeek: this.state.user.logistics.daysPerWeek,
+          hoursPerDay: this.state.user.logistics.hoursPerDay
+        }
       })
-      .catch(function (error) {
-        console.error(error);
-      });
-    // Navigate Home
-    this.setState({ toHome: true });
-    event.preventDefault();
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+      // Navigate Home
+      this.setState({ toHome: true });
+      event.preventDefault();
+    }
+    else
+    {
+      window.scrollTo(0, 0);
+    }
   }
 
   render() {
@@ -222,7 +290,9 @@ class Goals extends React.Component {
     const helpText = "Please enter a number between 0 and 24";
     return (
       <div className="register">
+
         <div className="container">
+        <div className="warning-container" ref="validationSummary"></div>
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4">{title}</h1>
@@ -259,6 +329,7 @@ class Goals extends React.Component {
                         id="formControlsCurrentWeight"
                         type="number"
                         placeholder="lbs"
+                        
                       />
                     </FormGroup>
                   </form>
@@ -273,6 +344,7 @@ class Goals extends React.Component {
                         id="formControlsGoalWeight"
                         type="number"
                         placeholder="lbs"
+                        min="0"
                       />
                     </FormGroup>
                   </form>
@@ -288,6 +360,7 @@ class Goals extends React.Component {
                         type="number"
                         label="Enter the number of weeks:"
                         placeholder="1"
+                        min="1"
                       />
                     </FormGroup>
                     <FormGroup>
@@ -326,7 +399,7 @@ class Goals extends React.Component {
               <div className="col-md-8 m-auto">
                 <p className="lead">{logistics.daysPerWeek.question}</p>
                 <form>
-                  <Input type="select" onChange={this.handleDaysPerWeekChange}>
+                  <Input id="daysPerWeek" type="select" onChange={this.handleDaysPerWeekChange}>
                     {daysPerWeek}
                   </Input>
                 </form>
@@ -337,13 +410,13 @@ class Goals extends React.Component {
               <div className="col-md-8 m-auto">
                 <p className="lead">{logistics.hoursPerDay.question}</p>
                 <Form>
-                  <NumericValidation id="frmCntrlSunday" validationState={this.state.validationState.sunday} label="Sunday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlMonday" validationState={this.state.validationState.monday} label="Monday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlTuesday" validationState={this.state.validationState.tuesday} label="Tuesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlWednesday" validationState={this.state.validationState.wednesday} label="Wednesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlThursday" validationState={this.state.validationState.thursday} label="Thursday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlFriday" validationState={this.state.validationState.friday} label="Friday" onChange={this.handleHoursPerDayChange} help={helpText}/>
-                  <NumericValidation id="frmCntrlSaturday" validationState={this.state.validationState.saturday} label="Saturday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlSunday" min="0" validationState={this.state.validationState.sunday} label="Sunday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlMonday" min="0" validationState={this.state.validationState.monday} label="Monday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlTuesday" min="0" validationState={this.state.validationState.tuesday} label="Tuesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlWednesday" min="0" validationState={this.state.validationState.wednesday} label="Wednesday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlThursday" min="0" validationState={this.state.validationState.thursday} label="Thursday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlFriday" min="0" validationState={this.state.validationState.friday} label="Friday" onChange={this.handleHoursPerDayChange} help={helpText}/>
+                  <NumericValidation id="frmCntrlSaturday" min="0" validationState={this.state.validationState.saturday} label="Saturday" onChange={this.handleHoursPerDayChange} help={helpText}/>
                 </Form>
               </div>
             </div>

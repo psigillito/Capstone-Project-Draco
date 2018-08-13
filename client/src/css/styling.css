@@ -174,3 +174,9 @@ input[type="button"]{
 .fig-caption{
   padding: 10px;
 }
+
+.warning-container{
+  width: 50%;
+  margin:auto;
+  text-align: center;
+}
