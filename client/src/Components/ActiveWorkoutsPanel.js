@@ -116,7 +116,7 @@ class ActiveWorkoutsPanel extends Component {
 
         {/* EDIT & CREATE TRAINING PLANS */}
         <div className="modal" id="trainingPlan" tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document">
+          <div className="modal-dialog modal-lg" role="document">
             <div className="modal-content">
               <div className="modal-body">
                 <UpdateTrainingPlan title={this.state.title} 
@@ -154,7 +154,7 @@ class ActiveWorkoutsPanel extends Component {
 
         {/* DELETE WORKOUT */}
         <div className="modal" id="deleteWorkout" tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document">
+          <div className="modal-dialog modal-lg" role="document">
             <div className="modal-content">
               <div className="modal-body">
                 <DeleteWorkout />
