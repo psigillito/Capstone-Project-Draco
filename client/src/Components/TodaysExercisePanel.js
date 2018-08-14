@@ -1,106 +1,70 @@
 import React, {Component} from 'react'
-import {store} from '../store';
-import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
-import {currentDay} from '../data/weekData';
+import { connect } from 'react-redux';
 
 class TodaysExercisePanel extends Component {
 
-    constructor(props){
-        super(props);
-  
-    }
+  render(){
 
-    render(){
+    if(this.props.todaysWorkouts && this.props.todaysWorkouts.length > 0){
 
-        var d = new Date();
-        var n = d.getDay();
-
-        var TodayTrainingPlans = store.getState().trainingPlans.data.filter( (plan) => Date.parse(plan.startDate) <= Date.parse(d) 
-                                                                                     && Date.parse(plan.endDate) >= Date.parse(d));
-        var newWorkoutList = [];
-        for(var i = 0; i < TodayTrainingPlans.length; i++){
-                newWorkoutList = newWorkoutList.concat(TodayTrainingPlans[i].workouts)
-        }
-
-
-
-        if(this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek !== null && exercise.daysOfWeek.includes(n)  
-                                            && newWorkoutList.includes(exercise.name) ).length){
-            return(
-                
-                <div>
-                    <h2 className="display-4 mb-4"  >Today's Workouts:</h2>
-                    <h4>Weight Training Workouts:</h4>
-                        {
-                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(n) 
-                                                                        && newWorkoutList.includes(exercise.name)
-                                                                        && exercise.mode =='Weight Training').map( (workout, index) =>
-                                <div key={index}>
-                                    <h5>{workout.name}</h5>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Sets</th>
-                                                <th>Reps</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <WorkOutDetail type="Weight Training" workout={workout}/>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )
-                        }
-                    <br/>
-                    <h4>Cardio Workouts:</h4>
-                        {
-                            this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(n) 
-                                                                        && newWorkoutList.includes(exercise.name)
-                                                                        && exercise.mode =='Running').map( (workout, index) =>
-                                <div key={index}>
-                                    <h5>{workout.name}</h5>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Distance</th>
-                                                <th>Duration</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <WorkOutDetail type="Running" workout={workout}/>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )
-                        }
-                </div>
-            )
-        }else{
-            return(
-                <div>
-                    <h2 className="display-4 mb-4"  >Today's Workouts:</h2>
-                    No Exercises Today...Take a Rest.
-
-                </div>
-            )
-        }
+      return(
+        <div>
+          <h2 className="display-4 mb-4">Today's Workouts</h2>    
+          { this.props.todaysWorkouts.filter( (exercise) => exercise.mode =='Weight Training' && exercise.exercises.length > 0).map( (workout, index) =>
+              <div key={index}>
+                <h5 className="font-header-weight">{workout.name}</h5>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Sets</th>
+                            <th>Reps</th>
+                            <th>Weight</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <WorkOutDetail type="Weight Training" workout={workout}/>
+                    </tbody>
+                </table>
+              </div>
+          )}
+          <br/>
+          { this.props.todaysWorkouts.filter( (exercise) => exercise.mode =='Running').map( (workout, index) =>
+              <div key={index}>
+                <h5 className="font-header-weight">{workout.name}</h5>
+                  <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Distance</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <WorkOutDetail type="Running" workout={workout}/>
+                    </tbody>
+                  </table>
+              </div>
+          )}
+          </div>
+      )}
+      else{
+        return (
+          <div>
+            <h2 className="display-4 mb-4">Today's Workouts</h2>   
+            <div>No Exercises Today</div>
+          </div>
+        )
+      }
     }
 }
 
-//this relies so much on state it can be loaded in directly to the component 
 const mapStateToProps = function(state) {
-    return { day: state.day,
-             weekDay: state.weekDay, 
-             month:state.month, 
-             year:state.year, 
-             workouts:state.workouts,
-             trainingPlans:state.trainingPlans,
-             selectedWorkoutList:state.selectedWorkoutList
-
-            }
-  }
+  return { 
+           todaysWorkouts: state.todaysWorkouts 
+         }
+}
 
 export default connect(mapStateToProps)(TodaysExercisePanel);

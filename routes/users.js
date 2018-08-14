@@ -28,6 +28,14 @@ function lookUpUser(req, res, next) {
 	});
 }
 
+function isEmpty(obj) {
+	for(var key in obj) {
+		if(obj.hasOwnProperty(key))
+			return false;
+	}
+	return true;
+}
+
 // POST to users/register
 // Register a user
 // Public access
@@ -39,41 +47,51 @@ router.post('/register', (req, res) => {
 	User.findOne({ email: req.body.email })
 		.then(user => {
 			if(user) { // email was found
-				errors.email = 'Email already exists';
-				return res.status(400).json(errors);
-			} else {
-
-				User.findOne({ username: req.body.username })
-					.then(user => {
-						if(user) {
-							errors.username = 'Username already exists';
-							return res.status(400).json(errors)
-						}
-					})
-				// Create new user
-				const newUser = new User({
-					email: req.body.email,
-					name: req.body.name,
-					username: req.body.username,
-					password: req.body.password,
-					trainingPlans: [],
-					numTrainingPlans: 0,
-					numWorkouts: 0
-				});
-
-				// Encrypt password
-				bcrypt.genSalt(10, (err, salt) => {
-					bcrypt.hash(newUser.password, salt, (err, hash) => {
-						if(err) throw err;
-						newUser.password = hash;
-						// Save user
-						newUser.save()
-							.then(user => res.json(user))
-							.catch(err => console.log(err));
-					});
-				});	
+				errors.email = 'Email already exists';			
 			}
 		});
+	// check password
+	if(req.body.password.length < 5) {
+		errors.password = 'Password must be at least 5 characters';	
+	}
+	// check username
+	User.findOne({ username: req.body.username })
+		.then(user => {
+			if(user) {
+				errors.username = 'Username already exists';			
+			}
+		});
+	
+	// wait on async functions above to finish		
+	setTimeout(function() {
+		if(isEmpty(errors)) {
+			// Create new user
+			const newUser = new User({
+				email: req.body.email,
+				name: req.body.name,
+				username: req.body.username,
+				password: req.body.password,
+				trainingPlans: [],
+				numTrainingPlans: 0,
+				numWorkouts: 0
+			});
+
+			// Encrypt password
+			bcrypt.genSalt(10, (err, salt) => {
+				bcrypt.hash(newUser.password, salt, (err, hash) => {
+					if(err) throw err;
+					newUser.password = hash;
+					// Save user
+					newUser.save()
+						.then(user => res.json(user))
+						.catch(err => console.log(err));
+				});
+			});	
+		} else {
+			return res.status(400).json(errors);
+		}
+	}, 500);
+
 });
 
 // POST to users/login

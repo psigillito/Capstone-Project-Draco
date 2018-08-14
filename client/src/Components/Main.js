@@ -6,7 +6,7 @@ import About from './About'
 import Settings from './Settings'
 import PairDevice from './PairDevice'
 import CalendarController from './CalendarController'
-import {updateCurrentYear, updateMonth, updateStatistics, dayVisible, logout, setCurrentUser} from '../redux/actions'
+import {updateCurrentYear, updateMonth, updateStatistics, dayVisible, logout, setCurrentUser, updateSelectedWorkoutList, setTodaysWorkouts} from '../redux/actions'
 import weekData from '../data/weekData'
 import Goals from './Goals'
 import DayDetail from './DayDetail'
@@ -39,7 +39,7 @@ if(localStorage.jwtToken) {
     // decode the token and get user info
     const userData = jwt_decode(localStorage.jwtToken);
     // set the current user
-    store.dispatch(setCurrentUser(userData));
+    store.dispatch(setCurrentUser(userData))
 
     // check for expired token
     const currentTime = Date.now() / 1000;
@@ -83,14 +83,14 @@ class Main extends Component{
                         <div className="container">
                             <Welcome goals={this.props.auth.user.goals}/>
                             <div className="row">
-                                <div className = "col-sm-3">
+                                <div className = "col-sm">
                                     <ActiveWorkoutsPanel trainingPlans={this.props.trainingPlans} workouts={this.props.workouts}/>
                                 </div>
-                                <div className = "col-sm-6"> 
+                                <div className = "col-sm"> 
                                     <h2>{Months[this.props.month] + ","+this.props.year}</h2>                   
                                     <Calendar trainingPlans={this.props.trainingPlans} user = {this.props.auth.user.name} weekArray={this.props.days} selectedYear={this.props.year} selectedMonth={this.props.month} updateDayVisible ={this.props.updateDayVisible} /> 
                                 </div>
-                                <div className = "col-sm-3"> 
+                                <div className = "col-sm"> 
                                 <CalendarController updateMonth={this.props.updateMonth} updateDays={this.props.updateDays} 
                                     updateCurrentYear={this.props.updateCurrentYear} updateStatistics={this.props.updateStatistics} year={this.props.year} month={this.props.month} className="calendar-controller"/>
                                 </div>
@@ -98,7 +98,7 @@ class Main extends Component{
                         </div>
                         <div className="container">
                             <div className="row">
-                                <TodaysExercisePanel className = "col-sm-4"/>
+                                <TodaysExercisePanel todaysWorkouts = {this.props.todaysWorkouts} className = "col-sm-4"/>
                                 <span className = "col-sm-2"/>
                                 <MonthStatisticsPanel weekArray={this.props.days} trainingPlans={this.props.trainingPlans} className = "col-sm-6"/>
 
@@ -120,7 +120,11 @@ class Main extends Component{
 }
 
 const mapStateToProps = function(state) {
-    return { trainingPlans: state.trainingPlans, workouts:state.workouts, errors: state.errors }
+    return { trainingPlans: state.trainingPlans, 
+             workouts:state.workouts, 
+             errors: state.errors,
+             todaysWorkouts: state.todaysWorkouts 
+           }
   }
 
 export default connect(mapStateToProps)(Main);

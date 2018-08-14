@@ -21,13 +21,13 @@ function mapStateToProps(state){
         athleteRoutes: state.athleteRoutes,
         selectedRoute: state.selectedRoute,
         currentRoute: state.currentRoute,
-        monthStatistics: state.monthStatistics
+        monthStatistics: state.monthStatistics,
+        todaysWorkouts: state.todaysWorkouts
     }
 }
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators(actions, dispatch)
-
 }
 
 const App = withRouter(connect(mapStateToProps, mapDispatchToProps)(Main))

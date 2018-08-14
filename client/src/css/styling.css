@@ -167,10 +167,16 @@ input[type="button"]{
 }
 
 .team-member-image{
-  width: 350px;
+  width: 100%;
   padding: 10px;
 }
 
 .fig-caption{
   padding: 10px;
+}
+
+.warning-container{
+  width: 50%;
+  margin:auto;
+  text-align: center;
 }

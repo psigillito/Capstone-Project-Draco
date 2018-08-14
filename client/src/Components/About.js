@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import nick from '../images/nick.jpg';
 import chris from '../images/chris.jpg';
+import phil from '../images/phil.jpg';
 
 class About extends Component{
 
@@ -24,6 +25,7 @@ class About extends Component{
                 their fitness goals.   
               </p>
               <h4 className="card-title">Team Members</h4>
+              <div>
               <table></table>
               <tr>
                 <td>
@@ -40,11 +42,12 @@ class About extends Component{
                 </td>
                 <td>
                   <figure className="figure">
-                    <img src={nick} className="team-member-image"/>
+                    <img src={phil} className="team-member-image"/>
                     <figcaption className="fig-caption">Philip Sigillito</figcaption>
                   </figure>
                 </td>
               </tr>
+              </div>
             </div>
           </div>
         </div>

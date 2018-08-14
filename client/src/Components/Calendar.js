@@ -6,7 +6,7 @@ import axios from 'axios';
 import store from '../store';
 import { connect } from 'react-redux';
 import WorkOutDetail from './WorkOutDetail';
-import {getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
+import {updateStatistics, setTodaysWorkouts, getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
 
 
 const Days = ['Sun','Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
@@ -19,16 +19,14 @@ class Calendar extends Component{
     }
 
     componentWillMount(){
-        //get all training plans 
-        axios.get('/trainingPlans/', {
-            params: {
-                user: this.props.auth.user.id  
-              }
-        }).then(res => {    
-            this.props.getCurrentTrainingPlans(res);
-        })
-
-        //get all workouts 
+      //get all training plans 
+      axios.get('/trainingPlans/', {
+        params: {
+            user: this.props.auth.user.id  
+          }
+      }).then(res => {    
+        this.props.getCurrentTrainingPlans(res);
+      }).then( res => { 
         axios.get('/workouts/', {
             params: {
                 user: this.props.auth.user.id
@@ -36,14 +34,15 @@ class Calendar extends Component{
         }).then(res => {
             this.props.getCurrentWorkouts(res);
         })
+      }).then( ()=> {
         axios.get('/users/getUser', {
-            params:{
-                _id: this.props.auth.user.id
-            }
+          params:{
+            _id: this.props.auth.user.id
+          }
         }).then(res => {
-            if(res.data && res.data.stravaToken){
-                this.props.updateStravaToken(res.data.stravaToken);
-            }
+          if(res.data && res.data.stravaToken){
+            this.props.updateStravaToken(res.data.stravaToken);
+          }
         }).then( res =>{
 
           fetch('https://www.strava.com/api/v3/athlete?access_token='+this.props.stravaToken).then((results) => results.json())
@@ -65,27 +64,41 @@ class Calendar extends Component{
               this.props.setAthleteRoutes(athleteRoutes)
             })
           })
-        })         
+      
+        }).then( res => {
+          this.props.setTodaysWorkouts();
+        }).then(res => {
+
+          console.log("MONTH IS: ")
+          console.log(this.props.year)
+          this.props.updateStatistics(this.props.month+1, this.props.year)
+        })     
+      })
     }
 
     render(){
-        return (
-            <div className="calendar-component">
-                <table>
-                    <thead>
-                        <tr>{Days.map( (day, index) => <th key={index} className ="calendar-header">{day}</th> )}</tr>
-                    </thead>
-                    <tbody>
-                        {this.props.weekArray.map( (daysOfWeek, index) => <Week key={index} updateDayVisible ={this.props.updateDayVisible} days={daysOfWeek}/>)}
-                    </tbody>
-                </table>
-            </div>
-        )
+      return (
+        <div className="calendar-component">
+          <table>
+            <thead>
+              <tr>{Days.map( (day, index) => <th key={index} className ="calendar-header">{day}</th> )}</tr>
+            </thead>
+            <tbody>
+              {this.props.weekArray.map( (daysOfWeek, index) => <Week key={index} updateDayVisible ={this.props.updateDayVisible} days={daysOfWeek}/>)}
+            </tbody>
+          </table>
+        </div>
+      )
     }
 }
 
 const mapStateToProps = function(state) {
-    return { auth: state.auth, workouts:state.workouts, stravaToken: state.stravaToken, errors: state.errors }
+    return { auth: state.auth, workouts:state.workouts, 
+             stravaToken: state.stravaToken, 
+             errors: state.errors,
+             month: state.month,
+             year: state.year
+           }
   }
 
-export default connect(mapStateToProps, { getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes} )(Calendar);
+export default connect(mapStateToProps, {updateStatistics, setTodaysWorkouts, getCurrentTrainingPlans, getCurrentWorkouts, updateStravaToken, setAthleteId, setAthleteRoutes} )(Calendar);

@@ -178,6 +178,7 @@ export function updateCurrentWeekDay(response) {
 
 export function updateSelectedWorkoutList(currentDate){
 
+    console.log("I FIRED")
     
     var activeTrainingPlans = store.getState().trainingPlans.data.filter( (plan) => Date.parse(plan.startDate) <= Date.parse(currentDate) 
                                                                                  && Date.parse(plan.endDate) >= Date.parse(currentDate));
@@ -186,6 +187,8 @@ export function updateSelectedWorkoutList(currentDate){
     for(var i = 0; i < activeTrainingPlans.length; i++){
             newWorkoutList = newWorkoutList.concat(activeTrainingPlans[i].workouts)
     }
+
+    console.log(newWorkoutList)
 
     return {
         type: 'SET_SELECTED_WORKOUT_LIST',
@@ -251,5 +254,25 @@ export function updateStatistics(month, year){
   return{
     type: 'UPDATE_MONTH_STATISTICS',
     monthStatistics: temp
+  }
+}
+
+export function setTodaysWorkouts(){
+
+  var currentDate = new Date();
+  var currentWeekday = currentDate.getDay();
+  var activeTrainingPlans = store.getState().trainingPlans.data.filter( (plan) => Date.parse(plan.startDate) <= Date.parse(currentDate) && Date.parse(plan.endDate) >= Date.parse(currentDate));
+  
+  var newWorkoutList = [];
+  for(var i = 0; i < activeTrainingPlans.length; i++){
+      newWorkoutList = newWorkoutList.concat(activeTrainingPlans[i].workouts)
+  }
+
+  var filteredWorkoutList = store.getState().workouts.data.filter((exercise) => exercise.daysOfWeek.includes(currentWeekday) 
+  && newWorkoutList.includes(exercise._id))
+
+  return {
+    type: 'SET_TODAYS_WORKOUTS',
+    data: filteredWorkoutList
   }
 }
