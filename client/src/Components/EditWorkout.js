@@ -47,7 +47,7 @@ class EditWorkout extends Component {
     		workout.daysOfWeek = this.state.daysOfWeek;
     	} 
     	if(this.state.daysOfWeek.length < 1) {
-    		errorList.push('You must select at least 1 day to perform workout');
+    		errorList.push('You must select at least 1 day to perform this workout');
     	}
     	if(this.state.workoutId === '') {
     		errorList.push('Please select a workout to edit');
@@ -97,12 +97,8 @@ class EditWorkout extends Component {
 		        {this.state.workoutId !== '' && this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId)
 		        	.map( (workout, index) => 
 		        	<div key={index}>
-
-			        	<div className="alert alert-primary" role="alert">
-							Note! Leave any fields you do not want changed, blank, or make no selections.
-						</div>
 			            
-			            <label htmlFor='name'><b>Workout Name:</b></label>
+			            <label htmlFor='name'><b>Update Workout Name:</b></label>
 			            <div className="form-group">
 			                <input type="text" 
 				                className="form-control form-control-lg" 
@@ -113,7 +109,7 @@ class EditWorkout extends Component {
 			                />
 			            </div>
 			            <br/>
-			            <label htmlFor='name'><b>Days:</b> (select which days you will do this workout)</label>
+			            <label htmlFor='name'><b>Update Workout Days:</b> (change which days you will do this workout)</label>
 			            <div className="form-group">
 			                {weekDays.map( (weekDay, index) => 
 			                  	<div key={index} className="form-check form-check-inline">
@@ -128,13 +124,13 @@ class EditWorkout extends Component {
 			                )}
 			            </div>
 			            <br/>
-			            <label htmlFor='name'><b>Training Plan: </b>(each workout must be part of a training plan)</label>
+			            <label htmlFor='name'><b>Update Training Plan: </b>(change the training plan this workout belongs to)</label>
 			            <div className="form-group"> 
 			                <select id="inputState" 
 				                name="trainingPlan" 
 				                className="form-control" 
 				                onChange={this.onChange}>
-				                    <option>...</option>
+				                    <option value=''>...</option>
 				                    {this.props.trainingPlans.data.filter( (plan)=>plan.active ==true).map( (plan, index) =>
 				                        <option key={index} name="trainingPlan" value={plan._id}>{plan.name}</option>
 				                    )}
