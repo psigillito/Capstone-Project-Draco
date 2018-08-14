@@ -69,11 +69,6 @@ class EditWorkout extends Component {
 	render() {
 		return (
 			<div>
-				{this.state.errors.map( (error, index) => 
-					<div key={index} className="alert alert-danger" role="alert">
-						{error}
-					</div>
-				)}
 				<div className="modal-header">
 		            <h5 className="modal-title">Edit Workout</h5>
 		            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
@@ -81,6 +76,13 @@ class EditWorkout extends Component {
 		            </button>
 		        </div>
 		        <br />
+		        
+		        {this.state.errors.map( (error, index) => 
+					<div key={index} className="alert alert-danger" role="alert">
+						{error}
+					</div>
+				)}
+
 		    	{/* select workout */}
 		        <label htmlFor="workout"><b>Select Workout:</b></label>
 				<select id="inputState" name="workoutId" 
