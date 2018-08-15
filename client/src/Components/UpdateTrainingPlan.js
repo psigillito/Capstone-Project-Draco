@@ -109,10 +109,10 @@ class UpdateTrainingPlan extends Component {
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary btn-sm" data-dismiss="modal">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">
                 Cancel
               </button>
-              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="btn btn-success btn-sm">
+              <button type="button" onClick={() => this.submitTrainingPlan(this.state.title)} className="btn btn-success">
                 Save changes
               </button>
             </div>
