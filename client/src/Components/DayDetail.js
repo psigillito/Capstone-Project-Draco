@@ -158,9 +158,7 @@ class DayDetail extends Component {
                 <div className="modal" id="addExercise" tabIndex="-1" role="dialog">
                   <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
-                      <div className="modal-body">
-                        <AddNewExercise />
-                      </div>
+                      <AddNewExercise />
                     </div>
                   </div>
                 </div>
@@ -168,9 +166,7 @@ class DayDetail extends Component {
                 <div className="modal" id="editExercise" tabIndex="-1" role="dialog">
                   <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
-                      <div className="modal-body">
-                        <EditExercise />
-                      </div>
+                      <EditExercise />
                     </div>
                   </div>
                 </div>  
