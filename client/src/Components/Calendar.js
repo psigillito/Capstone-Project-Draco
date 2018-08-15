@@ -33,12 +33,11 @@ class Calendar extends Component{
             }
         }).then(res => {
             this.props.getCurrentWorkouts(res);
-        })
-      }).then( ()=> {
-        axios.get('/users/getUser', {
-          params:{
-            _id: this.props.auth.user.id
-          }
+        }).then( ()=> {
+            axios.get('/users/getUser', {
+              params:{
+                _id: this.props.auth.user.id
+              }
         }).then(res => {
           if(res.data && res.data.stravaToken){
             this.props.updateStravaToken(res.data.stravaToken);
@@ -63,18 +62,16 @@ class Calendar extends Component{
               }
               this.props.setAthleteRoutes(athleteRoutes)
             })
-          })
-      
-        }).then( res => {
+          }).then( res => {
           this.props.setTodaysWorkouts();
-        }).then(res => {
-
-          console.log("MONTH IS: ")
-          console.log(this.props.year)
-          this.props.updateStatistics(this.props.month+1, this.props.year)
-        })     
+          }).then(res => {
+          
+            this.props.updateStatistics(this.props.month+1, this.props.year)
+          })     
+        })
       })
-    }
+    })
+  }
 
     render(){
       return (
