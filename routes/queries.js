@@ -442,6 +442,7 @@ var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
 		  break;
 	}
 	recommendedTP.save((err, response) => {
+		_addTrainingPlanToUser(response._id.valueOf(), response.user);
 		_createRecommendedWorkouts(response.logistics, response.user, response._id.valueOf())
 	});
 }
