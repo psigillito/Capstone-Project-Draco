@@ -246,8 +246,6 @@ class AddNewWorkout extends Component {
           </div>
 
           <div className="modal-body ">
-            <div ref="validationSummary"></div>
-
             <label htmlFor='name'><b>Workout Name:</b></label>
             <div className="form-group">
               <input type="text" ref="workoutName" className="form-control form-control-lg" placeholder="Workout Name" name="name"value={this.state.name} 
@@ -405,9 +403,10 @@ class AddNewWorkout extends Component {
               </table>
             </div>
             <br/>
+            <div ref="validationSummary"></div>
           </div>
-      
           <div className="modal-footer">
+
             <button type="button" className="btn btn-secondary" data-dismiss="modal" data-target="#addWorkout">Close</button>
             <button type="button" onClick={() => this.submitWorkout()} data-toggle="modal" data-target="#addExercise" className="btn btn-success">Save Workout</button>
           </div>

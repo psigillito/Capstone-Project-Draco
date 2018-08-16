@@ -146,7 +146,7 @@ class ActiveWorkoutsPanel extends Component {
           <div className="modal-dialog  modal-lg" role="document">
             <div className="modal-content">
               <div className="modal-body">
-                <AddNewWorkout title={this.state.title} />
+                <AddNewWorkout id="addNewWorkout" title={this.state.title} />
               </div>
             </div>
           </div>
