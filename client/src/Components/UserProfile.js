@@ -12,7 +12,7 @@ class UserProfile extends Component {
 		super(props);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getProfile(this.props.auth.user.id);
 
 		axios.get('/trainingPlans/', {
