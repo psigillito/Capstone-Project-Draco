@@ -70,7 +70,7 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts) {
     }
     workoutsByWeek.push(thisWeeksWorkouts);
   }
-  return calculateTotals(workoutsByWeek, 200);
+  return calculateTotals(workoutsByWeek);
 }
 
 function calculateDistanceInMiles(exercise) {
