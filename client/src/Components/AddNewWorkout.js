@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import GoogleMap from './GoogleMap';
 import {setAthleteId, setAthleteRoutes, setSelectedRoute, setCurrentRoute} from '../redux/actions';
 
-let createdExercise = {};
 let weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 class AddNewWorkout extends Component {
@@ -40,15 +39,21 @@ class AddNewWorkout extends Component {
     saveExercise(e) {
       e.preventDefault();
 
-      createdExercise['name'] = this.state.exerciseName;
-      createdExercise['sets'] = this.state.sets;
-      createdExercise['reps'] = this.state.reps;
-      createdExercise['weight'] = this.state.weight;
-      createdExercise['unit'] = this.state.unit;
-      createdExercise['distanceUnit'] = this.state.distanceUnit;
-      createdExercise['distance'] = this.state.distance;
-      createdExercise['stravaRoute'] = this.props.selectedRoute;
+      let createdExercise = {};
 
+      if(this.state.mode === 'Weight Training') {
+        createdExercise['name'] = this.state.exerciseName;
+        createdExercise['sets'] = this.state.sets;
+        createdExercise['reps'] = this.state.reps;
+        createdExercise['weight'] = this.state.weight;
+        createdExercise['unit'] = this.state.unit;
+      } else {
+        createdExercise['name'] = this.state.exerciseName;
+        createdExercise['distanceUnit'] = this.state.distanceUnit;
+        createdExercise['distance'] = this.state.distance;
+        createdExercise['stravaRoute'] = this.props.selectedRoute;
+      }
+      
       this.state.allExercises.push(createdExercise);
       createdExercise = {};
 
@@ -59,6 +64,8 @@ class AddNewWorkout extends Component {
         weight:'',
         duration:'',
         distance:'',
+        unit:'lbs',
+        distanceUnit:'mi'
       })
     }
 
@@ -303,7 +310,7 @@ class AddNewWorkout extends Component {
             {this.state.mode === 'Weight Training' && this.state.mode !== '' &&
               <div>
                 <div className="modal-header">
-                  <h5>Add Exercise</h5>
+                  <h5>Add Exercises</h5>
                 </div>
                 <div className="form-group"></div>
                 <form onSubmit={(e) => this.saveExercise(e) } className="form-group">
@@ -327,10 +334,10 @@ class AddNewWorkout extends Component {
                           <option name="unit" value="kg">Kg</option>
                         </select>
                         <br/>
-                        <div>
-                          <button type="submit"  className="btn btn-primary btn-block">Add Exercise To Workout</button>
-                        </div>
                       </div>
+                    </div>
+                    <div>
+                      <button type="submit"  className="btn btn-primary btn-block">Add Exercise To Workout</button>
                     </div>
                   </div>
                 </form>
@@ -381,10 +388,10 @@ class AddNewWorkout extends Component {
                 <thead>
                   <tr>
                     <th>Exercise Name</th>
-                    <th>{ (this.state.mode == 'Running') ? 'Distance' : 'Weight' }</th>
+                    <th>{ (this.state.mode !== 'Weight Training') ? 'Distance' : 'Weight' }</th>
                     <th>Units</th>
-                    <th>{ (this.state.mode == 'Running') ? '' : 'Reps' }</th>
-                    <th>{ (this.state.mode == 'Running') ? '' : 'Sets' }</th>
+                    <th>{ (this.state.mode !== 'Weight Training') ? '' : 'Reps' }</th>
+                    <th>{ (this.state.mode !== 'Weight Training') ? '' : 'Sets' }</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -392,10 +399,10 @@ class AddNewWorkout extends Component {
                   {this.state.allExercises.map( (exercise, index) =>
                     <tr key={index}>
                       <td>{exercise.name}</td> 
-                      <td>{ (this.state.mode == 'Running') ? exercise.distance : exercise.weight }</td>
-                      <td>{ (this.state.mode == 'Running') ? exercise.distanceUnit : exercise.unit }</td>
-                      <td>{ (this.state.mode == 'Running') ? '' : exercise.reps }</td>
-                      <td>{ (this.state.mode == 'Running') ? '' : exercise.sets }</td>
+                      <td>{ (this.state.mode !== 'Weight Training') ? exercise.distance : exercise.weight }</td>
+                      <td>{ (this.state.mode !== 'Weight Training') ? exercise.distanceUnit : exercise.unit }</td>
+                      <td>{ (this.state.mode !== 'Weight Training') ? '' : exercise.reps }</td>
+                      <td>{ (this.state.mode !== 'Weight Training') ? '' : exercise.sets }</td>
                       <td><button className="btn btn-danger" value={exercise.name} onClick={this.removeExercise}>X</button></td>
                     </tr>
                   )}

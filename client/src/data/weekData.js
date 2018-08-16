@@ -135,7 +135,7 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
           }
         } else if (tempWorkout.mode == 'Cycling') {
           for (var p = 0; p < tempWorkout.exercises.length; p++) {
-            var tempRide = tempWorkout.exercises[k];
+            var tempRide = tempWorkout.exercises[p];
             cycleCount++;
             cycleList.push(calculateDistanceInMiles(tempRide));
             cycleDistanceTotal += calculateDistanceInMiles(tempRide);

@@ -31,7 +31,7 @@ class TodaysExercisePanel extends Component {
               </div>
           )}
           <br/>
-          { this.props.todaysWorkouts.filter( (exercise) => exercise.mode =='Running').map( (workout, index) =>
+          { this.props.todaysWorkouts.filter( (exercise) => exercise.mode !== 'Weight Training' && exercise.mode !== '').map( (workout, index) =>
               <div key={index}>
                 <h5 className="font-header-weight">{workout.name}</h5>
                   <table className="table">
