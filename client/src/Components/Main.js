@@ -47,7 +47,7 @@ if(localStorage.jwtToken) {
         // token has expired. log user out
         store.dispatch(logout());
         //redirect to login page
-        window.location.href = '/login';
+        window.location.href = '/';
     }
 }
 
@@ -58,7 +58,7 @@ class Main extends Component{
 
     componentDidMount() {
         if(!this.props.auth.isAuthenticated) {
-          this.props.history.push('/login');
+          this.props.history.push('/');
         }
       }    
     
@@ -71,7 +71,6 @@ class Main extends Component{
                 <Route exact path= "/" component={Landing} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
-                <Route exact path="/profile" component={UserProfile} />
                 <Route exact path = "/calendar" render={()=>(
                     
                     <section className="main-container">
@@ -109,6 +108,7 @@ class Main extends Component{
                 )}/>
                 <Switch>
                     <Route path="/About" exact component={About}/>
+                    <Route path="/Profile" exact component={UserProfile} />
                     <Route path="/Settings" exact component={Settings}/>
                     <Route path="/PairDevice" exact component={PairDevice}/>
                     <Route path = "/goals" render={(props) => <Goals {...props} user={this.props.auth.user.id} responses={goalsJCR.goals.responses}/>}/>

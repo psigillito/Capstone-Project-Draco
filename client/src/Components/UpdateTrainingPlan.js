@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import isEmpty from '../utility/isEmpty.js';
 
 class UpdateTrainingPlan extends Component {
     constructor(props){
@@ -8,17 +9,37 @@ class UpdateTrainingPlan extends Component {
         this.state = {
           name: this.props.name,
           startDate: this.props.startDate,
-          endDate: this.props.endDate
+          endDate: this.props.endDate,
+          errors: []
         }
 
         this.onChange = this.onChange.bind(this);
     }
 
     submitTrainingPlan() {
+
+      let errorList = [];
+
+      if(this.props.title === 'Create New Training Plan') {
+        if(isEmpty(this.state.startDate)) {
+          errorList.push('Start date is required');
+        } 
+        if(isEmpty(this.state.endDate)) {
+          errorList.push('End date is required');
+        }
+        if(isEmpty(this.state.name)) {
+          errorList.push('Training plan name is required');
+        }
+      }
+
+      if(errorList.length) {
+        this.setState({ errors: errorList });
+      } else {
+
         const newPlan = {
-            name: this.state.name,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
+          name: this.state.name,
+          startDate: this.state.startDate,
+          endDate: this.state.endDate,
         }
 
         if(this.props.title === 'Create New Training Plan') {
@@ -30,8 +51,10 @@ class UpdateTrainingPlan extends Component {
               .then(res => console.log(res))
               .catch(err => console.log(err));
           } 
-          
+            
         window.location.reload();
+      }
+
     }
 
     onChange(e) {
@@ -65,6 +88,11 @@ class UpdateTrainingPlan extends Component {
                 </button>
               </div>
             <div className="modal-body">
+              {this.props.title === 'Create New Training Plan' && this.state.errors.map( (error, index) => 
+                <div className="alert alert-danger">
+                  {error}
+                </div>
+              )}
               <label htmlFor="name">
                 <b>Name:</b>
               </label>
