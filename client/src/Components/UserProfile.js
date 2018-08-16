@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { getProfile } from '../redux/actions';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import logo from '../images/profile.png';
 import loading from '../images/loading.gif';
-import { getCurrentTrainingPlans, getCurrentWorkouts } from '../redux/actions';
+import { getProfile, getCurrentTrainingPlans, getCurrentWorkouts } from '../redux/actions';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 class UserProfile extends Component {
-	componentDidMount() {
+	constructor(props) {
+		super(props);
+	}
+
+	componentWillMount() {
 		this.props.getProfile(this.props.auth.user.id);
 
 		axios.get('/trainingPlans/', {
@@ -25,9 +29,8 @@ class UserProfile extends Component {
 	        }).then(res => {
 	            this.props.getCurrentWorkouts(res);
 	        })
-	
-
-	})}
+		}
+	)}
 
 	render() {
 
@@ -43,7 +46,7 @@ class UserProfile extends Component {
 					<h1 className="display-4 text-center">{this.props.auth.user.name} User Profile</h1>
 					<div className="card about-section">
 						<div className="card text-center">
-							<div class="card-body">
+							<div className="card-body">
 								<img src={logo} />
 
 							    <h5 className="card-title">Name</h5>
@@ -62,7 +65,7 @@ class UserProfile extends Component {
 									)
 							    }
 							    {this.props.trainingPlans.data.length === 0 && 
-									<img src={loading} style={{height: 2 + 'em'}} />
+									<p className='card-text'>No current training plans</p>
 							    }
 
 							    <h5 className="card-title">Workouts</h5>
@@ -72,7 +75,7 @@ class UserProfile extends Component {
 									)
 							    }
 							    {this.props.workouts.data.length === 0 && 
-									<img src={loading} style={{height: 2 + 'em'}} />
+									<p className='card-text'>No current workouts</p>
 							    }
 
 						  	</div>
@@ -98,4 +101,4 @@ const mapStateToProps = function(state) {
 	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts, auth: state.auth }
 };
 
-export default connect(mapStateToProps, { getProfile, getCurrentTrainingPlans, getCurrentWorkouts })(UserProfile);
+export default connect(mapStateToProps, { getProfile, getCurrentTrainingPlans, getCurrentWorkouts })(withRouter(UserProfile));

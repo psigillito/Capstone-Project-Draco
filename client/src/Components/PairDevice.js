@@ -2,11 +2,12 @@ import React, {Component} from 'react'
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {updateStravaToken} from '../redux/actions'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch, Link} from 'react-router-dom'
 import About from './About'
 import GoogleMap from './GoogleMap'
 import strava1 from '../images/strava1.PNG';
 import strava2 from '../images/strava2.PNG';
+import Main from './Main'
 
 class PairDevice extends Component {
   constructor(props){
@@ -43,7 +44,9 @@ class PairDevice extends Component {
             <div className='centered-section'>
               <h1>Authorization Successfull!</h1>
               <p>You can now pair routes you've made in Strava with cardio workouts!</p>
-              <a type="btn" href="/calendar">Return Back to Calendar Page</a>
+
+              
+              <Link type="btn" href="/calendar">Return Back to Calendar Page</Link>
             </div>
           )
 
@@ -51,6 +54,7 @@ class PairDevice extends Component {
           return (
             <div className='centered-section'>
               <h1>Account Already Paired</h1>
+              <p>If you've made any routes in Strava, you can use them for your workouts!</p>
               <a href="/calendar">Return Back to Calendar Page</a>
             </div>
           )
