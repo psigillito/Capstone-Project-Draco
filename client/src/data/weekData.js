@@ -33,7 +33,7 @@ function getMonthWeeks(month, year) {
 function getWorkoutsForMonth(month, year, trainingPlans, workouts) {
 
   var workoutsByWeek = [];
-  var monthArray = getMonthWeeks(month-1, year)
+  var monthArray = getMonthWeeks(month, year)
 
   //for each week of month
   for (var i = 0; i < monthArray.length; i++) {
@@ -47,7 +47,7 @@ function getWorkoutsForMonth(month, year, trainingPlans, workouts) {
       if (monthArray[i][t] !== 'X') {
 
         //full date i.e. august 21st 2018 
-        var currentDate = new Date(year, month-1, monthArray[i][t]);
+        var currentDate = new Date(year, month, monthArray[i][t]);
 
         //i.e. int of weekday: tuesday
         var DayOfWeek = parseInt(currentDate.getDay());

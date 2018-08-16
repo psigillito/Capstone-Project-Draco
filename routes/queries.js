@@ -439,9 +439,10 @@ var _createRecommendedTrainingPlan = function(goals, logistics, userId) {
 		case 3:
 		recommendedTP.endDate = addWeeks(today, 52);
 		default:
-		  break;
+		  return;
 	}
 	recommendedTP.save((err, response) => {
+		_addTrainingPlanToUser(response._id.valueOf(), response.user);
 		_createRecommendedWorkouts(response.logistics, response.user, response._id.valueOf())
 	});
 }

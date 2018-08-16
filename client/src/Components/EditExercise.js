@@ -26,9 +26,9 @@ class EditExercise extends Component {
         sets:'',
         reps:'',
         weight:'',
-        unit:'',
+        unit:'lbs',
         distance:'',
-        distanceUnit:'',
+        distanceUnit:'mi',
         workoutId:'',
         exerciseName:''
     	})
@@ -49,11 +49,11 @@ class EditExercise extends Component {
         }
       } else {
           newExercise = {
-          name: this.state.exerciseName,
-          sets: this.state.sets,
-          reps: this.state.reps,
-          weight: this.state.weight,
-          unit: this.state.unit,
+            name: this.state.exerciseName,
+            sets: this.state.sets,
+            reps: this.state.reps,
+            weight: this.state.weight,
+            unit: this.state.unit,
         }
       }
 
@@ -104,7 +104,7 @@ class EditExercise extends Component {
             className="form-control" 
             value={this.state.workoutId ? this.state.workoutId : ''} 
             onChange={this.onChange}>
-            <option value='' selected>...</option>
+            <option value={''}>...</option>
             { this.props.workouts.data.filter( (exercise) => exercise.daysOfWeek.includes(this.props.weekDay) 
                 && this.props.selectedWorkoutList.includes(exercise._id))                                          
                 .map( (workout, index) =>
@@ -123,7 +123,7 @@ class EditExercise extends Component {
               className="form-control"
               value={this.state.exerciseName ? this.state.exerciseName : ''} 
               onChange={this.onChange}>
-              <option selected>...</option>
+              <option value={''}>...</option>
                 {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId)
                 	.map( (workout) => workout.exercises.map( (exercise, index) =>   		
                 			<option key={index} value={exercise.name}>{exercise.name}</option>
@@ -149,6 +149,7 @@ class EditExercise extends Component {
               		<label for="newExercise"><b>Update Exercise:</b></label>
 		              <form onSubmit={this.submitExercise.bind(this)}>
 		                <div className="form-row">
+
 		                  <div className="col">
 		                    <input type="number" 
                           className="form-control" 
@@ -162,6 +163,7 @@ class EditExercise extends Component {
                           Sets
                         </small>
 		                  </div>
+
 		                  <div className="col">
 		                    <input type="number" 
                           className="form-control" 
@@ -175,6 +177,7 @@ class EditExercise extends Component {
                           Reps
                         </small>
 		                  </div>
+
 		                  <div className="col">
 		                    <input type="number" 
                           className="form-control" 
@@ -182,12 +185,12 @@ class EditExercise extends Component {
                           value={this.state.weight ? this.state.weight : ''} 
                           onChange={this.onChange} 
                           placeholder={exercise.weight}
-                          required
                         />
                         <small id="weightHelpBlock" className="form-text text-muted">
                           Weight
                         </small>
 		                  </div>
+
 		                  <div className="col">
 		                   <select 
                          name="unit" 
@@ -201,11 +204,13 @@ class EditExercise extends Component {
                           Unit
                        </small>
 		                  </div>
+
 		                </div>
+
                     <br />
                     <button type="button" 
-                     onClick={() => this.deleteExercise() } 
-                     className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
+                      onClick={() => this.deleteExercise() } 
+                      className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
                     </button>
                     <br /><br />
                     <div className="modal-footer">

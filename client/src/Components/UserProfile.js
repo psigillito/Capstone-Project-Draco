@@ -4,11 +4,30 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import logo from '../images/profile.png';
 import loading from '../images/loading.gif';
+import { getCurrentTrainingPlans, getCurrentWorkouts } from '../redux/actions';
+import axios from 'axios';
 
 class UserProfile extends Component {
 	componentDidMount() {
 		this.props.getProfile(this.props.auth.user.id);
-	}
+
+		axios.get('/trainingPlans/', {
+	        params: {
+	            user: this.props.auth.user.id  
+	          }
+	      }).then(res => {    
+	        this.props.getCurrentTrainingPlans(res);
+	      }).then( res => { 
+	        axios.get('/workouts/', {
+	            params: {
+	                user: this.props.auth.user.id
+	            }
+	        }).then(res => {
+	            this.props.getCurrentWorkouts(res);
+	        })
+	
+
+	})}
 
 	render() {
 
@@ -43,7 +62,7 @@ class UserProfile extends Component {
 									)
 							    }
 							    {this.props.trainingPlans.data.length === 0 && 
-									<p className="card-text">No current training plans</p>
+									<img src={loading} style={{height: 2 + 'em'}} />
 							    }
 
 							    <h5 className="card-title">Workouts</h5>
@@ -53,7 +72,7 @@ class UserProfile extends Component {
 									)
 							    }
 							    {this.props.workouts.data.length === 0 && 
-									<p className="card-text">No current workouts</p>
+									<img src={loading} style={{height: 2 + 'em'}} />
 							    }
 
 						  	</div>
@@ -70,11 +89,13 @@ UserProfile.propTypes = {
 	profile: PropTypes.object.isRequired,
 	trainingPlans: PropTypes.object.isRequired,
 	workouts: PropTypes.object.isRequired,
-	auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired,
+	getCurrentTrainingPlans: PropTypes.func.isRequired,
+	getCurrentWorkouts: PropTypes.func.isRequired
 }
 
 const mapStateToProps = function(state) {
 	return {profile: state.profile, trainingPlans: state.trainingPlans, workouts: state.workouts, auth: state.auth }
 };
 
-export default connect(mapStateToProps, { getProfile })(UserProfile);
+export default connect(mapStateToProps, { getProfile, getCurrentTrainingPlans, getCurrentWorkouts })(UserProfile);
