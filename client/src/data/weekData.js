@@ -82,6 +82,15 @@ function calculateDistanceInMiles(exercise) {
   }
 }
 
+function calculateWeightInPounds(exercise) {
+  if (exercise.unit == 'lbs') {
+    return parseInt(exercise.weight, 10) * parseInt(exercise.sets, 10) * parseInt(exercise.reps, 10);
+  }
+  else if (exercise.unit == 'kg') {
+    return parseInt(exercise.weight * 2.2, 10) * parseInt(exercise.sets, 10) * parseInt(exercise.reps, 10);
+  }
+}
+
 function calculateTotals(allWorkoutsThisMonth, weight) {
   // These MET values are from the compendium of physical activity found at: http://prevention.sph.sc.edu/tools/docs/documents_compendium.pdf
   const RUN_CALORIES = 11.0;
@@ -152,17 +161,17 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
             }
 
             if (tempLift.sets) {
-              totalSets += parseFloat(tempLift.sets);
+              totalSets += parseInt(tempLift.sets, 10);
             }
             if (tempLift.reps) {
-              totalReps += parseFloat(tempLift.reps);
+              totalReps += parseInt(tempLift.reps, 10) * parseInt(tempLift.sets, 10);
             }
 
-            if (tempLift.intensity && tempLift.intensity.weight) {
-              totalWeight += tempLift.intensity.weight;
+            if (tempLift.weight && tempLift.unit) {
+              totalWeight += calculateWeightInPounds(tempLift);
             }
           }
-          strengthCalories += parseInt((parseFloat(totalSets) * 0.5 * STRENGTH_CALORIES * 3.5 * userWeight / 200), 10);
+          strengthCalories += parseInt((totalSets * 0.5 * STRENGTH_CALORIES * 3.5 * userWeight / 200), 10);
         }
       }
     }
