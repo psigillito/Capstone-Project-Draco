@@ -7,17 +7,6 @@ const queries = require('./queries');
 // Import user model
 const User = require('../models/users');
 
-// get current user profile
-// private route
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-	res.json({
-		name: req.user.name,
-		email: req.user.email,
-		username: req.user.username,
-		plans: req.user.trainingPlans
-	});
-});
-
 // edit user profile
 router.patch('/edit-profile', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const errors = {};
