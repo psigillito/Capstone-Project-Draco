@@ -30,7 +30,7 @@ class MonthStatisticsPanel extends Component {
               </ul>
               <h6>Swimming: </h6>
               <ul>
-                <li><b>Total Miles:</b> {this.props.monthStatistics.swimDistanceTotal}</li>
+                <li><b>Total Meters:</b> {this.props.monthStatistics.swimDistanceTotal}</li>
                 <li><b>Longest Distance:</b> {this.props.monthStatistics.longestSwim}</li>
                 <li><b>Shortest Distance:</b> {this.props.monthStatistics.shortestSwim}</li>
                 <li><b>Average Distance:</b> {this.props.monthStatistics.averageSwim}</li>

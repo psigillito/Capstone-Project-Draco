@@ -49,7 +49,12 @@ class AddNewWorkout extends Component {
         createdExercise['unit'] = this.state.unit;
       } else {
         createdExercise['name'] = this.state.exerciseName;
-        createdExercise['distanceUnit'] = this.state.distanceUnit;
+
+        if(this.state.mode === 'Swimming'){
+          createdExercise['distanceUnit'] = 'M'  
+        }else{
+          createdExercise['distanceUnit'] = this.state.distanceUnit;
+        }
         createdExercise['distance'] = this.state.distance;
         createdExercise['stravaRoute'] = this.props.selectedRoute;
       }
@@ -345,8 +350,8 @@ class AddNewWorkout extends Component {
               </div>
             }
 
-            {/* Exercises - Running */}
-            {(this.state.mode === 'Running' || this.state.mode === 'Swimming' || this.state.mode === 'Cycling') && this.state.mode !== '' && 
+            {/* Exercises - Running and Cycling*/}
+            {(this.state.mode === 'Running' || this.state.mode === 'Cycling') && this.state.mode !== '' && 
               <div>
                 <div className="modal-header">
                   <h5>Add Exercises</h5>
@@ -368,6 +373,39 @@ class AddNewWorkout extends Component {
                           <select id="inputState" name="distanceUnit" className="form-control" onChange={this.onChange}>
                             <option selected name="distanceUnit" value="mi">Mi</option>
                             <option name="distanceUnit" value="km">Km</option>
+                          </select>
+                        </div>
+                      </div>
+                  </fieldset>
+                  <br/>
+                  <div>
+                    <button type="submit"  className="btn btn-primary btn-block">Add Exercise To Workout</button>
+                  </div>
+                </form>
+              </div>
+            }
+
+            {/* Exercises - Swimming*/}
+            {(this.state.mode === 'Swimming') && this.state.mode !== '' && 
+              <div>
+                <div className="modal-header">
+                  <h5>Add Exercises</h5>
+                </div>
+                <br/>
+                <form action="" onSubmit={(e) => this.saveExercise(e) }>
+                  <div className="form-group">
+                    <input type="text" className="form-control form-control-lg" placeholder="Exercise Name" name="exerciseName" 
+                          value={this.state.exerciseName} onChange={this.onChange} required/>
+                  </div>
+                  <label htmlFor='duration'><b>Duration:</b></label>
+                  <fieldset disabled={this.state.stravaChecked}>
+                      <div className="form-row">
+                        <div className="col">
+                          <input type="number" id="inputDistance" min="0" className="form-control" name="distance" value={this.state.distance} onChange={this.onChange} placeholder="Distance" required/>
+                        </div>
+                        <div className="col">
+                          <select id="inputState" name="distanceUnit" className="form-control" onChange={this.onChange}>
+                            <option selected name="distanceUnit" value="Meters">Meters</option>
                           </select>
                         </div>
                       </div>

@@ -34,12 +34,10 @@ class Map extends PureComponent {
    
    return(
       <div> 
-
         <GoogleMapRoute
           containerElement={ <div style={{ height: `425px`, width: '425px' }} /> }
           mapElement={ <div style={{ height: `100%` }} /> }
         />
-
       </div>
    );
    }

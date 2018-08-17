@@ -19,6 +19,42 @@ class EditExercise extends Component {
         }
 
         this.onChange = this.onChange.bind(this);
+        this.validateInput = this.validateInput.bind(this);
+    }
+
+
+    validateInput(){
+
+      let errorsList = []
+
+      if(this.refs.distance && this.refs.distance.value < 0){
+        errorsList.push("Distance Cannot Be Negative");
+      }
+
+      if(this.refs.weight && this.refs.weight.value < 0){
+        errorsList.push("Weight Cannot Be Negative");
+      }
+
+      if(this.refs.reps && this.refs.reps.value < 0){
+        errorsList.push("Reps Cannot Be Negative");
+      }
+
+      if(this.refs.sets && this.refs.sets.value < 0){
+        errorsList.push("Sets Cannot Be Negative");
+      }
+
+      var validationSummary = this.refs.validationSummary; 
+      validationSummary.innerHTML = '';
+
+      for(var i = 0; i < errorsList.length; i++){
+        var message = document.createElement("div");
+        message.className = "alert alert-danger";        
+        var node = document.createTextNode(errorsList[i]);
+        message.appendChild(node);
+        validationSummary.appendChild(message);    
+      }
+            
+      return (errorsList.length < 1);
     }
 
     clearState() {
@@ -66,15 +102,19 @@ class EditExercise extends Component {
     }
 
     submitExercise(e) {
+
       e.preventDefault();
 
-      axios.patch('/workouts/exercises', {
-        id: this.state.workoutId,
-        name: this.state.exerciseName,
-        edit: true
-      })
-        .then(res => this.saveExercise())
-        .catch(err => console.log(err)); 
+      if(this.validateInput()){     
+
+        axios.patch('/workouts/exercises', {
+          id: this.state.workoutId,
+          name: this.state.exerciseName,
+          edit: true
+        })
+          .then(res => this.saveExercise())
+          .catch(err => console.log(err)); 
+      }
     }
 
     deleteExercise() {
@@ -98,6 +138,7 @@ class EditExercise extends Component {
             </button>
           </div>
           <div className="modal-body">
+          <div ref="validationSummary"></div>
           <label for='name'><b>Select workout to edit exercises:</b></label>
           <select id="inputState" 
             name="workoutId" 
@@ -153,6 +194,7 @@ class EditExercise extends Component {
 		                  <div className="col">
 		                    <input type="number" 
                           className="form-control" 
+                          ref="sets"
                           name="sets" 
                           value={this.state.sets ? this.state.sets : ''} 
                           onChange={this.onChange} 
@@ -166,7 +208,8 @@ class EditExercise extends Component {
 
 		                  <div className="col">
 		                    <input type="number" 
-                          className="form-control" 
+                          className="form-control"
+                          ref="reps"
                           name="reps" 
                           value={this.state.reps ? this.state.reps : ''} 
                           onChange={this.onChange} 
@@ -180,7 +223,8 @@ class EditExercise extends Component {
 
 		                  <div className="col">
 		                    <input type="number" 
-                          className="form-control" 
+                          className="form-control"
+                          ref="weight"
                           name="weight" 
                           value={this.state.weight ? this.state.weight : ''} 
                           onChange={this.onChange} 
@@ -223,16 +267,18 @@ class EditExercise extends Component {
               </div>
               }
 
-              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode === 'Running')
+              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && 
+                (workout.mode === 'Running' || workout.mode ==='Cycling' || workout.mode ==='Swimming'))
                 .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
                 .map((exercise, index) =>  
                   <div key={index}>
                   	<label for="newExercise"><b>Update Exercise:</b></label>
-  				            <form onSubmit={this.submitExercise.bind(this)}>
+  				            <form action="" onSubmit={ (e) => this.submitExercise(e)}>
   				              <div class="form-row">
   				                <div class="col">
   				                  <input type="number" 
                               class="form-control" 
+                              ref="distance"
                               name="distance" 
                               value={this.state.distance ? this.state.distance : ''} 
                               onChange={this.onChange} 
@@ -263,7 +309,7 @@ class EditExercise extends Component {
                         </button>
                         <br /><br />
                         <div className="modal-footer">
-                          <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <button type="button" type="submit" className="btn btn-secondary">Cancel</button>
                           <button type="submit" className="btn btn-success">Save changes</button>
                         </div>
   				            </form>
