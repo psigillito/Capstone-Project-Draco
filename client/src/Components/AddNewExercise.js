@@ -41,22 +41,52 @@ class AddNewExercise extends Component {
       })
     }
 
+    validateInput(){
+
+      let errorsList = []
+
+      if(this.refs.distance && this.refs.distance.value < 0){
+        errorsList.push("Distance Cannot Be Negative");
+      }
+
+      if(this.refs.weight && this.refs.weight.value < 0){
+        errorsList.push("Weight Cannot Be Negative");
+      }
+
+      if(this.refs.reps && this.refs.reps.value < 0){
+        errorsList.push("Reps Cannot Be Negative");
+      }
+
+      if(this.refs.sets && this.refs.sets.value < 0){
+        errorsList.push("Sets Cannot Be Negative");
+      }
+
+      var validationSummary = this.refs.validationSummary; 
+      validationSummary.innerHTML = '';
+
+      for(var i = 0; i < errorsList.length; i++){
+        var message = document.createElement("div");
+        message.className = "alert alert-danger";        
+        var node = document.createTextNode(errorsList[i]);
+        message.appendChild(node);
+        validationSummary.appendChild(message);    
+      }
+            
+      return (errorsList.length < 1);
+    }
+
     submitExercise(e) {
       e.preventDefault();
 
-      let errorList = [];
-      let createdExercise = {};
+      let errorsList = [];
 
-      if(this.state.workoutId === '') {
-        errorList.push('You must select a workout');
-      }
-      if(this.state.mode === '') {
-        errorList.push('You must select the workout mode');
-      }
+      var validationSummary = this.refs.validationSummary; 
+      validationSummary.innerHTML = '';
 
-      if(errorList.length) {
-        this.setState({ errors: errorList });
-      } else {
+      if(this.validateInput()) {
+
+        let createdExercise = {};
+
         if(this.state.mode === 'Weight Training') {
           createdExercise['name'] = this.state.exerciseName;
           createdExercise['sets'] = this.state.sets;
@@ -65,15 +95,22 @@ class AddNewExercise extends Component {
           createdExercise['unit'] = this.state.unit;
         } else {
           createdExercise['name'] = this.state.exerciseName;
-          createdExercise['distanceUnit'] = this.state.distanceUnit;
+          if(this.state.mode === 'Swimming') {
+            createdExercise['distanceUnit'] = 'M';
+          } else {
+            createdExercise['distanceUnit'] = this.state.distanceUnit;
+          } 
           createdExercise['distance'] = this.state.distance;
         }
 
         axios.get('/workouts/' + this.state.workoutId)
           .then(res => {
               if(res.data.mode !== this.state.mode) {
-                  errorList.push('Selected mode must be the same as workout mode');
-                  this.setState({ errors: errorList });
+                  var message = document.createElement("div");
+                  message.className = "alert alert-danger";        
+                  var node = document.createTextNode('Mode must be the same as selected workout mode');
+                  message.appendChild(node);
+                  validationSummary.appendChild(message);
               } else {
                   axios.patch('/workouts/' + this.state.workoutId, {
                       exercise: createdExercise
@@ -98,11 +135,7 @@ class AddNewExercise extends Component {
           </div>
           
           <div className="modal-body">
-            {this.state.errors.map( (error, index) =>
-              <div class="alert alert-danger" role="alert">
-                {error}
-              </div>
-            )}
+            <div ref="validationSummary"></div>
 
             <label htmlFor='name'><b>Select workout to add to:</b></label>
             <select id="inputState" name="workoutId" className="form-control" onChange={this.onChange}>
@@ -188,7 +221,8 @@ class AddNewExercise extends Component {
                   <div className="form-row">
                     <div className="col">
                       <input type="number" 
-                        className="form-control" 
+                        className="form-control"
+                        ref="sets" 
                         name="sets" 
                         value={this.state.sets} 
                         onChange={this.onChange} 
@@ -199,7 +233,8 @@ class AddNewExercise extends Component {
 
                     <div className="col">
                       <input type="number" 
-                        className="form-control" 
+                        className="form-control"
+                        ref="reps" 
                         name="reps" 
                         value={this.state.reps} 
                         onChange={this.onChange} 
@@ -210,7 +245,8 @@ class AddNewExercise extends Component {
 
                     <div className="col">
                       <input type="number" 
-                        className="form-control" 
+                        className="form-control"
+                        ref="weight" 
                         name="weight" 
                         value={this.state.weight} 
                         onChange={this.onChange} 
@@ -234,8 +270,9 @@ class AddNewExercise extends Component {
               </div>
             }
 
-            {/* Exercises - Running, Swimming, Cycling */}
-            {this.state.mode !== 'Weight Training' && this.state.mode !== '' && this.state.workoutId !== '' &&
+            {/* Exercises - Running, Cycling */}
+            {this.state.mode == 'Running' || this.state.mode === 'Cycling' 
+              && this.state.mode !== '' && this.state.workoutId !== '' &&
               <div>
                 <label for="newExercise"><b>New Exercise:</b></label>
                 <form onSubmit={this.submitExercise.bind(this)}>
@@ -254,7 +291,8 @@ class AddNewExercise extends Component {
                   <div className="form-row">
                     <div className="col">
                       <input type="number" 
-                        className="form-control" 
+                        className="form-control"
+                        ref="distance" 
                         name="distance" 
                         value={this.state.distance} 
                         onChange={this.onChange} 
@@ -267,6 +305,51 @@ class AddNewExercise extends Component {
                       <select id="unit" name="distanceUnit" className="form-control" onChange={this.onChange}>
                           <option name="distanceUnit" value="mi">Mi</option>
                           <option name="distanceUnit" value="km">Km</option>
+                      </select>
+                    </div>  
+                  </div>
+                  <br />
+                  <div className="modal-footer">
+                    <button type="button" onClick={ () => this.clearState() }className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" className="btn btn-success">Save exercise</button>
+                  </div>
+                </form>     
+              </div>
+            }
+
+            {/* Exercise - Swimming */}
+            {this.state.mode === 'Swimming' && this.state.mode !== '' && this.state.workoutId !== '' &&
+              <div>
+                <label for="newExercise"><b>New Exercise:</b></label>
+                <form onSubmit={this.submitExercise.bind(this)}>
+                  <div className="form-group">
+                    <input 
+                      type="text" 
+                      className="form-control form-control-lg"
+                      placeholder="Exercise Name" 
+                      name="exerciseName" 
+                      value={this.state.exerciseName}
+                      onChange={this.onChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="col">
+                      <input type="number" 
+                        className="form-control"
+                        ref="distance" 
+                        name="distance" 
+                        value={this.state.distance} 
+                        onChange={this.onChange} 
+                        placeholder="Distance"
+                        required
+                      />
+                    </div>
+
+                    <div className="col">
+                      <select id="unit" name="distanceUnit" className="form-control" onChange={this.onChange}>
+                          <option name="distanceUnit" value="M">M</option>
                       </select>
                     </div>  
                   </div>

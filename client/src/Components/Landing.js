@@ -17,10 +17,10 @@ class Landing extends Component {
             <div className="container">
               <div className="row">
                 <div className="col-md-12 text-center">
-                  <h1 className="display-3 mb-4">Workout App
+                  <h1 className="display-3 mb-4">Draco Workout Project
                   </h1>
                   <p className="lead">Plan Your Workouts</p>
-                  <hr />
+                  <br />
                   <Link to="/register" className="btn btn-lg btn-info mr-2">Register</Link>
                   <Link to="/login" className="btn btn-lg btn-light">Login</Link>
                 </div>

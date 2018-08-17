@@ -138,9 +138,9 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
           for (var n = 0; n < tempWorkout.exercises.length; n++) {
             var tempSwim = tempWorkout.exercises[n];
             swimCount++;
-            swimsList.push(calculateDistanceInMiles(tempSwim));
-            swimDistanceTotal += calculateDistanceInMiles(tempSwim);
-            swimCalories += parseInt((parseFloat(tempSwim.distance) * 35 * SWIM_CALORIES * 3.5 * userWeight / 200), 10);
+            swimsList.push(parseFloat(tempSwim.distance));
+            swimDistanceTotal += parseFloat(tempSwim.distance);
+            swimCalories += parseInt((parseFloat(tempSwim.distance) * 0.0217 * SWIM_CALORIES * 3.5 * userWeight / 200), 10);
           }
         } else if (tempWorkout.mode == 'Cycling') {
           for (var p = 0; p < tempWorkout.exercises.length; p++) {
@@ -190,7 +190,7 @@ function calculateTotals(allWorkoutsThisMonth, weight) {
 
   return {
     'runDistanceTotal': runDistanceTotal.toFixed(2),
-    'swimDistanceTotal': swimDistanceTotal.toFixed(2),
+    'swimDistanceTotal': swimDistanceTotal,
     'rideDistanceTotal': cycleDistanceTotal.toFixed(2),
     'totalSets': totalSets,
     'totalReps': totalReps,

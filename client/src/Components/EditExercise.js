@@ -19,6 +19,42 @@ class EditExercise extends Component {
         }
 
         this.onChange = this.onChange.bind(this);
+        this.validateInput = this.validateInput.bind(this);
+    }
+
+
+    validateInput(){
+
+      let errorsList = []
+
+      if(this.refs.distance && this.refs.distance.value < 0){
+        errorsList.push("Distance Cannot Be Negative");
+      }
+
+      if(this.refs.weight && this.refs.weight.value < 0){
+        errorsList.push("Weight Cannot Be Negative");
+      }
+
+      if(this.refs.reps && this.refs.reps.value < 0){
+        errorsList.push("Reps Cannot Be Negative");
+      }
+
+      if(this.refs.sets && this.refs.sets.value < 0){
+        errorsList.push("Sets Cannot Be Negative");
+      }
+
+      var validationSummary = this.refs.validationSummary; 
+      validationSummary.innerHTML = '';
+
+      for(var i = 0; i < errorsList.length; i++){
+        var message = document.createElement("div");
+        message.className = "alert alert-danger";        
+        var node = document.createTextNode(errorsList[i]);
+        message.appendChild(node);
+        validationSummary.appendChild(message);    
+      }
+            
+      return (errorsList.length < 1);
     }
 
     clearState() {
@@ -41,40 +77,53 @@ class EditExercise extends Component {
     saveExercise() {
       let newExercise = {};
 
-      if(this.state.distance !== '') {
-        newExercise = {
-          name: this.state.exerciseName,
-          distance: this.state.distance,
-          distanceUnit: this.state.distanceUnit
-        }
-      } else {
-          newExercise = {
-            name: this.state.exerciseName,
-            sets: this.state.sets,
-            reps: this.state.reps,
-            weight: this.state.weight,
-            unit: this.state.unit,
-        }
-      }
+      axios.get('/workouts/' + this.state.workoutId)
+        .then(res => {
+          if(res.data.mode === 'Swimming') {
+            newExercise = {
+              name: this.state.exerciseName,
+              distance: this.state.distance,
+              distanceUnit: 'M'
+            } 
+          } else if (res.data.mode === 'Running' || res.data.mode === 'Cycling') {
+              newExercise = {
+                name: this.state.exerciseName,
+                distance: this.state.distance,
+                distanceUnit: this.state.distanceUnit
+              }        
+          } else {
+              newExercise = {
+                name: this.state.exerciseName,
+                sets: this.state.sets,
+                reps: this.state.reps,
+                weight: this.state.weight,
+                unit: this.state.unit,
+            }
+          }
 
-      axios.patch('/workouts/' + this.state.workoutId, {
-        exercise: newExercise
-      })
-        .then(res => {window.location.reload();})
-        .catch(err => console.log(err));
+          axios.patch('/workouts/' + this.state.workoutId, {
+            exercise: newExercise
+          })
+            .then(res => {window.location.reload();})
+            .catch(err => console.log(err));
 
+        })
     }
 
     submitExercise(e) {
+
       e.preventDefault();
 
-      axios.patch('/workouts/exercises', {
-        id: this.state.workoutId,
-        name: this.state.exerciseName,
-        edit: true
-      })
-        .then(res => this.saveExercise())
-        .catch(err => console.log(err)); 
+      if(this.validateInput()){
+
+        axios.patch('/workouts/exercises', {
+          id: this.state.workoutId,
+          name: this.state.exerciseName,
+          edit: true
+        })
+          .then(res => this.saveExercise())
+          .catch(err => console.log(err)); 
+      }
     }
 
     deleteExercise() {
@@ -98,6 +147,7 @@ class EditExercise extends Component {
             </button>
           </div>
           <div className="modal-body">
+          <div ref="validationSummary"></div>
           <label for='name'><b>Select workout to edit exercises:</b></label>
           <select id="inputState" 
             name="workoutId" 
@@ -153,6 +203,7 @@ class EditExercise extends Component {
 		                  <div className="col">
 		                    <input type="number" 
                           className="form-control" 
+                          ref="sets"
                           name="sets" 
                           value={this.state.sets ? this.state.sets : ''} 
                           onChange={this.onChange} 
@@ -166,7 +217,8 @@ class EditExercise extends Component {
 
 		                  <div className="col">
 		                    <input type="number" 
-                          className="form-control" 
+                          className="form-control"
+                          ref="reps"
                           name="reps" 
                           value={this.state.reps ? this.state.reps : ''} 
                           onChange={this.onChange} 
@@ -180,7 +232,8 @@ class EditExercise extends Component {
 
 		                  <div className="col">
 		                    <input type="number" 
-                          className="form-control" 
+                          className="form-control"
+                          ref="weight"
                           name="weight" 
                           value={this.state.weight ? this.state.weight : ''} 
                           onChange={this.onChange} 
@@ -223,16 +276,18 @@ class EditExercise extends Component {
               </div>
               }
 
-              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode === 'Running')
+              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && 
+                (workout.mode === 'Running' || workout.mode ==='Cycling'))
                 .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
                 .map((exercise, index) =>  
                   <div key={index}>
                   	<label for="newExercise"><b>Update Exercise:</b></label>
-  				            <form onSubmit={this.submitExercise.bind(this)}>
+  				            <form action="" onSubmit={ (e) => this.submitExercise(e)}>
   				              <div class="form-row">
   				                <div class="col">
   				                  <input type="number" 
                               class="form-control" 
+                              ref="distance"
                               name="distance" 
                               value={this.state.distance ? this.state.distance : ''} 
                               onChange={this.onChange} 
@@ -243,9 +298,10 @@ class EditExercise extends Component {
                               Distance
                             </small>
   				                </div>
-  				                <div class="col">
+                          <div class="col"> 
   				                  <select name="distanceUnit" 
-                              class="form-control" 
+                              class="form-control"
+                              ref="distanceUnit" 
                               placeholder={exercise.distanceUnit} 
                               onChange={this.onChange}>
   				                    <option name="distanceUnit" value="mi">Mi</option>
@@ -254,7 +310,7 @@ class EditExercise extends Component {
                             <small id="distanceUnitHelpBlock" className="form-text text-muted">
                               Unit
                             </small>
-  				                </div>
+                          </div>   
   				              </div>
                         <br />
                         <button type="button" 
@@ -272,9 +328,59 @@ class EditExercise extends Component {
   				      </div>
                 )
               )}
-          </div>
 
-         
+              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && 
+                ( workout.mode ==='Swimming'))
+                .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
+                .map((exercise, index) =>  
+                  <div key={index}>
+                  	<label for="newExercise"><b>Update Exercise:</b></label>
+  				            <form action="" onSubmit={ (e) => this.submitExercise(e)}>
+  				              <div class="form-row">
+  				                <div class="col">
+  				                  <input type="number" 
+                              class="form-control" 
+                              ref="distance"
+                              name="distance" 
+                              value={this.state.distance ? this.state.distance : ''} 
+                              onChange={this.onChange} 
+                              placeholder={exercise.distance}
+                              required
+                            />
+                            <small id="distanceHelpBlock" className="form-text text-muted">
+                              Distance
+                            </small>
+  				                </div>
+  				                <div class="col">
+  				                  <select name="distanceUnit" 
+                              class="form-control" 
+                              placeholder={exercise.distanceUnit} 
+                              onChange={this.onChange}>
+  				                    <option name="distanceUnit" value="M">Meters</option>
+  				                  </select>
+                            <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                              Unit
+                            </small>
+  				                </div>
+  				              </div>
+                        <br />
+                        <button type="button" 
+                         onClick={() => this.deleteExercise() } 
+                         className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
+                        </button>
+                        <br /><br />
+                        <div className="modal-footer">
+                          <button type="button" type="submit" className="btn btn-secondary">Cancel</button>
+                          <button type="submit" className="btn btn-success">Save changes</button>
+                        </div>
+  				            </form>
+  				          <div>          
+  				        </div>
+  				      </div>
+                )
+              )}    
+
+          </div>   
       </div>
       )
     }
