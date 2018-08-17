@@ -223,7 +223,7 @@ class EditExercise extends Component {
               </div>
               }
 
-              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode === 'Running')
+              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && workout.mode !== 'Weight Training' && workout.mode !== '')
                 .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
                 .map((exercise, index) =>  
                   <div key={index}>
