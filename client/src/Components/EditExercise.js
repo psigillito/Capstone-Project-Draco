@@ -277,7 +277,7 @@ class EditExercise extends Component {
               }
 
               {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && 
-                (workout.mode === 'Running' || workout.mode ==='Cycling' || workout.mode ==='Swimming'))
+                (workout.mode === 'Running' || workout.mode ==='Cycling'))
                 .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
                 .map((exercise, index) =>  
                   <div key={index}>
@@ -347,6 +347,63 @@ class EditExercise extends Component {
   				      </div>
                 )
               )}
+
+              {this.props.workouts.data.filter( (workout) => workout._id === this.state.workoutId && 
+                ( workout.mode ==='Swimming'))
+                .map( (workout) => workout.exercises.filter( (exercise) => exercise.name === this.state.exerciseName)
+                .map((exercise, index) =>  
+                  <div key={index}>
+                  	<label for="newExercise"><b>Update Exercise:</b></label>
+  				            <form action="" onSubmit={ (e) => this.submitExercise(e)}>
+  				              <div class="form-row">
+  				                <div class="col">
+  				                  <input type="number" 
+                              class="form-control" 
+                              ref="distance"
+                              name="distance" 
+                              value={this.state.distance ? this.state.distance : ''} 
+                              onChange={this.onChange} 
+                              placeholder={exercise.distance}
+                              required
+                            />
+                            <small id="distanceHelpBlock" className="form-text text-muted">
+                              Distance
+                            </small>
+  				                </div>
+  				                <div class="col">
+  				                  <select name="distanceUnit" 
+                              class="form-control" 
+                              placeholder={exercise.distanceUnit} 
+                              onChange={this.onChange}>
+  				                    <option name="distanceUnit" value="M">Meters</option>
+  				                  </select>
+                            <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                              Unit
+                            </small>
+  				                </div>
+  				              </div>
+                        <br />
+                        <button type="button" 
+                         onClick={() => this.deleteExercise() } 
+                         className="btn btn-danger btn-sm">Delete '{this.state.exerciseName}' Exercise
+                        </button>
+                        <br /><br />
+                        <div className="modal-footer">
+                          <button type="button" type="submit" className="btn btn-secondary">Cancel</button>
+                          <button type="submit" className="btn btn-success">Save changes</button>
+                        </div>
+  				            </form>
+  				          <div>          
+  				        </div>
+  				      </div>
+                )
+              )}    
+
+
+
+
+
+
           </div>
 
          
