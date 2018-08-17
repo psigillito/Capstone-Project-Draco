@@ -77,35 +77,44 @@ class EditExercise extends Component {
     saveExercise() {
       let newExercise = {};
 
-      if(this.state.distance !== '') {
-        newExercise = {
-          name: this.state.exerciseName,
-          distance: this.state.distance,
-          distanceUnit: this.state.distanceUnit
-        }
-      } else {
-          newExercise = {
-            name: this.state.exerciseName,
-            sets: this.state.sets,
-            reps: this.state.reps,
-            weight: this.state.weight,
-            unit: this.state.unit,
-        }
-      }
+      axios.get('/workouts/' + this.state.workoutId)
+        .then(res => {
+          if(res.data.mode === 'Swimming') {
+            newExercise = {
+              name: this.state.exerciseName,
+              distance: this.state.distance,
+              distanceUnit: 'M'
+            } 
+          } else if (res.data.mode === 'Running' || res.data.mode === 'Cycling') {
+              newExercise = {
+                name: this.state.exerciseName,
+                distance: this.state.distance,
+                distanceUnit: this.state.distanceUnit
+              }        
+          } else {
+              newExercise = {
+                name: this.state.exerciseName,
+                sets: this.state.sets,
+                reps: this.state.reps,
+                weight: this.state.weight,
+                unit: this.state.unit,
+            }
+          }
 
-      axios.patch('/workouts/' + this.state.workoutId, {
-        exercise: newExercise
-      })
-        .then(res => {window.location.reload();})
-        .catch(err => console.log(err));
+          axios.patch('/workouts/' + this.state.workoutId, {
+            exercise: newExercise
+          })
+            .then(res => {window.location.reload();})
+            .catch(err => console.log(err));
 
+        })
     }
 
     submitExercise(e) {
 
       e.preventDefault();
 
-      if(this.validateInput()){     
+      if(this.validateInput()){
 
         axios.patch('/workouts/exercises', {
           id: this.state.workoutId,
@@ -289,18 +298,38 @@ class EditExercise extends Component {
                               Distance
                             </small>
   				                </div>
-  				                <div class="col">
-  				                  <select name="distanceUnit" 
-                              class="form-control" 
-                              placeholder={exercise.distanceUnit} 
-                              onChange={this.onChange}>
-  				                    <option name="distanceUnit" value="mi">Mi</option>
-  				                    <option name="distanceUnit" value="km">Km</option>
-  				                  </select>
-                            <small id="distanceUnitHelpBlock" className="form-text text-muted">
-                              Unit
-                            </small>
-  				                </div>
+  				                
+                          {workout.mode === 'Running' || workout.mode === 'Cycling' &&
+                            <div class="col"> 
+    				                  <select name="distanceUnit" 
+                                class="form-control"
+                                ref="distanceUnit" 
+                                placeholder={exercise.distanceUnit} 
+                                onChange={this.onChange}>
+    				                    <option name="distanceUnit" value="mi">Mi</option>
+    				                    <option name="distanceUnit" value="km">Km</option>
+    				                  </select>
+                              <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                                Unit
+                              </small>
+                            </div>
+                          }
+
+                          {workout.mode === 'Swimming' && 
+                            <div class="col"> 
+                              <select name="distanceUnit" 
+                                class="form-control"
+                                ref="distanceUnit" 
+                                placeholder={exercise.distanceUnit} 
+                                onChange={this.onChange}>
+                                <option name="distanceUnit" value="M">M</option>
+                              </select>
+                              <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                                Unit
+                              </small>
+                            </div>
+                          }
+  				                
   				              </div>
                         <br />
                         <button type="button" 
@@ -309,7 +338,7 @@ class EditExercise extends Component {
                         </button>
                         <br /><br />
                         <div className="modal-footer">
-                          <button type="button" type="submit" className="btn btn-secondary">Cancel</button>
+                          <button type="button" onClick={() => this.clearState() } className="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           <button type="submit" className="btn btn-success">Save changes</button>
                         </div>
   				            </form>
