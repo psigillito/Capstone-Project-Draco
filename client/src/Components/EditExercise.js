@@ -298,38 +298,19 @@ class EditExercise extends Component {
                               Distance
                             </small>
   				                </div>
-  				                
-                          {workout.mode === 'Running' || workout.mode === 'Cycling' &&
-                            <div class="col"> 
-    				                  <select name="distanceUnit" 
-                                class="form-control"
-                                ref="distanceUnit" 
-                                placeholder={exercise.distanceUnit} 
-                                onChange={this.onChange}>
-    				                    <option name="distanceUnit" value="mi">Mi</option>
-    				                    <option name="distanceUnit" value="km">Km</option>
-    				                  </select>
-                              <small id="distanceUnitHelpBlock" className="form-text text-muted">
-                                Unit
-                              </small>
-                            </div>
-                          }
-
-                          {workout.mode === 'Swimming' && 
-                            <div class="col"> 
-                              <select name="distanceUnit" 
-                                class="form-control"
-                                ref="distanceUnit" 
-                                placeholder={exercise.distanceUnit} 
-                                onChange={this.onChange}>
-                                <option name="distanceUnit" value="M">M</option>
-                              </select>
-                              <small id="distanceUnitHelpBlock" className="form-text text-muted">
-                                Unit
-                              </small>
-                            </div>
-                          }
-  				                
+                          <div class="col"> 
+  				                  <select name="distanceUnit" 
+                              class="form-control"
+                              ref="distanceUnit" 
+                              placeholder={exercise.distanceUnit} 
+                              onChange={this.onChange}>
+  				                    <option name="distanceUnit" value="mi">Mi</option>
+  				                    <option name="distanceUnit" value="km">Km</option>
+  				                  </select>
+                            <small id="distanceUnitHelpBlock" className="form-text text-muted">
+                              Unit
+                            </small>
+                          </div>   
   				              </div>
                         <br />
                         <button type="button" 
@@ -399,14 +380,7 @@ class EditExercise extends Component {
                 )
               )}    
 
-
-
-
-
-
-          </div>
-
-         
+          </div>   
       </div>
       )
     }
