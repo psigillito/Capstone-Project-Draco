@@ -271,7 +271,7 @@ class AddNewExercise extends Component {
             }
 
             {/* Exercises - Running, Cycling */}
-            {this.state.mode == 'Running' || this.state.mode === 'Cycling' 
+            {(this.state.mode === 'Running' || this.state.mode === 'Cycling') 
               && this.state.mode !== '' && this.state.workoutId !== '' &&
               <div>
                 <label for="newExercise"><b>New Exercise:</b></label>
