@@ -271,7 +271,7 @@ class AddNewExercise extends Component {
             }
 
             {/* Exercises - Running, Cycling */}
-            {this.state.mode == 'Running' || this.state.mode === 'Cycling' 
+            {(this.state.mode === 'Running' || this.state.mode === 'Cycling') 
               && this.state.mode !== '' && this.state.workoutId !== '' &&
               <div>
                 <label for="newExercise"><b>New Exercise:</b></label>
@@ -349,7 +349,7 @@ class AddNewExercise extends Component {
 
                     <div className="col">
                       <select id="unit" name="distanceUnit" className="form-control" onChange={this.onChange}>
-                          <option name="distanceUnit" value="M">M</option>
+                          <option name="distanceUnit" value="M">Meters</option>
                       </select>
                     </div>  
                   </div>
